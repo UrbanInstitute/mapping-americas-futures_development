@@ -80,15 +80,12 @@ module.exports = (grunt) ->
         files: [
           './app/src/*'
         ]
-        tasks: ['copy:main']
       html :
         files : ['./app/index.html']
-        tasks: ['copy:main']
       css :
         files : [
           "./app/css/*"
         ]
-        tasks: ['copy:main']
       options :
         livereload : true
     browserSync:

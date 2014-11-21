@@ -33,7 +33,6 @@ function scrollTo(start, end, duration){
   });
 }
 
-
 /*
 ** resize header based on scroll
 */
@@ -114,6 +113,12 @@ function carousel() {
     return $car.carousel(pages.indexOf(p));
   };
   projections.goTo = goTo;
+
+  // links to aspects of the feature in
+  // the header
+  $('.carousel-link').click(function() {
+    goTo(this.id);
+  });
 
   // go to page in url
   goTo(hash);
