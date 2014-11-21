@@ -12,7 +12,7 @@
 */
 
 // protect global scope
-;(function(){
+;(function() {
 
 // move node to front
 d3.selection.prototype.moveToFront = function() {
@@ -20,6 +20,14 @@ d3.selection.prototype.moveToFront = function() {
     this.parentNode.appendChild(this);
   });
 };
+
+
+// load images async
+$('img.async').each(function() {
+  $this = $(this);
+  $this.attr('src', $this.data().src);
+});
+
 
 // read more button
 $('a.read-more').click(function () {

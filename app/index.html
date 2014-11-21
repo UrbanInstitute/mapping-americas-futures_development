@@ -29,7 +29,7 @@
 <body>
 
   <div class="cropper" id="crossfade">
-    <img class="title-image" src="images/Header001.png"/>
+    <img class="title-image async" data-src="images/Header001.png"/>
     <!--
       <img class="title-image" src="images/Header002.png"/>
       <img class="title-image" src="images/Header003.png"/>
@@ -41,12 +41,12 @@
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-header">
       <a href="http://www.urban.org">
-        <img class="logo-image hidden-lg"
-             src="images/new_mark_U-01.png"/>
+        <img class="logo-image hidden-lg async"
+             data-src="images/new_mark_U-01.png"/>
       </a>
       <a href="http://www.urban.org">
-        <img class="logo-image hidden-xs hidden-sm hidden-md"
-              src="images/logo_revblue_trans.png"/>
+        <img class="logo-image hidden-xs hidden-sm hidden-md async"
+              data-src="images/logo_revblue_trans.png"/>
       </a>
       <span id="title-span" class="hidden-xs">
         MAPPING AMERICA'S FUTURES
@@ -73,9 +73,9 @@
             INTERACTIVE FEATURES
           </h1>
           <hr/>
-          <a>Map data tool</a>
-          <a>Text-based Feature Title Here</a>
-          <a>Questions or Comments?<br/>Let us know.</a>
+          <a class="carousel-link" id="map">Mapping America's Futures</a>
+          <a class="carousel-link" id="feature">What will America look like in 2030?</a>
+          <a href="http://www.urban.org/about/contact.cfm">Questions or Comments?<br/>Let us know.</a>
         </div>
         <div class="col-md-5 col-lg-5">
           <div class="row">
@@ -88,12 +88,12 @@
           </div>
           <div class="row">
             <div class="col-md-7">
-              <a>Which states are more charitable, red ones or blue ones?</a>
-              <a>Is marriage a solution to income inequality?</a>
-              <a>Hurricane Sandy: What we still haven’t learned</a>
+              <a href="http://blog.metrotrends.org/2014/10/states-charitable-red-blue-ones/">Which states are more charitable, red ones or blue ones?</a>
+              <a href="http://blog.metrotrends.org/2014/10/marriage-solution-income-inequality/">Is marriage a solution to income inequality?</a>
+              <a href="http://blog.metrotrends.org/2014/10/hurricane-sandy-havent-learned/">Hurricane Sandy: What we still haven’t learned</a>
             </div>
             <div class="col-md-5">
-              <a>Data in action: a breakthrough in estimating nonprofit employment</a>
+              <a href="http://blog.metrotrends.org/2014/10/data-action-breakthrough-estimating-nonprofit-employment/">Data in action: a breakthrough in estimating nonprofit employment</a>
             </div>
           </div>
         </div>
@@ -102,12 +102,11 @@
           RESEARCH
           </h1>
           <hr/>
-          <a>Municipal Debt: What Does It Buy and Who Benefits?</a>
-          <a>Is Bigger Better? The Implications of Health Care
-          Provider Consolidation: An Interview with Atul Gawande</a>
-          <a>Small-Dollar Credit: Consumer Needs and Industry
+          <a href="http://www.taxpolicycenter.org/publications/url.cfm?ID=109047">Municipal Debt: What Does It Buy and Who Benefits?</a>
+          <a href="http://www.urban.org/publications/413280.html">Is Bigger Better? The Implications of Health Care Provider Consolidation: An Interview with Atul Gawande</a>
+          <a href="http://www.urban.org/publications/413278.html">Small-Dollar Credit: Consumer Needs and Industry
           Challenges</a>
-          <a>Federal and State Policy Toward Association Health
+          <a href="http://www.urban.org/publications/413279.html">Federal and State Policy Toward Association Health
           Plans in Oregon</a>
         </div>
       </div>
@@ -172,19 +171,22 @@
                 its character.
                 </p>
 
-                <div class="place-holder-image">(insert image)</div>
+                <img data-src="images/yt_ga-sm.jpg"
+                     class="feature-image img-responsive img-rounded async">
 
-                <div class="hr-wrapper">
-                  <hr class="orange-hr"/>
-                </div>
+                <div class="quote-wrapper">
+                  <div class="hr-wrapper">
+                    <hr class="orange-hr"/>
+                  </div>
 
-                <div class="quote">
+                  <div class="quote">
                   Planning for growth and decline: <br/>
                   the futures of Atlanta and Youngstown
-                </div>
+                  </div>
 
-                <div class="hr-wrapper">
-                  <hr class="orange-hr"/>
+                  <div class="hr-wrapper">
+                    <hr class="orange-hr"/>
+                  </div>
                 </div>
 
                 <p>
@@ -352,18 +354,21 @@
                 deal with it."
                 </p>
 
-                <div class="place-holder-image">(insert image)</div>
+                <img data-src="images/shutterstock_217103686-sm.jpg"
+                     class="feature-image img-responsive img-rounded async">
 
-                <div class="hr-wrapper">
-                  <hr class="orange-hr"/>
-                </div>
+                <div class="quote-wrapper">
+                  <div class="hr-wrapper">
+                    <hr class="orange-hr"/>
+                  </div>
 
-                <div class="quote">
+                  <div class="quote">
                   Don’t forget about Generation Z
-                </div>
+                  </div>
 
-                <div class="hr-wrapper">
-                  <hr class="orange-hr"/>
+                  <div class="hr-wrapper">
+                    <hr class="orange-hr"/>
+                  </div>
                 </div>
 
                 <p>
@@ -404,18 +409,21 @@
                 </p>
 
 
-                <div class="place-holder-image">(insert image)</div>
+                <img data-src="images/shutterstock_119607373-sm.jpg"
+                     class="feature-image img-responsive img-rounded async">
 
-                <div class="hr-wrapper">
-                  <hr class="orange-hr"/>
-                </div>
+                <div class="quote-wrapper">
+                  <div class="hr-wrapper">
+                    <hr class="orange-hr"/>
+                  </div>
 
-                <div class="quote">
-                  Greater diversity in nearly every city and state
-                </div>
+                  <div class="quote">
+                    Greater diversity in nearly every city and state
+                  </div>
 
-                <div class="hr-wrapper">
-                  <hr class="orange-hr"/>
+                  <div class="hr-wrapper">
+                    <hr class="orange-hr"/>
+                  </div>
                 </div>
 
 
@@ -510,18 +518,22 @@
                 </p>
 
 
-                <div class="place-holder-image">(insert image)</div>
+                <img data-src="images/AP448161014046-sm.jpg"
+                     class="feature-image img-responsive img-rounded async">
 
-                <div class="hr-wrapper">
-                  <hr class="orange-hr"/>
-                </div>
 
-                <div class="quote">
+                <div class="quote-wrapper">
+                  <div class="hr-wrapper">
+                    <hr class="orange-hr"/>
+                  </div>
+
+                  <div class="quote">
                   Demography is not destiny
-                </div>
+                  </div>
 
-                <div class="hr-wrapper">
-                  <hr class="orange-hr"/>
+                  <div class="hr-wrapper">
+                    <hr class="orange-hr"/>
+                  </div>
                 </div>
 
                 <p>
@@ -596,7 +608,7 @@
 
 
     <div class="item" id="map">
-      <div class="view_button left" id="feature">READ THE<BR/> ARTICLE</div>
+      <div class="view_button right" id="feature">READ THE<BR/> ARTICLE</div>
       <div class="fill">
         <div class="container">
           <div class="col-md-10 col-md-offset-1 item-container"  id="map-tool-container">
