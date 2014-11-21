@@ -1,0 +1,659 @@
+/*
+//
+//
+// Population Projections 2.0
+// Ben Southgate (bsouthga@gmail.com)
+// 10/31/14
+//
+//
+// mapping factory function
+//
+//
+*/
+
+// protect global scope
+;(function(){
+
+
+//
+// given map settings, returns function
+// to produce maps
+//
+function mapper(options) {
+
+  //
+  // These "magic numbers" are not the pixel width and height,
+  // but simply a starting point for the w/h ratio
+  // which tightly bounds the map. The actual visible
+  // dimensions are set by the svg viewbox.
+  //
+  var width = 1011;
+  var height = 588;
+  // the assumption / age / race settings object
+  var settings = options.settings;
+  // standard projection function for the maps
+  var geoPath = d3.geo.path().projection(
+    d3.geo.albersUsa()
+      .scale(width*1.2)
+      .translate([width/2, height/2])
+  );
+
+  // cache for path strings (check for existence already)
+  var pathcache = projections.cache.path = projections.cache.path || {};
+  // cache for map data
+  var datacache = projections.cache.data = projections.cache.data || {};
+
+  // zero padding function
+  var zeros = d3.format("05d"), i_d;
+  // memoized path generation function
+  var path = function(d) {
+    var uid = d.id;
+    if (uid in pathcache) {
+      return pathcache[uid];
+    } else {
+      return (pathcache[uid] = geoPath(d));
+    }
+  };
+
+  // create a path in an object to a value
+  var recurseAssign = function(obj, path, value, last_index) {
+    path.forEach(function(key, i) {
+      if (i == last_index) return obj[key] = value;
+      if (!(key in obj)) obj[key] = {};
+      obj = obj[key] || {};
+    });
+  };
+
+  // structure data for usage in map
+  var prepMapData = function(raw) {
+    var d = {};
+    var variable_order = ["cz", "agegrp", "yr", "r"];
+    var last_index = variable_order.length - 1;
+    var row, path;
+    for (var r = 0, l=raw.length; r < l; r++) {
+      row = raw[r];
+      path = variable_order.map( function(n) { return row[n]; } );
+      recurseAssign(d, path, row.pop, last_index);
+    }
+    return d;
+  };
+
+  //
+  //
+  // map constructor
+  //
+  //
+  function map(renderOpts) {
+
+    // map object to return ("self")
+    var self = {async : renderOpts.async};
+    var container = d3.select(renderOpts.renderTo);
+    var tooltipDiv;
+
+    // local references to options
+    var colors = options.colors;
+    var bins = options.bins;
+    var display = options.display;
+    var missingColor = options.missingColor;
+    var topology = options.topology;
+    var state_topology = options.state_topology;
+
+    // Correct ratio of bins to colors
+    // (there should be one more color than bins)
+    var d = (colors.length - bins.length);
+    var fixed_bins = (d <= 0) ? bins.slice(0, d-1) : bins;
+    var fixed_colors = (d > 1) ? colors.slice(0, -d+1) : colors;
+
+    // create scale for breaks
+    var colorf = d3.scale.threshold()
+                  .domain(fixed_bins)
+                  .range(fixed_colors);
+
+    var createPopulationFunction = function(settings, data) {
+      // get the different settigns
+      var start = settings.start_abbr();
+      var end = settings.end_abbr();
+      var age = settings.age_number();
+      var race = settings.race_abbr();
+      // return a function which provides
+      // the population values in the two periods
+      // for a given czone
+      var uid, v_start, v_end;
+      return function(d) {
+        uid = parseInt(d.id);
+        if (data[uid]) {
+          // get population values from starting and ending periods
+          v_start = parseInt(data[uid][age][start][race]);
+          v_end = parseInt(data[uid][age][end][race]);
+          if (v_end !== 0 && v_start !== 0) {
+            return {start : v_start, end : v_end};
+          } else {
+            return false;
+          }
+        } else {
+          return false;
+        }
+      };
+    };
+
+    // color fill for czones, defaulting to missing color
+    var createFill = function(settings, data) {
+      // return function which calculates the population
+      // growth rate over the period requested and returns a color
+      var popf = createPopulationFunction(settings, data);
+      return function(d) {
+        var pop = popf(d);
+        if (pop) {
+          return colorf((pop.end - pop.start) / pop.start);
+        } else {
+          return missingColor;
+        }
+      };
+    };
+
+    // stop click events
+    var stopped = function() {
+      if (d3.event.defaultPrevented) d3.event.stopPropagation();
+    };
+
+    // map control icons (fontawesome)
+    container.selectAll('i')
+      .data(['search-plus', 'search-minus', 'arrows-alt'])
+      .enter()
+      .append('i')
+      .attr('class', function(d) {
+        return 'map-control fa fa-' + d;
+      })
+      .style('top', function(d, i) {
+        return (10 + 30*i) + 'px';
+      });
+
+    // add svg container class to map
+    container.classed('map-svg-container', true);
+
+    // Container SVG which follows dimensions of its container div
+    var svg = container.append('svg')
+      .attr({
+        "class" : "us-map map-svg",
+        "preserveAspectRatio" : "xMinYMin meet",
+        "viewBox" :  "0 0 " + width + " " + height
+      })
+      // stop event propogation when clicking, true indicates...
+      // http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-registration
+      .on("click", stopped, true);
+
+    // container for paths
+    var features = svg.append('g');
+
+    // zone paths
+    var czones = features.append('g')
+      .selectAll('path')
+        .data(topology)
+      .enter().append('path')
+        .attr({
+          "class": 'us-map-czones',
+          "id" : function(d) { return d.id; },
+          "d" : path,
+        });
+
+    // state paths
+    var states = features.append('g')
+      .selectAll('path')
+        .data(state_topology)
+      .enter().append('path')
+        .attr({
+          "class": 'us-map-states',
+          "id" : function(d) { return d.id; },
+          "d" : path
+        });
+
+    /* ---------------------------
+      Zooming behavior
+    -----------------------------*/
+
+    var zoom = d3.behavior.zoom()
+        .center([width/2, height/2])
+        .scaleExtent([1, 8])
+        .on("zoom", zoomed);
+
+
+    function zoomed() {
+      features.style("stroke-width", 1.5 / d3.event.scale + "px");
+      features.attr(
+        "transform",
+        "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
+      );
+    }
+
+    svg.call(zoom)
+       .call(zoom.event)
+       .on("dblclick.zoom", null);
+    /* ---------------------------
+    -----------------------------*/
+
+
+
+    /* ---------------------------
+      Map Tooltip
+    -----------------------------*/
+    if (d3.select('div.us-map-tooltip').empty()) {
+      tooltipDiv = d3.select('body').append('div')
+        .attr('class', 'us-map-tooltip hidden');
+    } else {
+      tooltipDiv = d3.select('div.us-map-tooltip');
+    }
+
+    // Move tooltip to position above mouse
+    var x, y, tt_bbox;
+    var moveToolTip = function(){
+      x = d3.event.pageX;
+      y = d3.event.pageY;
+      tt_bbox = tooltipDiv.node().getBoundingClientRect();
+      tooltipDiv.style({
+        top :  "" + (y - tt_bbox.height - 20) + "px",
+        left : "" + (x - tt_bbox.width / 2) + "px"
+      });
+    };
+
+    // move the tooltip as the user moves their
+    // mouse over the map container div
+    container.on('mousemove', moveToolTip);
+
+    var czone_click_callback = function(){};
+    czones
+      .attr('fill', missingColor)
+      .on( 'mouseover', function(d){
+        // create function to calculate population
+        // numbers given current settings
+        var popf = createPopulationFunction(settings, self.data);
+        // create object holding start and end populations
+        var pop = popf(d) || {};
+        // add percentage and czone id to object
+        pop.percent = (pop.end - pop.start) / pop.start;
+        pop.czone = this.id;
+        // call tooltip html renderer on tooltip
+        var formatter = options.tooltip.formatter;
+        tooltipDiv.html(formatter.call(pop))
+            .classed('hidden', false);
+        // move the tooltip above the mouse (needed for IE)
+        moveToolTip();
+      })
+      .on('mouseout', function(){
+        // Fade out tooltip if not over map
+        tooltipDiv.classed('hidden', true);
+      })
+      // czone click callback
+      .on('click', function(){
+        czone_click_callback(this.id);
+      });
+
+    /* ---------------------------
+    -----------------------------*/
+
+
+    /* ---------------------------
+      Map Control Icon Bindings
+    -----------------------------*/
+    // recenter map on click of reset button
+    container.select(".fa-arrows-alt")
+      .on('click', function(){self.reset();});
+
+
+    // after hours of failing at figuring this out,
+    // taken from http://stackoverflow.com/a/21653008/1718488
+    function zoomByFactor(factor, dur) {
+      var scale = zoom.scale();
+      var ext = zoom.scaleExtent();
+      var newScale = Math.max(ext[0], Math.min(ext[1], scale*factor));
+      var t = zoom.translate();
+      var c = [width / 2, height / 2];
+      zoom
+        .scale(newScale)
+        .translate([
+          c[0] + (t[0] - c[0]) / scale * newScale,
+          c[1] + (t[1] - c[1]) / scale * newScale
+        ])
+        .event(svg.transition().duration(dur || 500));
+    }
+
+    // zoom in + out
+    container.selectAll(".fa-search-plus, .fa-search-minus")
+      .on('click', function(){
+        zoomByFactor(
+          d3.select(this).classed('fa-search-plus') ? 1.5 : (1/1.5)
+        );
+      });
+    /* ---------------------------
+    -----------------------------*/
+
+    /* ---------------------------
+      Legend
+    -----------------------------*/
+    // if a legend container id is passed to the map constructor
+    // render a legend for this map to that container
+    var legendRenderTo = renderOpts.legendRenderTo, legend;
+    if (legendRenderTo) {
+
+      // Clear previous legend
+      var legend_container = d3.select(legendRenderTo)
+                                .classed('map-legend-svg-container', true);
+      legend_container.selectAll("*").remove();
+
+      // if the legend is rendered somewhere else, copy the svg
+      var existing = $('.us-map-legend.map-legend-svg').first();
+      if (existing.length && !renderOpts.legendMouseover) {
+        $(legendRenderTo).append(existing.clone());
+      } else {
+        // similar to the map, these simply guide the ratio of w/h
+        // for the legend, the actual size is determined dynamically
+        // by the svg view box
+        var legend_width = 400;
+        var legend_height = 62;
+        // Append svg element to draw legend
+        legend = legend_container
+              .append('svg')
+                .attr({
+                  preserveAspectRatio : "xMinYMin meet",
+                  viewBox :  "0 0 " + legend_width + " " + legend_height,
+                  class : 'us-map-legend map-legend-svg'
+                })
+                .append('g');
+
+        // Spacing between legend bins
+        var offset = 0;
+        // number of bins to render in legend
+        var n_bins = fixed_bins.length;
+        // Width of colored bins
+        var binWidth = (legend_width / (n_bins+1)) - offset;
+        // height of colored bins
+        var binHeight = (binWidth * 0.5);
+
+        // add hidden svg canvas for calculating bounding boxes
+        // even if the main svg is not yet being displayed
+        var helper_svg = d3.select('body').append('svg')
+          .style('visibility', "hidden");
+
+        // add legend rectangles
+        var legend_rects = legend.selectAll('rect')
+            .data(fixed_colors)
+            .enter()
+            .append('rect')
+              .attr({
+                "class" : "us-map-legend-rect",
+                id : function(d){ return d; },
+                width : binWidth,
+                height : binHeight,
+                // position
+                x : function(d, i) { return offset/2 + i*binWidth + i*offset; },
+                y : (legend_height - binHeight - 20)
+              })
+              .style('fill', function(d){ return d; });
+
+        if (renderOpts.legendMouseover) {
+          // show zones with this legend color
+          legend_rects.on('mouseover', function(){
+            var fill = createFill(settings, self.data);
+            var rect = this;
+            czones.attr('fill', function(d){
+                var czone_fill = d3.select(this).attr('fill');
+                return czone_fill == rect.id ? czone_fill : missingColor;
+            });
+          }).on('mouseout', function(){
+            var fill = createFill(settings, self.data);
+            czones.attr('fill', fill);
+          });
+        }
+
+        var formatter = options.legendFormat;
+        // Add text to legend, and reposition it correctly
+        legend.selectAll('text')
+              .data(fixed_bins)
+            .enter()
+            .append('text')
+              .attr('class', 'us-map-legend-label')
+              .text(formatter)
+              .attr({
+                y : (legend_height - binHeight - 30),
+                x : function(d, i) {
+                  // create text node in helper svg
+                  // and use it to calculate the bounding box
+                  // this is necessary if the client
+                  // lands on the feature page, resulting
+                  // in the map legend not being rendered and
+                  // the text nodes having no width
+                  var t = helper_svg.append('text')
+                            .text(formatter(d))
+                            .attr('class', 'us-map-legend-label');
+                  var w = t.node().getBBox().width;
+                  t.remove();
+                  return (i+1)*(binWidth + offset) - (w/2) ;
+                }
+              });
+
+        //
+        //
+        // add legend divider + bottom text
+        //
+        //
+        // half way accross the legend
+        var half_way = ((n_bins+1) / 2)*(binWidth + offset);
+        // midway line
+        legend.append('line')
+          .attr({
+            "x1" : half_way,
+            "x2" : half_way,
+            "y1" : legend_height,
+            "y2" : binHeight
+          }).style({
+            "stroke" : "#000",
+            "stroke-width" : 1
+          });
+        // growth/decline text
+        legend.selectAll('text.growth-text')
+          .data([
+            "Population decline", "Population growth"
+          ]).enter()
+          .append('text')
+          .text(function(d) {return d;})
+          .attr({
+            'class' : 'growth-text',
+            y : legend_height - 3,
+            x : function(d, i) {
+              // create text node in helper svg
+              // and use it to calculate the bounding box
+              // this is necessary if the client
+              // lands on the feature page, resulting
+              // in the map legend not being rendered and
+              // the text nodes having no width
+              var t = helper_svg.append('text')
+                        .text(d)
+                        .attr('class', 'growth-text');
+              var w = t.node().getBBox().width;
+              t.remove();
+              return i*half_way + (half_way - w)/2 ;
+            }
+          });
+
+        // remove helper svg from body
+        helper_svg.remove();
+      }
+
+
+
+    }
+    /* ---------------------------
+    -----------------------------*/
+
+    // set click callback
+    self.click = function(callback) {
+      czone_click_callback = callback;
+      return self;
+    };
+
+    // reset zoom
+    self.reset = function(duration) {
+      svg.transition()
+            .duration(duration || 750)
+            .call(zoom.translate([0, 0]).scale(1).event);
+      return self;
+    };
+
+    /* ----------------------------------
+        center the map on a target czone
+       ---------------------------------- */
+    self.target = function(czone_id, duration) {
+      // reset map if US is selected
+      if (czone_id == "0") return self.reset(duration);
+      // get czone dom node
+      var node = $('.us-map-czones#' + czone_id).get(0);
+      // zoom to bounding box : http://bl.ocks.org/mbostock/9656675
+      var bounds = geoPath.bounds(node.__data__),
+          dx = bounds[1][0] - bounds[0][0],
+          dy = bounds[1][1] - bounds[0][1],
+          x = (bounds[0][0] + bounds[1][0]) / 2,
+          y = (bounds[0][1] + bounds[1][1]) / 2,
+          extent = zoom.scaleExtent(),
+          scale = 0.9 / Math.max(dx / width, dy / height);
+      // cap scale at zoom bounds
+      scale = Math.min(extent[1], Math.max(extent[0], scale));
+      var translate = [width / 2 - scale * x, height / 2 - scale * y];
+      // zoom to czone
+      svg.transition()
+          .duration(duration || 750)
+          .call(zoom.translate(translate).scale(scale).event);
+      // method chaining
+      return self;
+    };
+
+
+    /* ----------------------------------
+        center the map on a target czone
+       ---------------------------------- */
+    self.highlight = function(czone) {
+      if (czone == "0") return self;
+      var fade = function(d) {
+        if (this.id == czone) {
+          d3.select(this).classed('highlighted', true)
+            .moveToFront();
+        } else {
+          d3.select(this).classed('faded', true);
+        }
+      };
+      //
+      // add fill css transitions,
+      // and highlight the czone
+      //
+      czones
+        .classed('transition', true)
+        .each(fade);
+      //
+      // transition fade on mouseover
+      //
+      container.on('mouseover', function() {
+        czones.classed('faded', false);
+      })
+      .on('mouseout', function() {
+        czones.each(fade);
+      });
+      return self;
+    };
+
+
+
+    /* ---------------------------
+        Update Function
+      -----------------------------*/
+    self.lag_path = null;
+    // update map with new assumption settings
+    self.update = function(settings, callback) {
+
+      // bounce back if already loading something
+      if (!self.async && projections.loading_indicator) return self;
+
+      // path to folder, using stored settings object
+      var path = projections.path(settings);
+
+      // check if the assumptions have been changed
+      // and if the path is the same as last time
+      // if so, no need to update
+      if (settings.assumption_change &&
+          path == self.lag_path) return self;
+      self.lag_path = path;
+
+      // transition map to new fill color
+      var transition = function(data) {
+        // create fill function for current settings
+        var fill = createFill(settings, data);
+        return czones
+          .transition()
+          .duration(300)
+          .attr('fill', fill);
+      };
+
+      // function to call when data is loaded
+      var end_callback = function(){
+        transition(self.data);
+        projections.loading_indicator = false;
+        if (callback) callback();
+      };
+
+      // try to get data from cache, or download it
+      if (datacache[path]) {
+        self.data = datacache[path];
+        end_callback();
+      } else {
+        projections.loading_indicator = true;
+        // progress bar for loading
+        var start_seconds = Date.now();
+        // progress bar, only show if loading is slow
+        var progress_bar;
+        // load csv
+        d3.csv("data/Map/" + path, function(error, downloaded_data){
+          if (error) throw error;
+          self.data = datacache[path] = prepMapData(downloaded_data);
+          if (progress_bar) {
+            progress_bar.remove(end_callback);
+          } else {
+            end_callback();
+          }
+        }).on("progress", function(event){
+          var time = Date.now();
+          // if loading has taken longer than 200 miliseconds,
+          // add a progress bar to the svg window
+          if (!progress_bar && (time - start_seconds) > 200) {
+            progress_bar = projections.progress({
+              "width" : width,
+              "height" : height,
+              "svg" : svg
+            });
+          }
+          //update progress bar
+          if (d3.event.lengthComputable) {
+            var percentComplete = Math.round(d3.event.loaded * 100 / d3.event.total);
+            if (progress_bar) progress_bar.update(percentComplete);
+          }
+        });
+      }
+      return self;
+    };
+    /* ---------------------------
+    -----------------------------*/
+
+    return self;
+  }
+
+  map.options = function(update) {
+    options = $.extend({}, options, update);
+    return map;
+  };
+
+  return map;
+}
+
+
+
+// write to projections module
+projections.mapper = mapper;
+
+
+}).call(this);

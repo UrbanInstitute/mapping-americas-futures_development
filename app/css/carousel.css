@@ -1,0 +1,130 @@
+/*
+#
+#
+# Population Projections 2.0
+# Ben Southgate (bsouthga@gmail.com)
+# 10/31/14
+#
+#
+# Carousel Styles
+#
+#
+*/
+
+
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Carousel Transition + Controls
+  ---------------------------------------
+  --------------------------------------- */
+
+#carousel {
+  padding:0;
+  padding-top: 200px;
+}
+
+#carousel a.carousel-control {
+  background-image: none;
+  z-index: 1001;
+  width: 0;
+}
+
+.carousel,.item,.active{height:100%;}
+.carousel-inner{height:100%;}
+.fill{
+  width:100%;
+  min-height: 100%;
+  padding: 0;
+}
+
+.carousel-inner > .item {
+  padding:0;
+  height: 100%;
+  -webkit-transition: 0.7s ease-in-out left;
+  -moz-transition: 0.7s ease-in-out left;
+  -o-transition: 0.7s ease-in-out left;
+  transition: 0.7s ease-in-out left;
+}
+/*---------------------------------------
+  --------------------------------------*/
+
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Carousel Toggle Button
+  ---------------------------------------
+  --------------------------------------- */
+
+/*
+  Shrink for phones
+*/
+@media (max-width: 1160px) {
+    div.view_button {
+      text-align: center;
+      margin-top:300px;
+      font-size: 12px;
+    }
+    div.view_button.right {
+      -moz-transform: rotate(270deg) translate(0, 40px);
+      -webkit-transform: rotate(270deg) translate(0, 40px);
+      transform: rotate(270deg) translate(0, 40px);
+      border-top-left-radius:10px;
+      border-top-right-radius:10px;
+      border-bottom-left-radius: 0px;
+    }
+    div.view_button.left {
+      -moz-transform: rotate(90deg) translate(0, 30px);
+      -webkit-transform: rotate(90deg) translate(0, 30px);
+      transform: rotate(90deg) translate(0, 30px);
+      border-top-left-radius:10px;
+      border-top-right-radius:10px;
+      border-bottom-right-radius: 0px;
+    }
+}
+
+/* disable to view feature */
+/*.view_button#feature {
+  display: none;
+}*/
+
+.view_button {
+  position: fixed;
+  font-size: 16px;
+  background-color: #0096D2;
+  color:white;
+  top:0px;
+  margin-top:400px;
+  margin-top:40vh;
+  padding:10px 20px;
+  z-index: 1000;
+  cursor: pointer;
+  -webkit-transition: 0.2s ease-in-out;
+     -moz-transition: 0.2s ease-in-out;
+       -o-transition: 0.2s ease-in-out;
+          transition: 0.2s ease-in-out;
+}
+
+.view_button:hover {
+  -moz-box-shadow: 5px 5px 4px #ccc;
+  -webkit-box-shadow: 5px 5px 4px #ccc;
+  box-shadow: 5px 5px 4px #ccc;
+  background-color: #fdbf11;
+}
+
+.view_button.right {
+  right: 0px;
+  text-align: right;
+  border-top-left-radius:10px;
+  border-bottom-left-radius:10px;
+}
+.view_button.left {
+  left: 0px;
+  text-align: left;
+  border-top-right-radius:10px;
+  border-bottom-right-radius:10px;
+}
+/*---------------------------------------
+  --------------------------------------*/

@@ -1,0 +1,157 @@
+/*
+#
+#
+# Population Projections 2.0
+# Ben Southgate (bsouthga@gmail.com)
+# 10/31/14
+#
+#
+# Bar and Line Charts
+#
+#
+*/
+
+.chart-svg {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.chart-svg-container {
+  display: inline-block;
+  position: relative;
+  padding:0px;
+  vertical-align: middle;
+}
+
+/*---------------------------------------
+  ---------------------------------------
+    Bar Charts
+  ---------------------------------------
+  --------------------------------------- */
+.bar {
+  fill : #0096D2;
+}
+
+.bar.highlight {
+  fill : #fdbf11;
+}
+
+.bar-title {
+  font-size: 30px;
+}
+
+.axis {
+  font-size: 18px;
+  fill : none;
+}
+
+.axis path.domain {
+  stroke : #000;
+  stroke-width : 1px;
+}
+
+
+.y.axis path.domain {
+  fill : none;
+  stroke : none;
+}
+
+.y.grid .tick {
+  stroke-dasharray : 3, 5;
+  stroke : #777;
+}
+
+.pyramid.bar {
+  cursor: pointer;
+}
+
+.pyramid:first-child .axis text {
+  stroke : none;
+  fill : #000;
+}
+
+.pyramid .x.axis text {
+  stroke : none;
+  fill : #000;
+}
+
+.bar-label {
+  fill : #000;
+}
+
+.datalabel {
+  font-size: 18px;
+  fill : #000;
+};
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+
+
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Line Charts
+  ---------------------------------------
+  --------------------------------------- */
+.line {
+  fill : none;
+  stroke-width : 4px;
+}
+
+.line.legend {
+  stroke-width: 7px;
+}
+
+.axis.linechart {
+  fill : #000;
+}
+
+.y.axis.linechart .domain {
+  fill : none;
+  stroke : none;
+}
+
+.x.axis.linechart .domain{
+  fill : none;
+  stroke : #000;
+}
+
+.x.axis.linechart .tick line {
+  stroke : #000;
+  stroke-width : 1px;
+}
+
+.line-title {
+  font-size: 40px;
+}
+
+.grid.linechart .tick {
+  stroke-dasharray : 3, 5;
+  stroke : #777;
+}
+
+.legend-text.linechart {
+  fill : #000;
+  font-size: 25px;
+}
+
+.legend.linechart:hover {
+  cursor: pointer;
+}
+
+.linechart.tooltip-year {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.linechart.tooltip-series,
+.linechart.tooltip-values {
+  font-size: 20px;
+}

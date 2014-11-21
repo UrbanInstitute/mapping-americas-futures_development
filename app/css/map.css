@@ -1,0 +1,310 @@
+/*
+#
+#
+# Population Projections 2.0
+# Ben Southgate (bsouthga@gmail.com)
+# 10/31/14
+#
+#
+# US Map styles
+#
+#
+*/
+
+
+.us-map-plexiglass {
+  fill : rgba(255,255,255, 0.7);
+}
+
+.us-map-progress-background {
+  fill : #aaa;
+}
+
+.us-map-progress-bar {
+  fill : #0096D2;
+}
+
+.us-map-progress-text {
+  font-size: 30px;
+}
+
+/*---------------------------------------
+  ---------------------------------------
+    Map Paths
+  ---------------------------------------
+  --------------------------------------- */
+path.us-map-czones {
+  stroke : #fff;
+  stroke-width: 0.5px;
+}
+
+path.us-map-czones.transition {
+  -webkit-transition: fill .3s ease;
+  -moz-transition: fill .3s ease;
+  -o-transition: fill .3s ease;
+  transition: fill .3s ease;
+}
+
+path.us-map-czones:hover, path.us-map-czones.highlighted {
+  stroke : #000;
+  stroke-width: 1.5px;
+}
+
+path.us-map-states {
+  fill : none;
+  stroke : #fff;
+  stroke-width : 1.5px;
+}
+
+path.us-map-czones.faded {
+  fill: #aaa;
+}
+
+
+/*---------------------------------------
+  --------------------------------------*/
+
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Map SVG
+  ---------------------------------------
+  --------------------------------------- */
+.map-svg {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.map-svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding:0px;
+  padding-bottom: 58%; /* depends on svg ratio, = (heightpx/widthpx)*width% */
+  vertical-align: middle;
+  background-color: #fff;
+  cursor: pointer;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+
+.map-svg-container:active {
+  cursor: all-scroll;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+}
+/*---------------------------------------
+  --------------------------------------*/
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Map Legend
+  ---------------------------------------
+  --------------------------------------- */
+.us-map-legend-rect:hover {
+  cursor: pointer;
+  stroke : #000;
+  stroke-width: 1;
+}
+
+.map-legend-svg {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.map-legend-svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding:0px;
+  padding-bottom: 16%; /* depends on svg ratio, = (heightpx/widthpx)*width% */
+  vertical-align: middle;
+  background-color: #fff;
+  cursor: pointer;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+/*---------------------------------------
+  --------------------------------------*/
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Map reset
+  ---------------------------------------
+  --------------------------------------- */
+.map-control {
+  padding: 5px 10px;
+  position: absolute;
+  left: 10px;
+  background-color: #777;
+  color:white;
+  opacity: 0.5;
+  border-radius: 5px;
+  z-index: 10;
+  -webkit-transition: 0.2s ease-in-out;
+  -moz-transition: 0.2s ease-in-out;
+  -o-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.map-control:hover {
+  opacity: 1;
+}
+/*---------------------------------------
+  --------------------------------------*/
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Map Tooltip
+  ---------------------------------------
+  --------------------------------------- */
+
+.us-map-tooltip {
+  display: block;
+  position: absolute;
+  color:#000;
+  background-color: #fff;
+  font-size: 20px;
+  padding: 10px;
+  border:1px solid #aaa;
+  border-radius: 5px;
+  z-index: 2000;
+  text-align: center;
+  opacity: 0.95;
+  visibility: visible;
+  -webkit-transition: visibility 0.2s linear;
+     -moz-transition: visibility 0.2s linear;
+       -o-transition: visibility 0.2s linear;
+          transition: visibility 0.2s linear;
+}
+
+.us-map-tooltip.hidden {
+  visibility: hidden;
+}
+
+.us-map-tooltip div {
+  width: 100%;
+}
+
+.us-map-tooltip #name {
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
+}
+
+.us-map-tooltip #growth_title,
+.us-map-tooltip #change_title  {
+  font-size: 16px;
+  color: #0096D2;
+}
+
+.us-map-tooltip #growth_value {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+.us-map-tooltip #change_value {
+  font-size: 14px;
+  font-weight: bold;
+  color: #000;
+}
+
+.us-map-tooltip #discover {
+  font-size: 12px;
+  font-style: italic;
+  color: #000;
+}
+
+.growth-text {
+  fill : #000;
+  font-style: italic;
+}
+
+/*---------------------------------------
+  --------------------------------------*/
+
+
+.inline-maps {
+  width: 100%;
+  display: block;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.inline-maps-header h1 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+
+.inline-maps-header h2 {
+  font-size: 13px;
+  font-weight: bold;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.inline-map-legend {
+  width: 70%;
+  margin: 5px auto;
+}
+
+.inline-map-legend.map-legend-svg-container {
+  display: inline-block;
+  position: relative;
+  padding:0px;
+  padding-bottom: 11.2%; /* depends on svg ratio, = (heightpx/widthpx)*width% */
+  vertical-align: middle;
+  background-color: #fff;
+  cursor: pointer;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+
+.inline-map-legend svg g rect:hover {
+  stroke : none;
+  cursor: default;
+}
+
+.inline-map-legend-container {
+  width: 100%;
+}
+
+@media (min-width: 1150px) {
+  .inline-maps {
+    width: 120%;
+    margin-left:-10%;
+  }
+
+  .inline-map-legend {
+    width: 50%;
+    margin: 0 auto;
+  }
+
+  .inline-map-legend.map-legend-svg-container {
+    padding-bottom: 8%;
+  }
+
+}
+
+.map-box {
+  width: 49%;
+  display: inline-block;
+  text-align: center;
+  float: left;
+}
+
+.map-box:nth-child(odd) {
+  float: right;
+}
+

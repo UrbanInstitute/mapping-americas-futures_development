@@ -1,0 +1,469 @@
+/*
+#
+#
+# Population Projections 2.0
+# Ben Southgate (bsouthga@gmail.com)
+# 10/31/14
+#
+#
+# General Styles
+#
+#
+*/
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Body Styles
+  ---------------------------------------
+  --------------------------------------- */
+html,body{
+  height:100%;
+  width: 100%;
+  font-family: 'Lato';
+  font-size:14px;
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+
+h2 {
+  font-size: 25px;
+}
+
+p {
+    font-size: 1.1em;
+}
+
+h1#title-header {
+  width: 100%;
+  text-align: center;
+  font-size: 45px;
+  font-weight: 300;
+  text-rendering: geometricPrecision;
+}
+
+h4#title-lead {
+  margin-top: 20px;
+  line-height: 25px;
+  font-weight: bold;
+}
+
+.urban-footer {
+  width: 100%;
+  text-align: center;
+  padding: 0;
+  margin: 20px 0;
+  float : none;
+}
+
+/*---------------------------------------
+  --------------------------------------*/
+
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Settings buttons
+  ---------------------------------------
+  --------------------------------------- */
+button.btn.settings-button {
+  background-color: #0096D2;
+  color: white;
+}
+
+button.btn.settings-button:not(.active):hover {
+  background-color: #777;
+}
+
+button.btn.settings-button.active {
+  background-color: #333;
+}
+/*---------------------------------------
+  --------------------------------------*/
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Nav override
+  ---------------------------------------
+  --------------------------------------- */
+.navbar-header {
+    float: none;
+}
+.navbar-left,.navbar-right {
+    float: none !important;
+}
+
+.navbar-toggle {
+  display: block;
+  border-radius: 20px;
+  margin-top: 10px;
+  padding: 3px 7px;
+  background-color: #fdbf11;
+  color: #fff;
+  cursor: pointer;
+}
+.navbar-toggle:active {
+  background-color: #fdbf11;
+}
+
+#hidden-share {
+  visibility: hidden;
+  opacity: 0;
+  display: inline-block;
+  border-right: 1px solid #fff;
+  padding-bottom: 10px;
+  margin-right: 5px;
+  padding-right: 5px
+  -webkit-transition: opacity .3s ease;
+  -moz-transition: opacity .3s ease;
+  -o-transition: opacity .3s ease;
+  transition: opacity .3s ease;
+}
+
+#hamburger-bun:hover #hidden-share {
+  visibility: visible;
+  opacity: 1;
+}
+
+#social, #hidden-share div {
+  display: inline-block;
+  padding : 3px 6px;
+  border-radius: 15px;
+  margin-top: 11px;
+  margin-right: 5px;
+  position: relative;
+  background-color: #0096D2;
+  color : #fff;
+}
+
+div#twitter {
+  padding: 3px 7px;
+  background-color: #55ACEE;
+}
+
+div#facebook {
+  padding: 3px 9px;
+  background-color: #3B5998;
+}
+
+div#mail {
+  background-color: #999;
+}
+
+#hamburger-bun {
+  position: absolute;
+  display: inline-block;
+  right: 0px;
+  padding-right: 15px;
+}
+
+#hamburger-bun  div:hover {
+  background-color: #777;
+  cursor: pointer;
+}
+
+nav.navbar {
+  height: 120px;
+}
+
+.navbar-collapse {
+    border-top: 1px solid transparent;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.navbar-fixed-top {
+top: 0;
+border-width: 0 0 1px;
+}
+.navbar-collapse.collapse {
+    display: none!important;
+}
+.navbar-nav {
+    float: none!important;
+margin-top: 7.5px;
+}
+.navbar-nav>li {
+    float: none;
+}
+.navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.collapse.in{
+  display:block !important;
+}
+
+.navbar-header {
+  text-align: center;
+}
+
+#title-span {
+  line-height: 120px;
+  font-size: 25px;
+  color : white;
+  font-weight: bold;
+}
+
+#briefs {
+  color : white;
+  background-color: #333;
+  top: 120px;
+  position: absolute;
+  width: 100%;
+}
+
+#hamburger-meat {
+  padding-top : 20px;
+  padding-bottom: 20px;
+}
+
+#hamburger-meat h1 {
+  font-size: 20px;
+}
+
+.height-adjust {
+  margin-top: 30px;
+}
+
+.logo-image {
+  float: left;
+  display: block;
+  position: absolute;
+  height: 100px;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+#hamburger-meat a {
+  display: block;
+  padding: 5px 0px;
+  cursor: pointer;
+  color: white;
+}
+
+.mini-footer {
+  position: absolute;
+  display: block;
+  top: 190px;
+}
+
+
+
+/*---------------------------------------
+  --------------------------------------*/
+
+/*---------------------------------------
+  ---------------------------------------
+    Misc
+  ---------------------------------------
+  --------------------------------------- */
+
+.jump-to-map {
+  color : #0096D2;
+  cursor: pointer;
+}
+
+.jump-to-map:hover {
+  color : #0096D2;
+}
+
+
+.quote {
+  font-size: 25px;
+  font-weight: 300;
+  width: 100%;
+  text-align: center;
+  margin: 20px 0px;
+}
+
+.place-holder-image {
+  width: 100%;
+  height: 400px;
+  line-height: 400px;
+  text-align: center;
+  color: #333;
+  background-color: #eee;
+  margin: 40px 0px;
+  border: 1px dashed #777;
+  border-radius: 5px;
+}
+
+.hr-wrapper {
+  width: 100%;
+  text-align: center;
+}
+
+.orange-hr {
+  width: 20%;
+  display: inline-block;
+  border: 1.5px solid #fdbf11;
+  margin : 10px;
+}
+
+.read-more {
+  cursor: pointer;
+}
+
+#map-more-text {
+  display: none;
+}
+
+.item-container {
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.item {
+  padding-top:100px;
+}
+
+label.centered {
+  width: 100%;
+  text-align: center;
+}
+
+label.select-label {
+  font-size: 12px;
+  line-height: 12px;
+  padding-bottom: 5px;
+}
+
+#top-row, #feature-top-row {
+  border-top: 8px solid #fdbf11;
+  border-radius: 8px;
+}
+
+#year-to {
+  font-style: italic;
+  font-size: 20px;
+  padding: 0 20px;
+  display: inline-block;
+}
+
+#return-to-map {
+  font-style: italic;
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#return-to-map:hover {
+  background-color: #0096D2;
+  color : #fff;
+}
+
+#right_controls {
+  text-align: right;
+}
+
+
+#return-button {
+  margin-left: 10px;
+}
+
+#year-select-container {
+  text-align: left;
+  padding: 20px 0px;
+}
+
+#detail-table tr td:nth-child(2){
+  padding-left: 10px;
+}
+
+#param-table {
+  margin-bottom: 10px;
+}
+
+#pyramids {
+  margin-top: 20px;
+}
+
+.navbar {
+  background-color: #000;
+  border-bottom: none;
+}
+
+.right-align {
+  float: right;
+  text-align: right;
+}
+
+.year-select {
+  display: inline-block;
+}
+
+.dropdown-menu {
+  min-width: 0px;
+}
+
+.dropdown-menu li {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.margin-group {
+  padding: 0px;
+  padding-right: 15px;
+}
+
+.year-select {
+  display: inline-block;
+  width: 35%
+}
+
+.color-label {
+  color: #0096D2;
+}
+
+#right_controls {
+  margin-bottom: 15px;
+}
+
+#czone-select {
+  float: right;
+}
+
+#detail-settings {
+  font-style: italic;
+  margin-top: -5px;
+  margin-bottom: 15px;
+}
+
+/*---------------------------------------
+  --------------------------------------*/
+
+
+
+/*---------------------------------------
+  ---------------------------------------
+    Header Image transition
+  ---------------------------------------
+  --------------------------------------- */
+
+#crossfade {
+  display: block;
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+ #crossfade > img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 0;
+}
