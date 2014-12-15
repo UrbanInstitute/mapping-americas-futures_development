@@ -143,8 +143,9 @@ q.awaitAll(function(error, data) {
         } else {
           t = "(no population)";
         }
+        var a = (parseFloat(this.czone) > 56 ? " area" : "");
         return (
-          '<div id="name">' + names[this.czone] + ' area</div>'+
+          '<div id="name">' + names[this.czone] + a + '</div>'+
           '<div id="growth_title">POPULATION GROWTH</div>'+
           '<div id="growth_value">' + p + '</div>'+
           '<div id="change_title">POPULATION CHANGE</div>' +
@@ -305,14 +306,30 @@ q.awaitAll(function(error, data) {
     });
   };
 
+  // update all the visuals with the new settings
+  // whenever a change is made to a setting
+  select_settings.change(refresh);
+
+
   // function to update detail info
   var update_detail = function(czone) {
+
     // update czone
-    select_settings.detail_czone = parseFloat(czone);
-    // refresh visuals
-    refresh(select_settings);
+    var cz = parseFloat(czone);
+    var cz_bound = (cz < 56 ? "states" : "czones");
+    var old_bound = select_settings.boundary;
+
+    select_settings.set({
+      detail_czone : czone,
+      boundary : (cz === 0 ? old_bound : cz_bound)
+    });
+
     // zoom to czone in map
     main_map.target(czone, 1500);
+
+    // update download links
+    projections.downloadLinks(select_settings);
+
   };
 
   // list of all the visuals to update
@@ -368,9 +385,6 @@ q.awaitAll(function(error, data) {
     })
   );
 
-  // update all the visuals with the new settings
-  // whenever a change is made to a setting
-  select_settings.change(refresh);
 
 
   //

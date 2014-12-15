@@ -42,6 +42,10 @@ function mapper(options) {
   var pathcache = projections.cache.path = projections.cache.path || {};
   // cache for map data
   var datacache = projections.cache.data = projections.cache.data || {};
+  // cache for map state data
+  var statecache = (
+    projections.cache.statedata = projections.cache.statedata || {}
+  );
 
   // zero padding function
   var zeros = d3.format("05d"), i_d;
@@ -67,13 +71,14 @@ function mapper(options) {
   // structure data for usage in map
   var prepMapData = function(raw) {
     var d = {};
-    var variable_order = ["cz", "agegrp", "yr", "r"];
+    var id = (raw[0].cz !== undefined) ? "cz" : "stfips";
+    var variable_order = [id, "agegrp", "yr", "r"];
     var last_index = variable_order.length - 1;
     var row, path;
     for (var r = 0, l=raw.length; r < l; r++) {
       row = raw[r];
       path = variable_order.map( function(n) { return row[n]; } );
-      recurseAssign(d, path, row.pop, last_index);
+      recurseAssign(d, path, Number(row.pop), last_index);
     }
     return d;
   };
@@ -194,19 +199,30 @@ function mapper(options) {
     // container for paths
     var features = svg.append('g');
 
-    // zone paths
-    var czones = features.append('g')
+    // zone paths to fill
+    var fill_czones = features.append('g')
       .selectAll('path')
         .data(topology)
       .enter().append('path')
         .attr({
-          "class": 'us-map-czones',
+          "class": 'us-map-czones us-map-boundary',
           "id" : function(d) { return d.id; },
           "d" : path,
         });
 
+    // state paths to fill
+    var fill_states = features.append('g')
+      .selectAll('path')
+        .data(state_topology)
+      .enter().append('path')
+        .attr({
+          "class": 'us-map-states-filled hidden us-map-boundary',
+          "id" : function(d) { return d.id; },
+          "d" : path
+        });
+
     // state paths
-    var states = features.append('g')
+    var czone_states = features.append('g')
       .selectAll('path')
         .data(state_topology)
       .enter().append('path')
@@ -216,7 +232,16 @@ function mapper(options) {
           "d" : path
         });
 
-
+    // state paths to hover over
+    var hover_states = features.append('g')
+      .selectAll('path')
+        .data(state_topology)
+      .enter().append('path')
+        .attr({
+          "class": 'us-map-states-hover hidden',
+          "id" : function(d) { return d.id; },
+          "d" : path
+        });
 
     // zone paths for hovering
     var hover_czones = features.append('g')
@@ -229,7 +254,8 @@ function mapper(options) {
           "d" : path,
         });
 
-
+    var fill_boundary = fill_czones;
+    var hover_boundary = hover_czones;
 
 
     /* ---------------------------
@@ -284,33 +310,37 @@ function mapper(options) {
     // mouse over the map container div
     container.on('mousemove', moveToolTip);
 
-    var czone_click_callback = function(){};
-    czones.attr('fill', missingColor);
+    var boundary_click_callback = function(){};
+    fill_boundary.attr('fill', missingColor);
 
-    hover_czones.on( 'mouseover', function(d){
-        // create function to calculate population
-        // numbers given current settings
-        var popf = createPopulationFunction(settings, self.data);
-        // create object holding start and end populations
-        var pop = popf(d) || {};
-        // add percentage and czone id to object
-        pop.percent = (pop.end - pop.start) / pop.start;
-        pop.czone = this.id;
-        // call tooltip html renderer on tooltip
-        var formatter = options.tooltip.formatter;
-        tooltipDiv.html(formatter.call(pop))
-            .classed('hidden', false);
-        // move the tooltip above the mouse (needed for IE)
-        moveToolTip();
-      })
-      .on('mouseout', function(){
-        // Fade out tooltip if not over map
-        tooltipDiv.classed('hidden', true);
-      })
-      // czone click callback
-      .on('click', function(){
-        czone_click_callback(this.id);
-      });
+    var bind_click_callback = function() {
+      hover_boundary.on( 'mouseover', function(d){
+          // create function to calculate population
+          // numbers given current settings
+          var popf = createPopulationFunction(settings, self.data);
+          // create object holding start and end populations
+          var pop = popf(d) || {};
+          // add percentage and czone id to object
+          pop.percent = (pop.end - pop.start) / pop.start;
+          pop.czone = this.id;
+          // call tooltip html renderer on tooltip
+          var formatter = options.tooltip.formatter;
+          tooltipDiv.html(formatter.call(pop))
+              .classed('hidden', false);
+          // move the tooltip above the mouse (needed for IE)
+          moveToolTip();
+        })
+        .on('mouseout', function(){
+          // Fade out tooltip if not over map
+          tooltipDiv.classed('hidden', true);
+        })
+        // czone click callback
+        .on('click', function(){
+          boundary_click_callback(this.id);
+        });
+    };
+
+    bind_click_callback();
 
     /* ---------------------------
     -----------------------------*/
@@ -446,13 +476,13 @@ function mapper(options) {
           legend_rects.on('mouseover', function(){
             var fill = createFill(settings, self.data);
             var rect = this;
-            czones.attr('fill', function(d){
+            fill_boundary.attr('fill', function(d){
                 var czone_fill = d3.select(this).attr('fill');
                 return czone_fill == rect.id ? czone_fill : missingColor;
             });
           }).on('mouseout', function(){
             var fill = createFill(settings, self.data);
-            czones.attr('fill', fill);
+            fill_boundary.attr('fill', fill);
           });
         }
 
@@ -565,7 +595,7 @@ function mapper(options) {
 
     // set click callback
     self.click = function(callback) {
-      czone_click_callback = callback;
+      boundary_click_callback = callback;
       return self;
     };
 
@@ -584,7 +614,7 @@ function mapper(options) {
       // reset map if US is selected
       if (czone_id == "0") return self.reset(duration);
       // get czone dom node
-      var node = $('.us-map-czones#' + czone_id).get(0);
+      var node = $('.us-map-boundary#' + czone_id).get(0);
       // zoom to bounding box : http://bl.ocks.org/mbostock/9656675
       var bounds = geoPath.bounds(node.__data__),
           dx = bounds[1][0] - bounds[0][0],
@@ -622,17 +652,17 @@ function mapper(options) {
       // add fill css transitions,
       // and highlight the czone
       //
-      czones
+      fill_boundary
         .classed('transition', true)
         .each(fade);
       //
       // transition fade on mouseover
       //
       container.on('mouseover', function() {
-        czones.classed('faded', false);
+        fill_boundary.classed('faded', false);
       })
       .on('mouseout', function() {
-        czones.each(fade);
+        fill_boundary.each(fade);
       });
       return self;
     };
@@ -643,6 +673,7 @@ function mapper(options) {
         Update Function
       -----------------------------*/
     self.lag_path = null;
+    self.lag_boundary = null;
     // update map with new assumption settings
     self.update = function(settings, callback) {
 
@@ -651,6 +682,24 @@ function mapper(options) {
 
       // path to folder, using stored settings object
       var path = projections.path(settings);
+      var boundary = settings.boundary;
+      var changed = (self.lag_boundary != boundary);
+      self.lag_boundary = boundary;
+
+      if (changed) {
+        fill_boundary.classed('hidden', true);
+        hover_boundary.classed('hidden', true);
+      }
+
+      if (boundary == "states") {
+        fill_boundary = fill_states;
+        hover_boundary = hover_states;
+        path = "data/states/Map/" + path;
+      } else {
+        fill_boundary = fill_czones;
+        hover_boundary = hover_czones;
+        path = "data/Map/" + path;
+      }
 
       // check if the assumptions have been changed
       // and if the path is the same as last time
@@ -659,22 +708,44 @@ function mapper(options) {
           path == self.lag_path) return self;
       self.lag_path = path;
 
+
       // transition map to new fill color
-      var transition = function(data) {
+      var transition = function(data, no_trans) {
         // create fill function for current settings
         var fill = createFill(settings, data);
-        return czones
-          .transition()
-          .duration(300)
-          .attr('fill', fill);
+
+        if (no_trans) {
+          fill_boundary.attr('fill', fill);
+        } else {
+          fill_boundary
+            .transition()
+            .duration(300)
+            .attr('fill', fill);
+        }
       };
+
 
       // function to call when data is loaded
       var end_callback = function(){
-        transition(self.data);
+
+        // if we're swithing between boundary types
+        // no fade transition
+        if (changed) {
+          transition(self.data, true);
+          fill_boundary.moveToFront();
+          hover_boundary.moveToFront();
+          self.lag_boundary = boundary;
+          bind_click_callback();
+          fill_boundary.classed('hidden', false);
+          hover_boundary.classed('hidden', false);
+        } else {
+          transition(self.data);
+        }
+
         projections.loading_indicator = false;
         if (callback) callback();
       };
+
 
       // try to get data from cache, or download it
       if (datacache[path]) {
@@ -687,7 +758,7 @@ function mapper(options) {
         // progress bar, only show if loading is slow
         var progress_bar;
         // load csv
-        d3.csv("data/Map/" + path, function(error, downloaded_data){
+        d3.csv(path, function(error, downloaded_data){
           if (error) throw error;
           self.data = datacache[path] = prepMapData(downloaded_data);
           if (progress_bar) {
@@ -708,7 +779,9 @@ function mapper(options) {
           }
           //update progress bar
           if (d3.event.lengthComputable) {
-            var percentComplete = Math.round(d3.event.loaded * 100 / d3.event.total);
+            var percentComplete = Math.round(
+              d3.event.loaded * 100 / d3.event.total
+            );
             if (progress_bar) progress_bar.update(percentComplete);
           }
         });

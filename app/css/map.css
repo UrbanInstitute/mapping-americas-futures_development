@@ -45,12 +45,14 @@ path.us-map-czones.transition {
   transition: fill .3s ease;
 }
 
-path.us-map-czones-hover {
+path.us-map-czones-hover,
+path.us-map-states-hover {
   fill : rgba(0,0,0,0);
   stroke : rgba(0,0,0,0);
 }
 
 path.us-map-czones-hover:hover,
+path.us-map-states-hover:hover,
 path.us-map-czones.highlighted {
   stroke : rgba(0,0,0,1);
   stroke-width: 1.5px;

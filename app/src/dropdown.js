@@ -39,7 +39,16 @@ function dropdown(names) {
     .enter()
     .append('option')
     .attr('value', function(d) { return d.czone; })
-    .text(function(d) { return d.name; });
+    .text(function(d) {
+      var cz = parseFloat(d.czone);
+      var i;
+      if (cz !== 0) {
+        i = (cz < 65) ? " (State)" : " Area";
+      } else {
+        i = "";
+      }
+      return d.name + i;
+    });
 
   // county dropdown
   var select = $('#czone-select').select2();

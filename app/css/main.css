@@ -388,6 +388,8 @@ label.select-label {
   bottom : 0;
   font-style: italic;
   padding-left: 10px;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .navbar {
