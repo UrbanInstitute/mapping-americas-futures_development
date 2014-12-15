@@ -71,7 +71,9 @@ function detail(options) {
       var czone = settings.detail_czone;
       if (czone != 0) czone = zeros(czone);
       // update detail title
-      d3.select("h1#region").text(czone_names[czone]);
+      d3.select("h1#region").text(
+        czone_names[czone] || "United States"
+      );
 
       // calculate percentage growth
       var start = settings.start_abbr();
@@ -130,6 +132,8 @@ function detail(options) {
       // when 'detail's update method is called
       var filename = projections.path(settings);
       var czone = settings.detail_czone;
+      // update download links
+      projections.downloadLinks(settings);
       // get new data and update charts
       var csv = 'data/Charts/' + czone + '_' + filename;
       d3.csv(csv, function(error, data) {

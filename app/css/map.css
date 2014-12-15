@@ -95,12 +95,17 @@ path.us-map-czones.faded {
   cursor: pointer;
   cursor: -webkit-grab;
   cursor: -moz-grab;
+  margin-bottom: 20px;
 }
 
 .map-svg-container:active {
   cursor: all-scroll;
   cursor: -webkit-grabbing;
   cursor: -moz-grabbing;
+}
+
+text.us-map-legend-label {
+  font-size: 9px;
 }
 /*---------------------------------------
   --------------------------------------*/
@@ -129,9 +134,10 @@ path.us-map-czones.faded {
   position: relative;
   width: 100%;
   padding:0px;
-  padding-bottom: 16%; /* depends on svg ratio, = (heightpx/widthpx)*width% */
+  padding-bottom: 7.5%; /* depends on svg ratio, = (heightpx/widthpx)*width% */
   vertical-align: middle;
   background-color: #fff;
+  margin: 15px 0;
   cursor: pointer;
   cursor: -webkit-grab;
   cursor: -moz-grab;
@@ -233,6 +239,7 @@ path.us-map-czones.faded {
 
 .growth-text {
   fill : #000;
+  font-size: 8px;
   font-style: italic;
 }
 
@@ -261,7 +268,7 @@ path.us-map-czones.faded {
 }
 
 .inline-map-legend {
-  width: 70%;
+  width: 90%;
   margin: 5px auto;
 }
 
@@ -269,7 +276,7 @@ path.us-map-czones.faded {
   display: inline-block;
   position: relative;
   padding:0px;
-  padding-bottom: 11.2%; /* depends on svg ratio, = (heightpx/widthpx)*width% */
+  padding-bottom: 6.75%; /* depends on svg ratio, = (heightpx/widthpx)*width% */
   vertical-align: middle;
   background-color: #fff;
   cursor: pointer;
@@ -293,12 +300,12 @@ path.us-map-czones.faded {
   }
 
   .inline-map-legend {
-    width: 50%;
+    width: 90%;
     margin: 0 auto;
   }
 
   .inline-map-legend.map-legend-svg-container {
-    padding-bottom: 8%;
+    padding-bottom: 6.75%;
   }
 
 }

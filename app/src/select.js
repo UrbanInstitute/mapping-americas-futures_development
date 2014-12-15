@@ -15,6 +15,10 @@
 ;(function(){
 
 
+/*
+  Update text at top of detail section
+*/
+
 function createDetailString(settings) {
   var full = {
     "avg" : "Average",
@@ -25,10 +29,11 @@ function createDetailString(settings) {
   var d = settings.mortality;
   var m = settings.migration;
   $('#detail-settings').text(
-    full[b] + " Birth, " + full[d] + " Death, " + full[m] + " Migration"
+    full[b] + " Birth, " +
+    full[d] + " Death, " +
+    full[m] + " Migration"
   );
 }
-
 
 function createYearString(settings) {
   $('#detail-years').text(
@@ -36,6 +41,26 @@ function createYearString(settings) {
   );
 }
 
+
+/*
+  Links for data download
+*/
+function downloadLinks(settings) {
+  var czone = settings.detail_czone;
+  var filename = projections.path(settings);
+  var dpath = "data/Download/";
+
+  // map data with current settings
+  $('#download-map').attr(
+    'href', dpath + '0_' + filename
+  );
+
+  // detail commuting zone data
+  $('#download-czone').attr(
+    'href', dpath + czone + "_AllFert_AllMort_AllMig.csv"
+  );
+
+}
 
 
 function raceAbbr(race_string) {
@@ -46,6 +71,8 @@ function raceAbbr(race_string) {
 function yearAbbr(year) {
   return ("" + year).slice(-2);
 }
+
+
 
 function select(defaults) {
 
@@ -77,10 +104,9 @@ function select(defaults) {
   var assumption_settings = [
     "mortality",
     "fertility",
-    "migration"
+    "migration",
+    "boundary"
   ];
-
-
 
 
   //
@@ -121,6 +147,8 @@ function select(defaults) {
     callback(settings);
     // update the indicator string in the detail section
     createDetailString(settings);
+    // update download links
+    downloadLinks(settings);
   });
 
 
@@ -182,6 +210,8 @@ function select(defaults) {
     callback(settings);
     // update detail year string
     createYearString(settings);
+    // update download links
+    downloadLinks(settings);
   });
 
   // add population pyramid settings
@@ -194,7 +224,9 @@ function select(defaults) {
     .append('button')
     .attr({
       "type" : "button",
-      "class" : function(d, i) {return "btn settings-button"+(i===0?" active":"");},
+      "class" : function(d, i) {
+        return "btn settings-button"+(i===0?" active":"");
+      },
       "id" : function(d) {return d;}
     }).text(function(d) {return d;});
 
@@ -246,6 +278,8 @@ function select(defaults) {
     year_select.property('value', setYear);
     // run callback on update settings
     callback(settings);
+    // update download links
+    downloadLinks(settings);
   };
 
   // start with defaults
@@ -260,5 +294,6 @@ projections.select = select;
 // helper functions to format settings
 projections.raceAbbr = raceAbbr;
 projections.yearAbbr = yearAbbr;
+projections.downloadLinks = downloadLinks;
 
 }).call(this);

@@ -373,7 +373,7 @@ function mapper(options) {
         // for the legend, the actual size is determined dynamically
         // by the svg view box
         var legend_width = 400;
-        var legend_height = 62;
+        var legend_height = 30;
         // Append svg element to draw legend
         legend = legend_container
               .append('svg')
@@ -389,7 +389,7 @@ function mapper(options) {
         // number of bins to render in legend
         var n_bins = fixed_bins.length;
         // Width of colored bins
-        var binWidth = (legend_width / (n_bins+1)) - offset;
+        var binWidth = (legend_width*0.6 / (n_bins+1)) - offset;
         // height of colored bins
         var binHeight = (binWidth * 0.5);
 
@@ -397,6 +397,27 @@ function mapper(options) {
         // even if the main svg is not yet being displayed
         var helper_svg = d3.select('body').append('svg')
           .style('visibility', "hidden");
+
+
+        var decline_text = legend.append('text')
+          .text('decline')
+          .attr('class', 'growth-text');
+
+        var dtext_dims = (function() {
+          var t = helper_svg.append('text')
+                    .text(decline_text.text())
+                    .attr('class', 'growth-text');
+          var w = t.node().getBBox();
+          t.remove();
+          return w;
+        })();
+
+        decline_text.attr({
+          "x" : 0,
+          "y" : dtext_dims.height
+        });
+
+        var dtext_pad = dtext_dims.width + 5;
 
         // add legend rectangles
         var legend_rects = legend.selectAll('rect')
@@ -409,10 +430,16 @@ function mapper(options) {
                 width : binWidth,
                 height : binHeight,
                 // position
-                x : function(d, i) { return offset/2 + i*binWidth + i*offset; },
-                y : (legend_height - binHeight - 20)
+                x : function(d, i) {
+                  return offset/2 + i*binWidth + i*offset + dtext_pad;
+                },
+                y : 0,
+                rx : 3,
+                ry : 3
               })
-              .style('fill', function(d){ return d; });
+              .style('fill', function(d){ return d; })
+              .style('stroke', "#fff")
+              .style('stroke-width', 3);
 
         if (renderOpts.legendMouseover) {
           // show zones with this legend color
@@ -431,14 +458,14 @@ function mapper(options) {
 
         var formatter = options.legendFormat;
         // Add text to legend, and reposition it correctly
-        legend.selectAll('text')
+        legend.append('g').selectAll('text')
               .data(fixed_bins)
             .enter()
             .append('text')
               .attr('class', 'us-map-legend-label')
               .text(formatter)
               .attr({
-                y : (legend_height - binHeight - 30),
+                y : (binHeight + 10),
                 x : function(d, i) {
                   // create text node in helper svg
                   // and use it to calculate the bounding box
@@ -451,53 +478,80 @@ function mapper(options) {
                             .attr('class', 'us-map-legend-label');
                   var w = t.node().getBBox().width;
                   t.remove();
-                  return (i+1)*(binWidth + offset) - (w/2) ;
+                  return (i+1)*(binWidth + offset) - (w/2) + dtext_pad;
                 }
               });
 
-        //
-        //
-        // add legend divider + bottom text
-        //
-        //
-        // half way accross the legend
-        var half_way = ((n_bins+1) / 2)*(binWidth + offset);
+
+        //half way accross the legend
+        var half_way = ((n_bins+1) / 2)*(binWidth + offset) + dtext_pad;
         // midway line
         legend.append('line')
           .attr({
             "x1" : half_way,
             "x2" : half_way,
-            "y1" : legend_height,
+            "y1" : 0,
             "y2" : binHeight
           }).style({
             "stroke" : "#000",
-            "stroke-width" : 1
+            "stroke-width" : 0.5
           });
-        // growth/decline text
-        legend.selectAll('text.growth-text')
-          .data([
-            "Population decline", "Population growth"
-          ]).enter()
-          .append('text')
-          .text(function(d) {return d;})
-          .attr({
-            'class' : 'growth-text',
-            y : legend_height - 3,
-            x : function(d, i) {
-              // create text node in helper svg
-              // and use it to calculate the bounding box
-              // this is necessary if the client
-              // lands on the feature page, resulting
-              // in the map legend not being rendered and
-              // the text nodes having no width
-              var t = helper_svg.append('text')
-                        .text(d)
-                        .attr('class', 'growth-text');
-              var w = t.node().getBBox().width;
-              t.remove();
-              return i*half_way + (half_way - w)/2 ;
-            }
-          });
+
+        //half way accross the legend
+        var past_legend = (n_bins+1)*(binWidth + offset) + dtext_pad;
+
+        var growth_text = legend.append('text')
+          .text('growth')
+          .attr('class', 'growth-text');
+
+        var gtext_dims = (function() {
+          var t = helper_svg.append('text')
+                    .text(growth_text.text())
+                    .attr('class', 'growth-text');
+          var w = t.node().getBBox();
+          t.remove();
+          return w;
+        })();
+
+        growth_text.attr({
+          "x" : past_legend + 5,
+          "y" : gtext_dims.height
+        });
+
+        var no_pop_position = past_legend + gtext_dims.width + 20;
+
+        legend.append('rect')
+              .attr({
+                "class" : "us-map-legend-rect",
+                "width" : binWidth,
+                "height": binHeight,
+                "x" : no_pop_position,
+                "rx" : 3,
+                "ry" : 3
+              })
+              .style('stroke', "#fff")
+              .style('stroke-width', 3)
+              .style('fill', missingColor);
+
+        var pop_text = legend.append('text')
+          .text('no population')
+          .attr('class', 'growth-text');
+
+        var poptext_dims = (function() {
+          var t = helper_svg.append('text')
+                    .text(pop_text.text())
+                    .attr('class', 'growth-text');
+          var w = t.node().getBBox();
+          t.remove();
+          return w;
+        })();
+
+        pop_text.attr({
+          "x" : no_pop_position + binWidth + 5,
+          "y" : poptext_dims.height
+        });
+
+
 
         // remove helper svg from body
         helper_svg.remove();

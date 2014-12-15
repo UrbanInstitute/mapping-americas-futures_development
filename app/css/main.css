@@ -256,7 +256,10 @@ margin-top: 7.5px;
   top: 190px;
 }
 
-
+.settings-header {
+  font-weight: bold;
+  font-size: 14px;
+}
 
 /*---------------------------------------
   --------------------------------------*/
@@ -330,21 +333,14 @@ label.centered {
 }
 
 label.select-label {
+  padding-top: 10px;
   font-size: 12px;
   line-height: 12px;
-  padding-bottom: 5px;
 }
 
 #top-row, #feature-top-row {
   border-top: 8px solid #fdbf11;
   border-radius: 8px;
-}
-
-#year-to {
-  font-style: italic;
-  font-size: 20px;
-  padding: 0 20px;
-  display: inline-block;
 }
 
 #return-to-map {
@@ -372,7 +368,7 @@ label.select-label {
 
 #year-select-container {
   text-align: left;
-  padding: 20px 0px;
+  padding: 0px;
 }
 
 #detail-table tr td:nth-child(2){
@@ -387,6 +383,13 @@ label.select-label {
   margin-top: 20px;
 }
 
+#boundary-info {
+  position: absolute;
+  bottom : 0;
+  font-style: italic;
+  padding-left: 10px;
+}
+
 .navbar {
   background-color: #000;
   border-bottom: none;
@@ -395,10 +398,6 @@ label.select-label {
 .right-align {
   float: right;
   text-align: right;
-}
-
-.year-select {
-  display: inline-block;
 }
 
 .dropdown-menu {
@@ -416,8 +415,8 @@ label.select-label {
 }
 
 .year-select {
-  display: inline-block;
-  width: 35%
+  display: block;
+  width: 100%
 }
 
 .color-label {
@@ -436,6 +435,19 @@ label.select-label {
   font-style: italic;
   margin-top: -5px;
   margin-bottom: 15px;
+}
+
+.border-group {
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+}
+
+@media (max-width: 767px) {
+  .border-group {
+    border-left: none;
+    border-right: none;
+    margin: 20px 0px;
+  }
 }
 
 /*---------------------------------------

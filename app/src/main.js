@@ -51,6 +51,7 @@ var default_settings = {
   start     : 2010,
   end       : 2030,
   pyramid_year : 2010,
+  boundary : "czones",
   detail_czone : 0 // 0 for US
 };
 
@@ -135,12 +136,12 @@ q.awaitAll(function(error, data) {
         if (this.percent) {
           p = percent(this.percent);
         } else {
-          p = "(no data)";
+          p = "(no population)";
         }
         if (this.end && this.start) {
           t = commas(this.end - this.start);
         } else {
-          t = "(no data)";
+          t = "(no population)";
         }
         return (
           '<div id="name">' + names[this.czone] + ' area</div>'+
