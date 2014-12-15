@@ -196,7 +196,8 @@ q.awaitAll(function(error, data) {
   var small_map_tooltip = {
     tooltip : {
       formatter : createToolTipFunc(false)
-    }
+    },
+    fixed : true
   };
 
   var smallMapFactory = projections.mapper(map_opts)

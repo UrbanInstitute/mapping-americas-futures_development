@@ -97,6 +97,7 @@ function mapper(options) {
     var missingColor = options.missingColor;
     var topology = options.topology;
     var state_topology = options.state_topology;
+    var fixed = options.fixed;
 
     // Correct ratio of bins to colors
     // (there should be one more color than bins)
@@ -109,7 +110,15 @@ function mapper(options) {
                   .domain(fixed_bins)
                   .range(fixed_colors);
 
-    var createPopulationFunction = function(settings, data) {
+    var start_data = null;
+    var createPopulationFunction = function(curr_settings, data) {
+
+      if (fixed && !start_data) {
+        start_data = curr_settings;
+      }
+
+      var settings = start_data || curr_settings;
+
       // get the different settigns
       var start = settings.start_abbr();
       var end = settings.end_abbr();
@@ -207,6 +216,22 @@ function mapper(options) {
           "d" : path
         });
 
+
+
+    // zone paths for hovering
+    var hover_czones = features.append('g')
+      .selectAll('path')
+        .data(topology)
+      .enter().append('path')
+        .attr({
+          "class": 'us-map-czones-hover',
+          "id" : function(d) { return d.id; },
+          "d" : path,
+        });
+
+
+
+
     /* ---------------------------
       Zooming behavior
     -----------------------------*/
@@ -260,9 +285,9 @@ function mapper(options) {
     container.on('mousemove', moveToolTip);
 
     var czone_click_callback = function(){};
-    czones
-      .attr('fill', missingColor)
-      .on( 'mouseover', function(d){
+    czones.attr('fill', missingColor);
+
+    hover_czones.on( 'mouseover', function(d){
         // create function to calculate population
         // numbers given current settings
         var popf = createPopulationFunction(settings, self.data);
