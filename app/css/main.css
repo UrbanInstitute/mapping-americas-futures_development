@@ -76,8 +76,11 @@ h4#title-lead {
   ---------------------------------------
   --------------------------------------- */
 button.btn.settings-button {
-  background-color: #0096D2;
-  color: white;
+background-color: #0096D2;
+color: white;
+text-transform: uppercase;
+font-weight: 400;
+letter-spacing: .5px;
 }
 
 button.btn.settings-button:not(.active):hover {
@@ -257,8 +260,8 @@ margin-top: 7.5px;
 }
 
 .settings-header {
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: regular;
+  font-size: 18px;
 }
 
 /*---------------------------------------
@@ -333,9 +336,11 @@ label.centered {
 }
 
 label.select-label {
-  padding-top: 10px;
-  font-size: 12px;
-  line-height: 12px;
+padding-top: 25px;
+font-size: 14px;
+line-height: 12px;
+letter-spacing: -.5px;
+padding-bottom: 2px;
 }
 
 #top-row, #feature-top-row {
