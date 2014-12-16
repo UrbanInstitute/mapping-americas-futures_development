@@ -71,9 +71,9 @@ function detail(options) {
       var czone = settings.detail_czone;
       if (czone != 0) czone = zeros(czone);
       // update detail title
-      d3.select("h1#region").text(
-        czone_names[czone] || "United States"
-      );
+      var name = czone_names[parseFloat(czone)] || "United States";
+      d3.select("h1#region").text(name);
+      d3.select("#download-czone span").text(name);
 
       // calculate percentage growth
       var start = settings.start_abbr();
@@ -92,8 +92,8 @@ function detail(options) {
           if (row.yr == end) end_total += parseFloat(row.pop);
         }
         if (row.age == "99" && row.yr == pyramid_year) {
-          race_totals[row.r] = row.pop
-        };
+          race_totals[row.r] = row.pop;
+        }
       });
       // second pass to find max percent growth
       var max_growth = {};
@@ -128,24 +128,33 @@ function detail(options) {
 
   return {
     update : function(settings) {
+
       // update all the individual detail charts
       // when 'detail's update method is called
       var filename = projections.path(settings);
       var czone = settings.detail_czone;
+
       // update download links
       projections.downloadLinks(settings);
+
+      var csv;
+      if (settings.boundary == "states") {
+        csv = 'data/states/Charts/' + czone + '_' + filename;
+      } else {
+        csv = 'data/Charts/' + czone + '_' + filename;
+      }
+
       // get new data and update charts
-      var csv = 'data/Charts/' + czone + '_' + filename;
       d3.csv(csv, function(error, data) {
         if (error) throw error;
-        var max = updateDetailText(data, settings)
+        var max = updateDetailText(data, settings);
         // update all plots
         detail_visuals.map(function(chart) {
           chart.update(data, max);
-        })
-      })
+        });
+      });
     }
-  }
+  };
 
 
 }

@@ -218,6 +218,7 @@
                     data-fertility="avg"
                     data-mortality="avg"
                     data-migration="high"
+                    data-boundary="czones"
                     data-czone="0"
                     data-age="all"
                     data-race="all"
@@ -235,6 +236,7 @@
                     data-fertility="avg"
                     data-mortality="avg"
                     data-migration="low"
+                    data-boundary="czones"
                     data-czone="0"
                     data-age="all"
                     data-race="all"
@@ -844,7 +846,13 @@
                     </div>
                   </div>
 
-                  <span id="boundary-info">
+                  <span id="boundary-info"
+                      data-toggle = "tooltip"
+                      data-trigger = "hover"
+                      data-placement = "top"
+                      data-html = "true"
+                      data-title = "Make the map display statistics calculated for states or commuting zones by clicking an option to the left."
+                      data-container = "body">
                     What is this?
                   </span>
 
@@ -907,7 +915,9 @@
                       <div class="color-label">IN DETAIL
                         <span id="detail-years"></span>
                       </div>
-                      <h1 id="region"></h1>
+                      <span>
+                        <h1 id="region"></h1>
+                      </span>
 
                       <div id="detail-settings"></div>
 
@@ -971,13 +981,13 @@
                     <h2>Data Available for Download</h2>
                     <ul>
                       <li>
-                        <a id="download-czone" href="">All data for all scenarios for the selected commuting zone.</a>
+                        <a id="download-czone" href="">All data for all scenarios for the selected area (<span></span>).</a>
                       </li>
                       <li>
                         <a id="download-xwalk" href="data/Download/PopProj_GeoXwalk.xlsx">Geographic crosswalk between counties and commuting zones.</a>
                       </li>
                       <li>
-                        <a id="download-map" href="">Map data for current assumption settings.</a>
+                        <a id="download-map" href="">Map data for current assumption and boundary settings.</a>
                       </li>
                       <li>
                         <a id="download-full" href="data/Download/AllCZ_AllFert_AllMort_AllMig.csv">All available data (0.5GB).</a>

@@ -48,7 +48,13 @@ function createYearString(settings) {
 function downloadLinks(settings) {
   var czone = settings.detail_czone;
   var filename = projections.path(settings);
-  var dpath = "data/Download/";
+  var dpath;
+  // path to data download
+  if (settings.boundary == "states") {
+    dpath = "data/states/Download/";
+  } else {
+    dpath = "data/Download/";
+  }
 
   // map data with current settings
   $('#download-map').attr(
@@ -62,7 +68,6 @@ function downloadLinks(settings) {
 
 }
 
-
 function raceAbbr(race_string) {
   var race = race_string.charAt(0).toUpperCase();
   return ( race === "A" ? "T" : race );
@@ -71,8 +76,6 @@ function raceAbbr(race_string) {
 function yearAbbr(year) {
   return ("" + year).slice(-2);
 }
-
-
 
 function select(defaults) {
 
@@ -259,9 +262,9 @@ function select(defaults) {
   //
   // set model to update
   //
-  settings.set = function(update) {
+  settings.set = function(update, no_callback) {
     for (var varname in update) {
-      if (this[varname]) {
+      if (this[varname] != undefined) {
         this[varname] = update[varname];
       }
     }
@@ -277,7 +280,9 @@ function select(defaults) {
     // write default settings
     year_select.property('value', setYear);
     // run callback on update settings
-    callback(settings);
+    if (!no_callback) {
+      callback(settings);
+    }
     // update download links
     downloadLinks(settings);
   };
