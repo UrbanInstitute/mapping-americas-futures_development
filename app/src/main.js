@@ -113,7 +113,7 @@ q.awaitAll(function(error, data) {
 
   // pre-caculate topology for map
   var czones = loaded['json/czone.geo.json'];
-  var topoData = topojson.feature(
+  var czone_topology = topojson.feature(
     czones, czones.objects.czones
   ).features;
 
@@ -130,7 +130,7 @@ q.awaitAll(function(error, data) {
   var createToolTipFunc = function(click) {
     // create the html content of the tooltip
     // the function context is the data for the
-    // czone currently being moused over
+    // area currently being moused over
     return function(){
         var p, t;
         if (this.percent) {
@@ -143,9 +143,10 @@ q.awaitAll(function(error, data) {
         } else {
           t = "(no population)";
         }
-        var a = (parseFloat(this.czone) > 56 ? " area" : "");
+        var id = this.boundary_id;
+        var a = (parseFloat(id) > 56 ? " area" : "");
         return (
-          '<div id="name">' + names[this.czone] + a + '</div>'+
+          '<div id="name">' + names[id] + a + '</div>'+
           '<div id="growth_title">POPULATION GROWTH</div>'+
           '<div id="growth_value">' + p + '</div>'+
           '<div id="change_title">POPULATION CHANGE</div>' +
@@ -182,12 +183,11 @@ q.awaitAll(function(error, data) {
     id : "czone",
     display : "population",
     // czone topology
-    topology : topoData,
+    czone_topology : czone_topology,
     // state topology
     state_topology : state_topology,
     // tooltip
     tooltip : {
-
       formatter : createToolTipFunc(true)
     }
   };

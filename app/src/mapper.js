@@ -101,7 +101,7 @@ function mapper(options) {
     var bins = options.bins;
     var display = options.display;
     var missingColor = options.missingColor;
-    var topology = options.topology;
+    var czone_topology = options.czone_topology;
     var state_topology = options.state_topology;
     var fixed = options.fixed;
 
@@ -200,71 +200,48 @@ function mapper(options) {
     // container for paths
     var features = svg.append('g');
 
+    // add geographic layer to features
+    var addLayer = function(topology, classes) {
+      return features.append('g')
+                .selectAll('path')
+                  .data(topology)
+                .enter().append('path')
+                  .attr({
+                    "class": classes,
+                    "id" : function(d) { return d.id; },
+                    "d" : path
+                  });
+    };
+
     // States visible in background while transitioning
-    var background_states = features.append('g')
-      .selectAll('path')
-        .data(state_topology)
-      .enter().append('path')
-        .attr({
-          "class": 'us-map-states-background',
-          "id" : function(d) { return d.id; },
-          "d" : path
-        });
+    var background_states = addLayer(
+      state_topology, 'us-map-states-background'
+    );
 
     // zone paths to fill
-    var fill_czones = features.append('g')
-      .selectAll('path')
-        .data(topology)
-      .enter().append('path')
-        .attr({
-          "class": 'us-map-czones us-map-boundary',
-          "id" : function(d) { return d.id; },
-          "d" : path,
-        });
+    var fill_czones = addLayer(
+      czone_topology, 'us-map-czones us-map-boundary'
+    );
 
     // state paths to fill
-    var fill_states = features.append('g')
-      .selectAll('path')
-        .data(state_topology)
-      .enter().append('path')
-        .attr({
-          "class": 'us-map-states-filled hidden us-map-boundary',
-          "id" : function(d) { return d.id; },
-          "d" : path
-        });
+    var fill_states = addLayer(
+      state_topology, 'us-map-states-filled hidden us-map-boundary'
+    );
 
-    // state paths
-    var czone_states = features.append('g')
-      .selectAll('path')
-        .data(state_topology)
-      .enter().append('path')
-        .attr({
-          "class": 'us-map-states',
-          "id" : function(d) { return d.id; },
-          "d" : path
-        });
+    // state paths for white state boundary
+    var czone_states = addLayer(
+      state_topology, 'us-map-states'
+    );
 
     // state paths to hover over
-    var hover_states = features.append('g')
-      .selectAll('path')
-        .data(state_topology)
-      .enter().append('path')
-        .attr({
-          "class": 'us-map-states-hover hidden',
-          "id" : function(d) { return d.id; },
-          "d" : path
-        });
+    var hover_states = addLayer(
+      state_topology, 'us-map-states-hover hidden'
+    );
 
     // zone paths for hovering
-    var hover_czones = features.append('g')
-      .selectAll('path')
-        .data(topology)
-      .enter().append('path')
-        .attr({
-          "class": 'us-map-czones-hover',
-          "id" : function(d) { return d.id; },
-          "d" : path,
-        });
+    var hover_czones = addLayer(
+      czone_topology, 'us-map-czones-hover'
+    );
 
     var fill_boundary = fill_czones;
     var hover_boundary = hover_czones;
@@ -334,7 +311,7 @@ function mapper(options) {
           var pop = popf(d) || {};
           // add percentage and czone id to object
           pop.percent = (pop.end - pop.start) / pop.start;
-          pop.czone = this.id;
+          pop.boundary_id = this.id;
           // call tooltip html renderer on tooltip
           var formatter = options.tooltip.formatter;
           tooltipDiv.html(formatter.call(pop))
@@ -346,7 +323,7 @@ function mapper(options) {
           // Fade out tooltip if not over map
           tooltipDiv.classed('hidden', true);
         })
-        // czone click callback
+        // click callback
         .on('click', function(){
           boundary_click_callback(this.id);
         });
