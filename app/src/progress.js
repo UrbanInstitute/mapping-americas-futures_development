@@ -88,11 +88,15 @@ function progress(options) {
       return this;
     },
     remove : function(callback) {
-      callback();
       plexiglass.transition()
         .duration(300)
         .style('opacity', 0)
-        .remove();
+        .each("end", function (d, i) {
+          if (i == 0) {
+            callback();
+            plexiglass.remove();
+          }
+        });
     }
   };
 }

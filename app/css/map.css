@@ -38,6 +38,10 @@ path.us-map-czones {
   stroke-width: 0.5px;
 }
 
+path.us-map-states-background {
+  fill : #aaa;
+}
+
 path.us-map-czones.transition {
   -webkit-transition: fill .3s ease;
   -moz-transition: fill .3s ease;

@@ -49,6 +49,7 @@ function mapper(options) {
 
   // zero padding function
   var zeros = d3.format("05d"), i_d;
+
   // memoized path generation function
   var path = function(d) {
     var uid = d.id;
@@ -198,6 +199,17 @@ function mapper(options) {
 
     // container for paths
     var features = svg.append('g');
+
+    // States visible in background while transitioning
+    var background_states = features.append('g')
+      .selectAll('path')
+        .data(state_topology)
+      .enter().append('path')
+        .attr({
+          "class": 'us-map-states-background',
+          "id" : function(d) { return d.id; },
+          "d" : path
+        });
 
     // zone paths to fill
     var fill_czones = features.append('g')
@@ -732,12 +744,18 @@ function mapper(options) {
         // no fade transition
         if (changed) {
           transition(self.data, true);
-          fill_boundary.moveToFront();
-          hover_boundary.moveToFront();
+
+          fill_boundary
+            .classed('hidden', false)
+            .moveToFront();
+
+          hover_boundary
+            .classed('hidden', false)
+            .moveToFront();
+
           self.lag_boundary = boundary;
+
           bind_click_callback();
-          fill_boundary.classed('hidden', false);
-          hover_boundary.classed('hidden', false);
         } else {
           transition(self.data);
         }
@@ -770,7 +788,7 @@ function mapper(options) {
           var time = Date.now();
           // if loading has taken longer than 200 miliseconds,
           // add a progress bar to the svg window
-          if (!progress_bar && (time - start_seconds) > 200) {
+          if (!progress_bar && (time - start_seconds) > 100) {
             progress_bar = projections.progress({
               "width" : width,
               "height" : height,
