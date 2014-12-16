@@ -198,7 +198,9 @@ function mapper(options) {
       .on("click", stopped, true);
 
     // container for paths
-    var features = svg.append('g');
+    var zoom_class = renderOpts.zoomClass;
+    var features = svg.append('g')
+                      .attr('class', 'features ' + zoom_class);
 
     // add geographic layer to features
     var addLayer = function(topology, classes) {
@@ -254,7 +256,8 @@ function mapper(options) {
     var zoom = d3.behavior.zoom()
         .center([width/2, height/2])
         .scaleExtent([1, 8])
-        .on("zoom", zoomed);
+        .on("zoom", zoomed)
+        .on('zoomend', zoomOthers);
 
 
     function zoomed() {
@@ -263,6 +266,19 @@ function mapper(options) {
         "transform",
         "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
       );
+    }
+
+    function zoomOthers() {
+      // Select all features with common zoomclass
+      var other_features = d3.selectAll('.' + zoom_class);
+      other_features
+        .transition()
+        .duration(300)
+        .style(
+          "stroke-width", features.style('stroke-width')
+        ).attr(
+          "transform", features.attr('transform')
+        );
     }
 
     svg.call(zoom)
