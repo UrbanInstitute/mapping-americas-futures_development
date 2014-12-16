@@ -218,29 +218,29 @@ function mapper(options) {
       state_topology, 'us-map-states-background'
     );
 
-    // zone paths to fill
-    var fill_czones = addLayer(
-      czone_topology, 'us-map-czones us-map-boundary'
-    );
-
     // state paths to fill
     var fill_states = addLayer(
-      state_topology, 'us-map-states-filled hidden us-map-boundary'
+      state_topology, 'us-map-states-filled hidden'
+    );
+
+    // zone paths to fill
+    var fill_czones = addLayer(
+      czone_topology, 'us-map-czones'
     );
 
     // state paths for white state boundary
-    var czone_states = addLayer(
+    var outline_states = addLayer(
       state_topology, 'us-map-states'
     );
 
     // state paths to hover over
     var hover_states = addLayer(
-      state_topology, 'us-map-states-hover hidden'
+      state_topology, 'us-map-states-hover hidden us-map-boundary'
     );
 
     // zone paths for hovering
     var hover_czones = addLayer(
-      czone_topology, 'us-map-czones-hover'
+      czone_topology, 'us-map-czones-hover us-map-boundary'
     );
 
     var fill_boundary = fill_czones;
@@ -302,8 +302,8 @@ function mapper(options) {
     var boundary_click_callback = function(){};
     fill_boundary.attr('fill', missingColor);
 
-    var bind_click_callback = function() {
-      hover_boundary.on( 'mouseover', function(d){
+    var bind_click_callback = function(boundary) {
+      boundary.on( 'mouseover', function(d){
           // create function to calculate population
           // numbers given current settings
           var popf = createPopulationFunction(settings, self.data);
@@ -323,13 +323,12 @@ function mapper(options) {
           // Fade out tooltip if not over map
           tooltipDiv.classed('hidden', true);
         })
-        // click callback
         .on('click', function(){
           boundary_click_callback(this.id);
         });
     };
 
-    bind_click_callback();
+    bind_click_callback(hover_boundary);
 
     /* ---------------------------
     -----------------------------*/
@@ -597,13 +596,13 @@ function mapper(options) {
     };
 
     /* ----------------------------------
-        center the map on a target czone
+        center the map on a target boundary
        ---------------------------------- */
-    self.target = function(czone_id, duration) {
+    self.target = function(boundary_id, duration) {
       // reset map if US is selected
-      if (czone_id == "0") return self.reset(duration);
-      // get czone dom node
-      var node = $('.us-map-boundary#' + czone_id).get(0);
+      if (boundary_id == "0") return self.reset(duration);
+      // get boundary dom node
+      var node = $('path#' + boundary_id + '.us-map-boundary').get(0);
       // zoom to bounding box : http://bl.ocks.org/mbostock/9656675
       var bounds = geoPath.bounds(node.__data__),
           dx = bounds[1][0] - bounds[0][0],
@@ -615,7 +614,7 @@ function mapper(options) {
       // cap scale at zoom bounds
       scale = Math.min(extent[1], Math.max(extent[0], scale));
       var translate = [width / 2 - scale * x, height / 2 - scale * y];
-      // zoom to czone
+      // zoom to boundary
       svg.transition()
           .duration(duration || 750)
           .call(zoom.translate(translate).scale(scale).event);
@@ -680,6 +679,8 @@ function mapper(options) {
         hover_boundary.classed('hidden', true);
       }
 
+      hover_boundary.on('click', null);
+
       if (boundary == "states") {
         fill_boundary = fill_states;
         hover_boundary = hover_states;
@@ -719,20 +720,23 @@ function mapper(options) {
 
         // if we're swithing between boundary types
         // no fade transition
+        // the order in this ifstatement is
+        // important for the click callback binding
         if (changed) {
           transition(self.data, true);
 
-          fill_boundary
-            .classed('hidden', false)
-            .moveToFront();
-
-          hover_boundary
-            .classed('hidden', false)
-            .moveToFront();
+          fill_boundary.moveToFront();
+          hover_boundary.moveToFront();
 
           self.lag_boundary = boundary;
 
-          bind_click_callback();
+          bind_click_callback(hover_boundary);
+
+          // hidden removal needs to come
+          // after event binding for click callback
+          fill_boundary.classed('hidden', false);
+          hover_boundary.classed('hidden', false);
+
         } else {
           transition(self.data);
         }
