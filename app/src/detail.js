@@ -71,9 +71,9 @@ function detail(options) {
       var czone = settings.detail_czone;
       if (czone != 0) czone = zeros(czone);
       // update detail title
-      d3.select("h1#region").text(
-        czone_names[parseFloat(czone)] || "United States"
-      );
+      var name = czone_names[parseFloat(czone)] || "United States";
+      d3.select("h1#region").text(name);
+      d3.select("#download-czone span").text(name);
 
       // calculate percentage growth
       var start = settings.start_abbr();
