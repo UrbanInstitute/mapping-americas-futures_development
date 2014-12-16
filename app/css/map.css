@@ -57,7 +57,7 @@ path.us-map-states-hover {
 
 path.us-map-czones-hover:hover,
 path.us-map-states-hover:hover,
-path.us-map-czones.highlighted {
+path.us-map-czones-hover.highlight {
   stroke : rgba(0,0,0,1);
   stroke-width: 1.5px;
 }
@@ -68,9 +68,6 @@ path.us-map-states {
   stroke-width : 1.5px;
 }
 
-path.us-map-czones.faded {
-  fill: #aaa;
-}
 
 
 /*---------------------------------------
