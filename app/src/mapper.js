@@ -256,36 +256,31 @@ function mapper(options) {
       Zooming behavior
     -----------------------------*/
 
-    var zoom = d3.behavior.zoom()
-        .center([width/2, height/2])
-        .scaleExtent([1, 8])
-        .on("zoom", zoomed)
-        .on('zoomend', zoomOthers);
-
-
-    function zoomed() {
+    var zoomed = function() {
       features.style("stroke-width", 1.5 / d3.event.scale + "px");
       features.attr(
         "transform",
         "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
       );
-    }
-
-    function zoomOthers() {
-      // Select all features with common zoomclass
-      var other_features = d3.selectAll(
-        '.' + zoom_class + ":not(#" + container_id + ")"
-      );
-      // give other features the transform of this feature
-      other_features
-        .transition()
-        .duration(300)
-        .style(
-          "stroke-width", features.style('stroke-width')
-        ).attr(
-          "transform", features.attr('transform')
+      if (options.multizoom) {
+        // Select all features with common zoomclass
+        var other_features = d3.selectAll(
+          '.' + zoom_class + ":not(#" + container_id + ")"
         );
-    }
+        // give other features the transform of this feature
+        other_features
+          .style(
+            "stroke-width", features.style('stroke-width')
+          ).attr(
+            "transform", features.attr('transform')
+          );
+      }
+    };
+
+    var zoom = d3.behavior.zoom()
+        .center([width/2, height/2])
+        .scaleExtent([1, 8])
+        .on("zoom", zoomed);
 
     svg.call(zoom)
        .call(zoom.event)
@@ -326,6 +321,12 @@ function mapper(options) {
 
     var bind_click_callback = function(boundary) {
       boundary.on( 'mouseover', function(d){
+
+          // rebind click event
+          boundary.on('click', function(){
+            boundary_click_callback(this.id.replace("z", ""));
+          });
+
           // create function to calculate population
           // numbers given current settings
           var popf = createPopulationFunction(settings, self.data);
@@ -344,10 +345,8 @@ function mapper(options) {
         .on('mouseout', function(){
           // Fade out tooltip if not over map
           tooltipDiv.classed('hidden', true);
-        })
-        .on('click', function(){
-          boundary_click_callback(this.id.replace("z", ""));
         });
+
     };
 
     bind_click_callback(hover_boundary);
@@ -650,9 +649,8 @@ function mapper(options) {
        ---------------------------------- */
     self.highlight = function(czone) {
       if (czone == "0") return self;
-      hover_boundary.classed('highlight', function() {
-        return this.id == "z" + czone;
-      });
+      svg.select('path.us-map-boundary#z' + czone)
+        .classed('highlight', true);
       return self;
     };
 

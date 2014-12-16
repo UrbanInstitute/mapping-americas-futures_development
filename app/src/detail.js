@@ -67,9 +67,10 @@ function detail(options) {
   var percent = d3.format(".2%");
   var comma = d3.format(",");
   var zeros = d3.format("05d");
+
   var updateDetailText = function(data, settings) {
       var czone = settings.detail_czone;
-      if (czone != 0) czone = zeros(czone);
+      if (czone !== 0) czone = zeros(czone);
       // update detail title
       var name = czone_names[parseFloat(czone)] || "United States";
       d3.select("h1#region").text(name);
@@ -105,7 +106,7 @@ function detail(options) {
           // adjust max if necessary
           max_growth[row.r] = (curr_max > row_per ? curr_max : row_per);
         }
-      })
+      });
       // update text
       start_total = start_total | 1; // defense agains div#0
       d3.select("#growth-cell")
@@ -119,7 +120,7 @@ function detail(options) {
       }
       // increase max by 40 percent for data label
       return overall_max*1.4;
-  }
+  };
 
   // load starting settings
   updateDetailText(starting_data, starting_settings);
@@ -132,7 +133,7 @@ function detail(options) {
       // update all the individual detail charts
       // when 'detail's update method is called
       var filename = projections.path(settings);
-      var czone = settings.detail_czone;
+      var czone = parseFloat(settings.detail_czone);
 
       // update download links
       projections.downloadLinks(settings);

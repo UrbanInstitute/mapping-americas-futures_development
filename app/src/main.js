@@ -199,7 +199,8 @@ q.awaitAll(function(error, data) {
     tooltip : {
       formatter : createToolTipFunc(false)
     },
-    fixed : true
+    fixed : true,
+    multizoom : true
   };
 
   var smallMapFactory = projections.mapper(map_opts)
@@ -398,8 +399,6 @@ q.awaitAll(function(error, data) {
     })
   );
 
-
-
   //
   //
   // inline links to map settings in feature
@@ -425,9 +424,6 @@ q.awaitAll(function(error, data) {
     // zoom map to given czone
     main_map.target(data.czone);
   });
-
-
-
 
 });
 
