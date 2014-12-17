@@ -59,7 +59,7 @@ path.us-map-czones-hover:hover,
 path.us-map-states-hover:hover,
 path.us-map-czones-hover.highlight {
   stroke : rgba(0,0,0,1);
-  stroke-width: 1.5px;
+  stroke-width: 1px;
 }
 
 path.us-map-states {
@@ -189,7 +189,7 @@ text.us-map-legend-label {
   color:#000;
   background-color: #fff;
   font-size: 20px;
-  padding: 10px;
+  padding: 20px;
   border:1px solid #aaa;
   border-radius: 5px;
   z-index: 2000;

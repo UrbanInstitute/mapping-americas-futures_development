@@ -257,11 +257,19 @@ function mapper(options) {
     -----------------------------*/
 
     var zoomed = function() {
-      features.style("stroke-width", 1.5 / d3.event.scale + "px");
-      features.attr(
-        "transform",
-        "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
+
+      var trans = (
+        "translate(" +
+          d3.event.translate +
+        ")scale(" + d3.event.scale + ")"
       );
+
+      var swidth = 1.5 / d3.event.scale + "px";
+
+      features
+        .style("stroke-width", swidth)
+        .attr("transform",trans);
+
       if (options.multizoom) {
         // Select all features with common zoomclass
         var other_features = d3.selectAll(
@@ -269,11 +277,8 @@ function mapper(options) {
         );
         // give other features the transform of this feature
         other_features
-          .style(
-            "stroke-width", features.style('stroke-width')
-          ).attr(
-            "transform", features.attr('transform')
-          );
+          .style("stroke-width", swidth)
+          .attr("transform",trans);
       }
     };
 
@@ -295,7 +300,7 @@ function mapper(options) {
     -----------------------------*/
     if (d3.select('div.us-map-tooltip').empty()) {
       tooltipDiv = d3.select('body').append('div')
-        .attr('class', 'us-map-tooltip hidden');
+        .attr('class', 'us-map-tooltip hidden shadow');
     } else {
       tooltipDiv = d3.select('div.us-map-tooltip');
     }

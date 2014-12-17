@@ -65,6 +65,14 @@ h4#title-lead {
   float : none;
 }
 
+div.shadow {
+  -moz-box-shadow: 3px 3px 6px #777;
+  -webkit-box-shadow: 3px 3px 6px #777;
+  box-shadow: 3px 3px 6px #777;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444')";
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444');
+}
+
 /*---------------------------------------
   --------------------------------------*/
 

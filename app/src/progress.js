@@ -92,7 +92,7 @@ function progress(options) {
         .duration(300)
         .style('opacity', 0)
         .each("end", function (d, i) {
-          if (i == 0) {
+          if (i === 0) {
             callback();
             plexiglass.remove();
           }
