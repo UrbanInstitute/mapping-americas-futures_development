@@ -257,7 +257,7 @@ text.us-map-legend-label {
   width: 100%;
   display: block;
   text-align: center;
-  margin: 60px 0;
+  margin: 80px 0 85px 0;
 }
 
 .inline-maps-header h1 {
@@ -327,3 +327,8 @@ text.us-map-legend-label {
   float: right;
 }
 
+/*---------------------------------------
+  ---------------------------------------
+    Adrienne Bootstrap Overrides
+  ---------------------------------------
+  --------------------------------------- */
