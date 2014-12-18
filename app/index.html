@@ -629,248 +629,258 @@
             <div class="row">
               <div class="col-md-12" id="map-top">
 
-                <div class="col-sm-4">
+                <div id="control-collapse">
 
-                    <div class="settings-header">1. Select rates: </div>
+                  <div class="col-sm-4">
 
-                    <label class="select-label">Births</label>
-                    <div class="btn-group btn-group-justified settings" id="fertility">
+                      <div class="settings-header">1. Select rates: </div>
+
+                      <label class="select-label">Births</label>
+                      <div class="btn-group btn-group-justified settings" id="fertility">
+                        <div class="btn-group btn-group-sm">
+                          <button
+                            type="button"
+                            class="btn settings-button active"
+                            id="low"
+                            >
+                            Low</button>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                          <button
+                            type="button"
+                            class="btn settings-button"
+                            id="avg"
+                            >
+                            Avg.</button>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                          <button
+                            type="button"
+                            class="btn settings-button"
+                            id="high"
+                            >
+                            High</button>
+                        </div>
+                      </div>
+
+                      <label class="select-label">Deaths</label>
+                      <div class="btn-group btn-group-justified settings" id="mortality">
+                        <div class="btn-group btn-group-sm">
+                          <button
+                            type="button"
+                            class="btn settings-button active"
+                            id="low"
+                            >
+                            Low</button>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                          <button
+                            type="button"
+                            class="btn settings-button"
+                            id="avg"
+                            >
+                            Avg.</button>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                          <button
+                            type="button"
+                            class="btn settings-button"
+                            id="high"
+                            >
+                            High</button>
+                        </div>
+                      </div>
+
+                      <label class="select-label">Migration</label>
+                      <div class="btn-group btn-group-justified settings" id="migration">
+                        <div class="btn-group btn-group-sm">
+                          <button
+                            type="button"
+                            class="btn settings-button active"
+                            id="low"
+                            >
+                            Low</button>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                          <button
+                            type="button"
+                            class="btn settings-button"
+                            id="avg"
+                            >
+                            Avg.</button>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                          <button
+                            type="button"
+                            class="btn settings-button"
+                            id="high"
+                            >
+                            High</button>
+                        </div>
+                      </div>
+
+                  </div>
+
+                  <div class="col-sm-6 border-group">
+
+                    <div class="settings-header">2. Filter by: </div>
+
+                    <label class="select-label">Age</label>
+
+                    <div class="btn-group btn-group-justified settings" id="age">
+
                       <div class="btn-group btn-group-sm">
                         <button
                           type="button"
                           class="btn settings-button active"
-                          id="low"
+                          id="all"
                           >
-                          Low</button>
+                          ALL</button>
                       </div>
+
                       <div class="btn-group btn-group-sm">
                         <button
                           type="button"
                           class="btn settings-button"
-                          id="avg"
+                          id="0-19"
                           >
-                          Avg.</button>
+                          0-19</button>
                       </div>
+
                       <div class="btn-group btn-group-sm">
                         <button
                           type="button"
                           class="btn settings-button"
-                          id="high"
+                          id="20-49"
                           >
-                          High</button>
+                          20-49</button>
                       </div>
+
+                      <div class="btn-group btn-group-sm">
+                        <button
+                          type="button"
+                          class="btn settings-button"
+                          id="50-64"
+                          >
+                          50-64</button>
+                      </div>
+
+                      <div class="btn-group btn-group-sm">
+                        <button
+                          type="button"
+                          class="btn settings-button"
+                          id="65+"
+                          >
+                          65+</button>
+                      </div>
+
                     </div>
 
-                    <label class="select-label">Deaths</label>
-                    <div class="btn-group btn-group-justified settings" id="mortality">
+                    <label class="select-label">Race</label>
+
+                    <div class="btn-group btn-group-justified settings" id="race">
+
                       <div class="btn-group btn-group-sm">
                         <button
                           type="button"
                           class="btn settings-button active"
-                          id="low"
+                          id="all"
                           >
-                          Low</button>
+                          ALL</button>
                       </div>
+
                       <div class="btn-group btn-group-sm">
                         <button
                           type="button"
                           class="btn settings-button"
-                          id="avg"
+                          id="white"
                           >
-                          Avg.</button>
+                          WHITE</button>
                       </div>
+
                       <div class="btn-group btn-group-sm">
                         <button
                           type="button"
                           class="btn settings-button"
-                          id="high"
+                          id="black"
                           >
-                          High</button>
+                          BLACK</button>
                       </div>
+
+                      <div class="btn-group btn-group-sm">
+                        <button
+                          type="button"
+                          class="btn settings-button"
+                          id="hispanic"
+                          >
+                          HISPANIC</button>
+                      </div>
+
+                      <div class="btn-group btn-group-sm">
+                        <button
+                          type="button"
+                          class="btn settings-button"
+                          id="other"
+                          >
+                          OTHER</button>
+                      </div>
+
                     </div>
 
-                    <label class="select-label">Migration</label>
-                    <div class="btn-group btn-group-justified settings" id="migration">
+                    <label class="select-label">Boundary</label><br/>
+
+                    <div class="btn-group settings" id="boundary">
+
+                      <div class="btn-group btn-group-sm">
+                        <button
+                          type="button"
+                          class="btn settings-button"
+                          id="states"
+                          >
+                          STATES</button>
+                      </div>
+
                       <div class="btn-group btn-group-sm">
                         <button
                           type="button"
                           class="btn settings-button active"
-                          id="low"
+                          id="czones"
                           >
-                          Low</button>
-                      </div>
-                      <div class="btn-group btn-group-sm">
-                        <button
-                          type="button"
-                          class="btn settings-button"
-                          id="avg"
-                          >
-                          Avg.</button>
-                      </div>
-                      <div class="btn-group btn-group-sm">
-                        <button
-                          type="button"
-                          class="btn settings-button"
-                          id="high"
-                          >
-                          High</button>
+                          COMMUTING ZONES</button>
                       </div>
                     </div>
 
-                </div>
+                    <span id="boundary-info"
+                        data-toggle = "tooltip"
+                        data-trigger = "hover"
+                        data-placement = "top"
+                        data-html = "true"
+                        data-title = "The map divides the United States into 740 commuting zones—places connected by local economies, which can cross city and state boundaries, and that include metro and rural areas."
+                        data-container = "body">
+                      What is this?
+                    </span>
 
-                <div class="col-sm-6 border-group">
+                  </div>
 
-                  <div class="settings-header">2. Filter by: </div>
+                  <div class="col-sm-2">
 
-                  <label class="select-label">Age</label>
+                    <div class="settings-header">3. Year Change: </div>
 
-                  <div class="btn-group btn-group-justified settings" id="age">
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button active"
-                        id="all"
-                        >
-                        ALL</button>
-                    </div>
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button"
-                        id="0-19"
-                        >
-                        0-19</button>
-                    </div>
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button"
-                        id="20-49"
-                        >
-                        20-49</button>
-                    </div>
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button"
-                        id="50-64"
-                        >
-                        50-64</button>
-                    </div>
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button"
-                        id="65+"
-                        >
-                        65+</button>
+                    <div id="year-select-container">
+                      <label class="select-label">From</label>
+                      <select class="form-control year-select" id="start"></select>
+                      <label class="select-label">To</label>
+                      <select class="form-control year-select" id="end"></select>
                     </div>
 
                   </div>
 
-                  <label class="select-label">Race</label>
+                </div> <!-- collapse div -->
 
-                  <div class="btn-group btn-group-justified settings" id="race">
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button active"
-                        id="all"
-                        >
-                        ALL</button>
-                    </div>
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button"
-                        id="white"
-                        >
-                        WHITE</button>
-                    </div>
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button"
-                        id="black"
-                        >
-                        BLACK</button>
-                    </div>
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button"
-                        id="hispanic"
-                        >
-                        HISPANIC</button>
-                    </div>
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button"
-                        id="other"
-                        >
-                        OTHER</button>
-                    </div>
-
+                <div class="col-sm-12">
+                  <div id="control-collapse-toggle">
+                    Click to Change Settings
                   </div>
-
-                  <label class="select-label">Boundary</label><br/>
-
-                  <div class="btn-group settings" id="boundary">
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button"
-                        id="states"
-                        >
-                        STATES</button>
-                    </div>
-
-                    <div class="btn-group btn-group-sm">
-                      <button
-                        type="button"
-                        class="btn settings-button active"
-                        id="czones"
-                        >
-                        COMMUTING ZONES</button>
-                    </div>
-                  </div>
-
-                  <span id="boundary-info"
-                      data-toggle = "tooltip"
-                      data-trigger = "hover"
-                      data-placement = "top"
-                      data-html = "true"
-                      data-title = "The map divides the United States into 740 commuting zones—places connected by local economies, which can cross city and state boundaries, and that include metro and rural areas."
-                      data-container = "body">
-                    What is this?
-                  </span>
-
-                </div>
-
-                <div class="col-sm-2">
-
-                  <div class="settings-header">3. Year Change: </div>
-
-                  <div id="year-select-container">
-                    <label class="select-label">From</label>
-                    <select class="form-control year-select" id="start"></select>
-                    <label class="select-label">To</label>
-                    <select class="form-control year-select" id="end"></select>
-                  </div>
-
                 </div>
 
               </div>
@@ -882,7 +892,7 @@
             <div class="row">
               <div class="col-sm-12">
                 <div class="col-sm-12">
-                  <div class="settings-header-legend">
+                  <div class="settings-header-legend" id="legend-header">
                     Rollover key to isolate population change range on map
                   </div>
                   <div class="legend" id="map_container-legend"></div>
@@ -1006,7 +1016,7 @@
               </div>
 
 
-              <div class="urban-footer">
+              <div class="urban-footer" id="map-footer">
                 <div class="col-sm-12">
                   <ul>
                     <li class="name">Name goes here <br> 

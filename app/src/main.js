@@ -22,6 +22,47 @@ d3.selection.prototype.moveToFront = function() {
 };
 
 
+
+// affix map controls
+var $controls = $('#map-top'),
+    $control_collapse = $('#control-collapse'),
+    $control_toggle = $('#control-collapse-toggle'),
+    $legend_header = $('#legend-header'),
+    $map_container = $('#map_container');
+
+$control_toggle
+  .click(function() {
+    $control_collapse.slideToggle();
+  })
+  .hide();
+
+$controls
+  .affix({
+    offset: {
+      top: 300,
+      bottom: function() { return false; }
+    }
+  })
+  .on('affix.bs.affix', function() {
+    $legend_header.addClass('extra-padding-top');
+  })
+  .on('affixed.bs.affix', function() {
+    $controls.css('width', $map_container.width());
+    $control_collapse.hide();
+    $control_toggle.show();
+  })
+  .on('affixed-top.bs.affix', function() {
+    $controls.css('width', 'inherit');
+    $control_collapse.show();
+    $control_toggle.hide();
+    $legend_header.removeClass('extra-padding-top');
+  });
+
+$(window).on('resize', function() {
+  $controls.css('width', $map_container.width());
+});
+
+
 // load images async
 $('img.async').each(function() {
   $this = $(this);

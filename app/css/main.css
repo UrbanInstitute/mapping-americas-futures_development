@@ -79,6 +79,40 @@ div.shadow {
   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444');
 }
 
+
+.affix#map-top {
+  position:fixed;
+  top: 66px;
+  margin-top: 0px;
+  margin-left: 15px;
+  z-index: 10;
+  background-color: rgba(255,255,255,0.8);
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#control-collapse {
+  display: block;
+}
+
+#control-collapse-toggle {
+  width: 100%;
+  display: block;
+  padding : 10px 0;
+  text-align: center;
+}
+
+#control-collapse-toggle:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#legend-header.extra-padding-top {
+  margin-top: 80px;
+}
+
+
 /*---------------------------------------
   --------------------------------------*/
 
