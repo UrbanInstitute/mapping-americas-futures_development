@@ -199,7 +199,8 @@ q.awaitAll(function(error, data) {
     tooltip : {
       formatter : createToolTipFunc(false)
     },
-    fixed : true
+    fixed : true,
+    multizoom : true
   };
 
   var smallMapFactory = projections.mapper(map_opts)
@@ -207,7 +208,11 @@ q.awaitAll(function(error, data) {
 
   var render_small_map = function(opt) {
     // start render options, async data loading
-    var renderOpts = {renderTo : opt.id, async : true};
+    var renderOpts = {
+      renderTo : opt.id,
+      async : true,
+      zoomClass : opt.zoomClass
+    };
     // create options object to load data for map
     var update_opts = $.extend({}, default_settings, (opt.d || {}));
     // render legend if necssary
@@ -232,12 +237,14 @@ q.awaitAll(function(error, data) {
       id : "#youngstown-low",
       cz : "16400",
       legend: "#youngstown",
-      d : {"migration" : "low"}
+      d : {"migration" : "low"},
+      zoomClass : "youngstown"
     },
     youngstown_high : {
       id : "#youngstown-high",
       cz : "16400",
-      d : {"migration" : "high"}
+      d : {"migration" : "high"},
+      zoomClass : "youngstown"
     },
     //
     // atlanta
@@ -246,12 +253,14 @@ q.awaitAll(function(error, data) {
       id : "#atlanta-low",
       cz : "09100",
       legend: "#atlanta",
-      d : {"migration" : "low"}
+      d : {"migration" : "low"},
+      zoomClass : "atlanta"
     },
     atlanta_high : {
       id : "#atlanta-high",
       cz : "09100",
-      d : {"migration" : "high"}
+      d : {"migration" : "high"},
+      zoomClass : "atlanta"
     },
     //
     // race groupings
@@ -259,22 +268,26 @@ q.awaitAll(function(error, data) {
     races_all : {
       id : "#races-inline-all",
       cz : "0",
-      legend: "#races-inline"
+      legend: "#races-inline",
+      zoomClass : "races-inline"
     },
     races_white : {
       id : "#races-inline-white",
       cz : "0",
-      d : {"race" : "white"}
+      d : {"race" : "white"},
+      zoomClass : "races-inline"
     },
     races_black : {
       id : "#races-inline-black",
       cz : "0",
-      d : {"race" : "black"}
+      d : {"race" : "black"},
+      zoomClass : "races-inline"
     },
     races_hispanic : {
       id : "#races-inline-hispanic",
       cz : "0",
-      d : {"race" : "hispanic"}
+      d : {"race" : "hispanic"},
+      zoomClass : "races-inline"
     }
   };
 
@@ -282,7 +295,8 @@ q.awaitAll(function(error, data) {
   var main_map =  mapFactory({
     renderTo : "#map_container",
     legendRenderTo : "#map_container-legend",
-    legendMouseover : true
+    legendMouseover : true,
+    zoomClass : "main_map"
   });
 
   // draw topology for all small maps
@@ -385,8 +399,6 @@ q.awaitAll(function(error, data) {
     })
   );
 
-
-
   //
   //
   // inline links to map settings in feature
@@ -412,9 +424,6 @@ q.awaitAll(function(error, data) {
     // zoom map to given czone
     main_map.target(data.czone);
   });
-
-
-
 
 });
 

@@ -96,6 +96,8 @@ function mapper(options) {
     var container = d3.select(renderOpts.renderTo);
     var tooltipDiv;
 
+    var container_id = renderOpts.renderTo.replace("#","");
+
     // local references to options
     var colors = options.colors;
     var bins = options.bins;
@@ -198,7 +200,10 @@ function mapper(options) {
       .on("click", stopped, true);
 
     // container for paths
-    var features = svg.append('g');
+    var zoom_class = renderOpts.zoomClass;
+    var features = svg.append('g')
+                      .attr("id", "features-" + container_id)
+                      .attr('class', 'features ' + zoom_class);
 
     // add geographic layer to features
     var addLayer = function(topology, classes) {
@@ -208,7 +213,7 @@ function mapper(options) {
                 .enter().append('path')
                   .attr({
                     "class": classes,
-                    "id" : function(d) { return d.id; },
+                    "id" : function(d) { return "z" + d.id; },
                     "d" : path
                   });
     };
@@ -251,19 +256,36 @@ function mapper(options) {
       Zooming behavior
     -----------------------------*/
 
+    var zoomed = function() {
+
+      var trans = (
+        "translate(" +
+          d3.event.translate +
+        ")scale(" + d3.event.scale + ")"
+      );
+
+      var swidth = 1.5 / d3.event.scale + "px";
+
+      features
+        .style("stroke-width", swidth)
+        .attr("transform",trans);
+
+      if (options.multizoom) {
+        // Select all features with common zoomclass
+        var other_features = d3.selectAll(
+          '.' + zoom_class + ":not(#" + container_id + ")"
+        );
+        // give other features the transform of this feature
+        other_features
+          .style("stroke-width", swidth)
+          .attr("transform",trans);
+      }
+    };
+
     var zoom = d3.behavior.zoom()
         .center([width/2, height/2])
         .scaleExtent([1, 8])
         .on("zoom", zoomed);
-
-
-    function zoomed() {
-      features.style("stroke-width", 1.5 / d3.event.scale + "px");
-      features.attr(
-        "transform",
-        "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"
-      );
-    }
 
     svg.call(zoom)
        .call(zoom.event)
@@ -278,7 +300,7 @@ function mapper(options) {
     -----------------------------*/
     if (d3.select('div.us-map-tooltip').empty()) {
       tooltipDiv = d3.select('body').append('div')
-        .attr('class', 'us-map-tooltip hidden');
+        .attr('class', 'us-map-tooltip hidden shadow');
     } else {
       tooltipDiv = d3.select('div.us-map-tooltip');
     }
@@ -304,6 +326,12 @@ function mapper(options) {
 
     var bind_click_callback = function(boundary) {
       boundary.on( 'mouseover', function(d){
+
+          // rebind click event
+          boundary.on('click', function(){
+            boundary_click_callback(this.id.replace("z", ""));
+          });
+
           // create function to calculate population
           // numbers given current settings
           var popf = createPopulationFunction(settings, self.data);
@@ -311,7 +339,7 @@ function mapper(options) {
           var pop = popf(d) || {};
           // add percentage and czone id to object
           pop.percent = (pop.end - pop.start) / pop.start;
-          pop.boundary_id = this.id;
+          pop.boundary_id = this.id.replace("z", "");
           // call tooltip html renderer on tooltip
           var formatter = options.tooltip.formatter;
           tooltipDiv.html(formatter.call(pop))
@@ -322,10 +350,8 @@ function mapper(options) {
         .on('mouseout', function(){
           // Fade out tooltip if not over map
           tooltipDiv.classed('hidden', true);
-        })
-        .on('click', function(){
-          boundary_click_callback(this.id);
         });
+
     };
 
     bind_click_callback(hover_boundary);
@@ -602,7 +628,7 @@ function mapper(options) {
       // reset map if US is selected
       if (boundary_id == "0") return self.reset(duration);
       // get boundary dom node
-      var node = $('path#' + boundary_id + '.us-map-boundary').get(0);
+      var node = $('path#z' + boundary_id + '.us-map-boundary').get(0);
       // zoom to bounding box : http://bl.ocks.org/mbostock/9656675
       var bounds = geoPath.bounds(node.__data__),
           dx = bounds[1][0] - bounds[0][0],
@@ -628,30 +654,8 @@ function mapper(options) {
        ---------------------------------- */
     self.highlight = function(czone) {
       if (czone == "0") return self;
-      var fade = function(d) {
-        if (this.id == czone) {
-          d3.select(this).classed('highlighted', true)
-            .moveToFront();
-        } else {
-          d3.select(this).classed('faded', true);
-        }
-      };
-      //
-      // add fill css transitions,
-      // and highlight the czone
-      //
-      fill_boundary
-        .classed('transition', true)
-        .each(fade);
-      //
-      // transition fade on mouseover
-      //
-      container.on('mouseover', function() {
-        fill_boundary.classed('faded', false);
-      })
-      .on('mouseout', function() {
-        fill_boundary.each(fade);
-      });
+      svg.select('path.us-map-boundary#z' + czone)
+        .classed('highlight', true);
       return self;
     };
 

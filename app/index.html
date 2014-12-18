@@ -605,20 +605,23 @@
       <div class="view_button right" id="feature">READ THE<BR/> ARTICLE</div>
       <div class="fill">
         <div class="container">
-          <div class="col-md-10 col-md-offset-1 item-container"  id="map-tool-container">
+          <div class="col-md-12 item-container  extra-padding"  id="map-tool-container">
 
             <div class="row" id="top-row">
               <div class="col-md-12">
 
-                <h1>Mapping America's Futures</h1>
+                <!-- extra container to keep alignment with lower rows -->
+                <div class="col-md-12">
 
-                <p>
-                  Test possible scenarios for how the US population might change in 2020 and 2030. The map will change depending on whether users choose low, average, or high rates for future births, deaths, or migration. <a class="read-more">Read more</a>
+                    <h1>Mapping America's Futures</h1>
+                <p class="map-more-text">
+                  Test possible scenarios for how the US population might change in 2020 and 2030. The map will change depending on whether users choose low, average, or high rates for future births, deaths, or migration. <!--<a class="read-more">Read more</a>
                 </p>
                 <p id="map-more-text">
                   The map divides the United States into 740 commuting zones—places connected by local economies, which can cross city and state boundaries, and that include metro and rural areas. Click on a commuting zone for detailed information below.
-                </p>
+                </p>-->
               </div>
+            </div>
             </div>
 
 
@@ -850,7 +853,7 @@
                       data-trigger = "hover"
                       data-placement = "top"
                       data-html = "true"
-                      data-title = "Make the map display statistics calculated for states or commuting zones by clicking an option to the left."
+                      data-title = "The map divides the United States into 740 commuting zones—places connected by local economies, which can cross city and state boundaries, and that include metro and rural areas."
                       data-container = "body">
                     What is this?
                   </span>
@@ -874,12 +877,12 @@
 
             </div>
 
-            <hr/>
+            <hr class="hr-legend"/>
 
             <div class="row">
               <div class="col-sm-12">
                 <div class="col-sm-12">
-                  <div class="settings-header">
+                  <div class="settings-header-legend">
                     Rollover key to isolate population change range on map
                   </div>
                   <div class="legend" id="map_container-legend"></div>
@@ -911,9 +914,7 @@
                     </div>
 
                     <div class="col-sm-8 col-sm-pull-4">
-                      <div class="color-label">IN DETAIL
-                        <span id="detail-years"></span>
-                      </div>
+                      
                       <span>
                         <h1 id="region"></h1>
                       </span>
@@ -923,7 +924,15 @@
                       <table id="detail-table">
                         <tr>
                           <td>
-                            <span class="color-label">POPULATION GROWTH </span>
+                            <span class="color-label">In detail: </span>
+                          </td>
+                          <td>
+                              <span id="detail-years"></span>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <span class="color-label">Population growth: </span>
                           </td>
                           <td>
                            <span id="growth-cell"></span>
@@ -931,7 +940,7 @@
                         </tr>
                        <tr>
                           <td>
-                            <span class="color-label">POPULATION CHANGE </span>
+                            <span class="color-label">Population change: </span>
                           </td>
                           <td>
                             <span id="start-change"></span> to
@@ -973,9 +982,8 @@
                     </div>
                   </div>
                 </div>
-
-
-                <div class="row">
+              </div> <!-- detail view well -->
+                  
                   <div class="col-sm-12">
                     <h2>Data Available for Download</h2>
                     <ul>
@@ -993,16 +1001,25 @@
                       </li>
                     </ul>
                   </div>
-                </div>
-
-              </div> <!-- detail view well -->
-
               <div class="footer">
                 <hr class="footer"/>
               </div>
 
 
               <div class="urban-footer">
+                <div class="col-sm-12">
+                  <ul>
+                    <li class="name">Name goes here <br> 
+                    <span class="position">Position Title</span>                     
+                    </li>
+                    <li class="name">Name goes here <br> 
+                    <span class="position">Position Title</span>                     
+                    </li>
+                    <li class="name">Name goes here <br> 
+                    <span class="position">Position Title</span>                     
+                    </li>
+                </ul>
+                    </div>
                 <p>Copyright &copy; Urban Institute 2014</p>
               </div>
 

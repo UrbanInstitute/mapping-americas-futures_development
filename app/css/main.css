@@ -61,10 +61,22 @@ h4#title-lead {
 
 .urban-footer {
   width: 100%;
-  text-align: center;
+  text-align: left;
   padding: 0;
   margin: 20px 0;
   float : none;
+}
+
+.urban-footer ul li{
+    list-style-type: none;
+}
+
+div.shadow {
+  -moz-box-shadow: 3px 3px 6px #777;
+  -webkit-box-shadow: 3px 3px 6px #777;
+  box-shadow: 3px 3px 6px #777;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444')";
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444');
 }
 
 /*---------------------------------------
@@ -263,8 +275,10 @@ margin-top: 7.5px;
 
 .settings-header {
   font-weight: regular;
-  font-size: 18px;
+  font-size: 20px;
 }
+
+
 
 /*---------------------------------------
   --------------------------------------*/
@@ -325,7 +339,6 @@ margin-top: 7.5px;
 
 .item-container {
   background-color: #fff;
-  border-radius: 8px;
 }
 
 .item {
@@ -339,13 +352,13 @@ label.centered {
 
 label.select-label {
 padding-top: 25px;
-font-size: 14px;
+font-size: 16px;
 line-height: 12px;
 letter-spacing: -.5px;
-padding-bottom: 2px;
+padding-bottom: 5px;
 }
 
-#top-row, #feature-top-row {
+#map-tool-container, #feature-top-row {
   border-top: 8px solid #000;
 }
 
@@ -428,7 +441,14 @@ padding-bottom: 2px;
 }
 
 .color-label {
-  color: #0096D2;
+  color: #000;
+  font-size: 18px;
+  padding-top:20px;
+}
+
+#detail-years, #start-change, #end-change, #growth-cell{
+    color:#0096D2;
+    font-size: 18px;
 }
 
 #right_controls {
@@ -448,6 +468,7 @@ padding-bottom: 2px;
 .border-group {
   border-left: 1px solid #eee;
   border-right: 1px solid #eee;
+  margin-bottom: 20px;
 }
 
 @media (max-width: 767px) {
@@ -457,6 +478,12 @@ padding-bottom: 2px;
     margin: 20px 0px;
   }
 }
+
+div.extra-padding {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
 
 /*---------------------------------------
   --------------------------------------*/
@@ -491,8 +518,8 @@ padding-bottom: 2px;
     Adrienne Bootstrap Overrides & New
   ---------------------------------------
   --------------------------------------- */
-#container .img-rounded{
-    border-radius: none;
+#feature-container .img-rounded{
+    border-radius: 0px;
 }
 
 h1{
@@ -505,6 +532,28 @@ h1{
     border: none;
 }
 
-.col-md-12{
-    padding: 10px 30px 20px 30px;
+#map-top{
+    margin-top:30px;
+}
+
+. col-sm12 .legend{
+    margin-top:20px;
+}
+
+.settings-header-legend {
+  font-weight: regular;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.hr-legend{
+    margin: 20px 15px;
+}
+
+#region{
+    margin-top: 30px;
+}
+
+.well col-sm-12 #detail-well{
+    border: 0px;
 }
