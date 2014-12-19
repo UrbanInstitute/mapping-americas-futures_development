@@ -71,25 +71,24 @@ h4#title-lead {
     list-style-type: none;
 }
 
-div.shadow {
+div.shadow, .affix#map-top {
   -moz-box-shadow: 3px 3px 6px #777;
   -webkit-box-shadow: 3px 3px 6px #777;
   box-shadow: 3px 3px 6px #777;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444')";
-  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#444444');
+  -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#777777')";
+  filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#777777');
 }
 
-
 .affix#map-top {
-  position:fixed;
+  position: fixed;
   top: 66px;
-  margin-top: 0px;
+  margin-top: 0;
   margin-left: 15px;
-  z-index: 10;
-  background-color: rgba(255,255,255,0.8);
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  z-index: 11;
+  background-color: #1696d2;
   border: 1px solid #ccc;
+  color: #fff;
+  text-transform: uppercase;
 }
 
 #control-collapse {
@@ -112,6 +111,10 @@ div.shadow {
   margin-top: 80px;
 }
 
+#space-filler {
+  width : 100%;
+  display: block;
+}
 
 /*---------------------------------------
   --------------------------------------*/
@@ -181,7 +184,12 @@ button.btn.settings-button.active {
   transition: opacity .3s ease;
 }
 
-#hamburger-bun:hover #hidden-share {
+#share-container {
+  display: inline-block;
+  background-color: rgba(0,0,0,0);
+}
+
+#share-container:hover #hidden-share {
   visibility: visible;
   opacity: 1;
 }
@@ -218,7 +226,8 @@ div#mail {
   padding-right: 15px;
 }
 
-#hamburger-bun  div:hover {
+#hamburger-bun .navbar-toggle:hover,
+#share-container div:hover {
   background-color: #777;
   cursor: pointer;
 }
@@ -445,6 +454,11 @@ padding-bottom: 5px;
   cursor: pointer;
 }
 
+#boundary button {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 .navbar {
   background-color: #000;
   border-bottom: none;
@@ -590,4 +604,9 @@ h1{
 
 .well col-sm-12 #detail-well{
     border: 0px;
+}
+
+div .well {
+  border-radius: 0px;
+  border : none;
 }

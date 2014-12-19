@@ -21,48 +21,6 @@ d3.selection.prototype.moveToFront = function() {
   });
 };
 
-
-
-// affix map controls
-var $controls = $('#map-top'),
-    $control_collapse = $('#control-collapse'),
-    $control_toggle = $('#control-collapse-toggle'),
-    $legend_header = $('#legend-header'),
-    $map_container = $('#map_container');
-
-$control_toggle
-  .click(function() {
-    $control_collapse.slideToggle();
-  })
-  .hide();
-
-$controls
-  .affix({
-    offset: {
-      top: 300,
-      bottom: function() { return false; }
-    }
-  })
-  .on('affix.bs.affix', function() {
-    $legend_header.addClass('extra-padding-top');
-  })
-  .on('affixed.bs.affix', function() {
-    $controls.css('width', $map_container.width());
-    $control_collapse.hide();
-    $control_toggle.show();
-  })
-  .on('affixed-top.bs.affix', function() {
-    $controls.css('width', 'inherit');
-    $control_collapse.show();
-    $control_toggle.hide();
-    $legend_header.removeClass('extra-padding-top');
-  });
-
-$(window).on('resize', function() {
-  $controls.css('width', $map_container.width());
-});
-
-
 // load images async
 $('img.async').each(function() {
   $this = $(this);
@@ -348,6 +306,11 @@ q.awaitAll(function(error, data) {
     small_rendered[m] = render_small_map(opts);
   }
 
+
+  // list of all the visuals to update
+  // on parameter changes
+  var visuals = [];
+
   // update a small map and run a callback
   var update_from_cache = function(id, callback) {
     var init = small_rendered[id].__updateopts__;
@@ -382,14 +345,12 @@ q.awaitAll(function(error, data) {
     // zoom to czone in map
     main_map.target(czone, 1500);
 
+    detail.update(select_settings);
+
     // update download links
     projections.downloadLinks(select_settings);
 
   };
-
-  // list of all the visuals to update
-  // on parameter changes
-  var visuals = [detail];
 
   // whenever a new czone is selected,
   // update the charts
@@ -437,6 +398,8 @@ q.awaitAll(function(error, data) {
       update_from_cache('races_black');
       update_from_cache('races_hispanic');
 
+    }).update_callback(function(settings) {
+      detail.update(settings);
     })
   );
 

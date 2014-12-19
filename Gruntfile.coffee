@@ -1,7 +1,9 @@
 module.exports = (grunt) ->
 
-  deploy_path = 'B:/bsouthga/projections/'
-
+  deploy_paths = [
+    'B:/bsouthga/projections/'
+    'B:/mapping-americas-futures/'
+  ]
   #
   # Full build system steps
   #
@@ -55,14 +57,14 @@ module.exports = (grunt) ->
   grunt.initConfig
     copy :
       deploy :
-        files : [
+        files : (
           {
             expand: true
             cwd : "dist/"
             src: ['**']
-            dest: deploy_path
-          }
-        ]
+            dest: path
+          } for path in deploy_paths
+        )
     uglify:
       options:
         mangle: true

@@ -14,7 +14,6 @@
 // protect global scope
 ;(function(){
 
-
 //
 // bar chart factory function
 //

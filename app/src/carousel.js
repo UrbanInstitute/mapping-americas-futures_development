@@ -24,12 +24,13 @@ function getTop() {
 }
 
 // animate scrolling from start to end
-function scrollTo(start, end, duration){
+function scrollTo(start, end, duration, callback){
   $({scrTop: start}).animate({scrTop: end}, {
     duration: duration,
     step: function(val) {
       window.scrollTo(0, val);
-    }
+    },
+    complete : callback
   });
 }
 
@@ -38,17 +39,16 @@ function scrollTo(start, end, duration){
 */
 // store selection references
 // (selecting is slowwwww)
-var $nav = $('nav.navbar');
-var $title = $('#title-span');
-var $margined = $('.height-adjust');
-var $logoimage = $('.logo-image');
-var $briefs = $('#briefs');
-
-
-var start_size = parseFloat($nav.css('height'));
-var end_size = 66;
-var start_margin_top = parseFloat($('.height-adjust').css('margin-top'));
-var end_margin_top = 10;
+var $nav = $('nav.navbar'),
+    $title = $('#title-span'),
+    $margined = $('.height-adjust'),
+    $logoimage = $('.logo-image'),
+    $briefs = $('#briefs'),
+    $map_affix = $('.affix#map-top'),
+    start_size = parseFloat($nav.css('height')),
+    end_size = 66,
+    start_margin_top = parseFloat($('.height-adjust').css('margin-top')),
+    end_margin_top = 10;
 
 
 // linear scales for scroll position
@@ -66,23 +66,18 @@ var font_size = d3.scale.linear()
 
 
 function resizeHeader() {
-  var scr = Math.min(1, getTop()/(350 - end_size));
-  var h = height(scr);
+  var scr = Math.min(1, getTop()/(350 - end_size)),
+      h = height(scr);
 
+  $map_affix.css('top', h + 'px');
   $nav.css('height' , h + 'px');
-
   $briefs.css('top', h + 'px');
-
   $title.css('line-height', h + 'px')
         .css('font-size', font_size(scr) + 'px');
-
   $margined.css('margin-top', margin(scr) + 'px');
-
   $logoimage.css('height', h*0.8 + 'px')
             .css('margin-top', h*0.1 + 'px');
 }
-
-
 
 /*
 #
@@ -91,28 +86,83 @@ function resizeHeader() {
 */
 function carousel() {
 
-  // selection references
-  var $win = $(window);
-  var $view = $('.view_button');
-  var $car = $('.carousel');
+  //scroll to top on page init;
+  scrollTo(getTop(), 0, 0);
 
-  // Get page to start on from url
-  var hash = window.location.hash;
+  // selection references
+  var $win = $(window),
+      $view = $('.view_button'),
+      $car = $('.carousel'),
+      // affix map controls
+      $controls = $('#map-top'),
+      $control_collapse = $('#control-collapse'),
+      $control_toggle = $('#control-collapse-toggle'),
+      $legend_header = $('#legend-header'),
+      $map_container = $('#map_container'),
+      $filler = $('#space-filler'),
+      affix_initialized = false,
+      // Get page to start on from url
+      hash = window.location.hash,
+      // User scroll position for each carousel component
+      view_top = {map : 0, feature : 0},
+      // function to go to index of page in carousel
+      pages = ["feature", "map"],
+      goTo = projections.goTo = function(p) {
+        return $car.carousel(pages.indexOf(p));
+      },
+      // reset affix offset for different div sizes
+      control_bottom = function() {
+        return $controls.get(0).getBoundingClientRect().bottom - 100;
+      },
+      setAffixOffset = function() {
+        if (!$('.affix').length) {
+          $controls.data('bs.affix').options.offset = control_bottom();
+        }
+      };
+
+
+  // Bind affix events once affixed div has
+  // rendered bounding rect
+  var init_affix = function() {
+
+    // only show control toggle when affixed
+    $control_toggle
+      .click(function() {
+        $control_collapse.slideToggle();
+      })
+      .hide();
+
+    // bind affix listeners
+    $controls
+      .affix({
+        offset: control_bottom(),
+        bottom: function() { return false; }
+      })
+      .on('affix.bs.affix', function() {
+        $filler.css('height',
+           $controls.get(0).getBoundingClientRect().height
+        );
+      })
+      .on('affixed.bs.affix', function() {
+        $controls.css('width', $map_container.width());
+        $control_collapse.hide();
+        $control_toggle.show();
+      })
+      .on('affixed-top.bs.affix', function() {
+        $controls.css('width', 'inherit');
+        $control_collapse.show();
+        $control_toggle.hide();
+        $filler.css('height', 0);
+      });
+
+  };
+
+  // Check hash in request, default to feature
   hash = hash ? hash.slice(1) : "feature";
   hash = hash != "map" ? "feature" : "map";
 
-  // User scroll position for each carousel component
-  var view_top = {map : 0, feature : 0};
-
   // initialize carousel with no wrapping
   $car.carousel({interval : false, wrap : false});
-
-  // function to go to index of page in carousel
-  var pages = ["feature", "map"];
-  var goTo = function(p) {
-    return $car.carousel(pages.indexOf(p));
-  };
-  projections.goTo = goTo;
 
   // links to aspects of the feature in
   // the header
@@ -134,6 +184,9 @@ function carousel() {
     var start = view_top[hash];
     // get new view hash
     hash = $('.item:not(.active)').attr('id');
+
+
+
     // get window top of new view
     var end = view_top[hash];
     // alter url to match view
@@ -141,7 +194,23 @@ function carousel() {
     // fade in new button
     $("#" + hash + " .view_button").fadeIn(200);
     // animate window position to new top
-    scrollTo(start, end, 700);
+    scrollTo(start, end, 700, function() {
+      if (hash == "map" && !affix_initialized) {
+        init_affix();
+        affix_initialized = true;
+      }
+      setAffixOffset();
+    });
+  });
+
+  if (hash == "map") {
+    init_affix();
+    affix_initialized = true;
+  }
+
+  $(window).on('resize', function() {
+    scrollTo(getTop(), 0, 0);
+    $controls.css('width', $map_container.width());
   });
 
   // record user scroll position
@@ -152,7 +221,7 @@ function carousel() {
 
   // map scroll top button
   $('#return-to-map').click(function(){
-    var map_top = $("#map-top").offset().top - 50;
+    var map_top = $(".hr-legend").offset().top - 50;
     scrollTo(getTop(), map_top, 750);
   });
 
@@ -162,11 +231,7 @@ function carousel() {
     }
   };
 
-
 } // carousel events
-
-
-
 
 // export carousel initialization
 projections.carousel = carousel;

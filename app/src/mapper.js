@@ -477,9 +477,7 @@ function mapper(options) {
                 x : function(d, i) {
                   return offset/2 + i*binWidth + i*offset + dtext_pad;
                 },
-                y : 0,
-                rx : 3,
-                ry : 3
+                y : 0
               })
               .style('fill', function(d){ return d; })
               .style('stroke', "#fff")
@@ -555,6 +553,7 @@ function mapper(options) {
           var w = t.node().getBBox();
           t.remove();
           return w;
+
         })();
 
         growth_text.attr({
@@ -569,9 +568,7 @@ function mapper(options) {
                 "class" : "us-map-legend-rect",
                 "width" : binWidth,
                 "height": binHeight,
-                "x" : no_pop_position,
-                "rx" : 3,
-                "ry" : 3
+                "x" : no_pop_position
               })
               .style('stroke', "#fff")
               .style('stroke-width', 3)
@@ -647,6 +644,21 @@ function mapper(options) {
       // method chaining
       return self;
     };
+
+
+    /* ----------------------------------
+        callback to be fired on every update
+       ---------------------------------- */
+    var update_callback = function() {};
+    self.update_callback = function(callback) {
+      if (callback) {
+        update_callback = callback;
+        return self;
+      } else {
+        return update_callback;
+      }
+    };
+
 
 
     /* ----------------------------------
@@ -747,6 +759,11 @@ function mapper(options) {
 
         projections.loading_indicator = false;
         if (callback) callback();
+
+        // callback to execute on every update
+        // used to render detail charts after
+        // assumption changes have been downloaded
+        update_callback(settings);
       };
 
 

@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
 
+  <!--
+    Population Projections 2.0
+    Ben Southgate (bsouthga@gmail.com)
+    12/01/14
+  -->
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mapping America's Futures</title>
@@ -46,14 +52,17 @@
       </span>
       <div id="hamburger-bun" class="height-adjust">
 
-        <span id="hidden-share">
-          <div id="twitter"><i class="fa fa-twitter"></i></div>
-          <div id="facebook"><i class="fa fa-facebook"></i></div>
-          <div id="mail"><i class="fa fa-envelope-o"></i></div>
-        </span>
-        <div id="social">
-          <i class="fa fa-share"></i>
+        <div id="share-container">
+          <span id="hidden-share">
+            <div id="twitter"><i class="fa fa-twitter"></i></div>
+            <div id="facebook"><i class="fa fa-facebook"></i></div>
+            <div id="mail"><i class="fa fa-envelope-o"></i></div>
+          </span>
+          <div id="social">
+            <i class="fa fa-share"></i>
+          </div>
         </div>
+
         <div class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
           <i class="fa fa-bars"></i>
         </div>
@@ -626,9 +635,9 @@
 
 
             <!-- Assumption settings -->
-            <div class="row">
+            <div class="row" id="control-row">
+              <div id="space-filler"></div>
               <div class="col-md-12" id="map-top">
-
                 <div id="control-collapse">
 
                   <div class="col-sm-4">
@@ -723,7 +732,7 @@
 
                   <div class="col-sm-6 border-group">
 
-                    <div class="settings-header">2. Filter by: </div>
+                    <div class="settings-header">2. Filter by (map only): </div>
 
                     <label class="select-label">Age</label>
 
@@ -857,7 +866,7 @@
                         data-html = "true"
                         data-title = "The map divides the United States into 740 commuting zones—places connected by local economies, which can cross city and state boundaries, and that include metro and rural areas."
                         data-container = "body">
-                      What is this?
+                      What is a commuting zone?
                     </span>
 
                   </div>
@@ -1019,21 +1028,17 @@
               <div class="urban-footer" id="map-footer">
                 <div class="col-sm-12">
                   <ul>
-                    <li class="name">Name goes here <br> 
-                    <span class="position">Position Title</span>                     
-                    </li>
-                    <li class="name">Name goes here <br> 
-                    <span class="position">Position Title</span>                     
-                    </li>
-                    <li class="name">Name goes here <br> 
-                    <span class="position">Position Title</span>                     
-                    </li>
-                </ul>
-                    </div>
+                    <li>PROJECT CREDITS</li>
+                    <li>DESIGN AND DEVELOPMENT</li>
+                    <li>Adrienne Hapanowicz, Ben Southgate, Tim Meko, Graham MacDonald</li>
+                    <li>STORY</li>
+                    <li>Serena Lei</li>
+                    <li>EDITING</li>
+                    <li>Elizabeth Forney</li>
+                  </ul>
+                </div>
                 <p>Copyright &copy; Urban Institute 2014</p>
               </div>
-
-
 
               </div> <!-- col-sm-12 -->
             </div> <!-- row -->
@@ -1074,6 +1079,9 @@
   <script src="src/main.js"></script>
 
   <!-- /build -->
+
+
+  <script async src="//tdcdn.blob.core.windows.net/toolbar/assets/prod/td.js" data-trackduck-id="548b51585750c0273af7cd49"></script>
 
 </body>
 </html>

@@ -108,7 +108,7 @@ path.us-map-states {
 }
 
 text.us-map-legend-label {
-  font-size: 7px;
+  font-size: 6px;
 }
 /*---------------------------------------
   --------------------------------------*/
@@ -242,7 +242,7 @@ text.us-map-legend-label {
 
 .growth-text {
   fill : #000;
-  font-size: 8px;
+  font-size: 6px;
   font-style: italic;
 }
 

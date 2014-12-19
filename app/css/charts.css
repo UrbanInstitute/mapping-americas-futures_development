@@ -47,6 +47,11 @@
   fill : none;
 }
 
+.x.axis {
+  font-size: 14px;
+  fill : none;
+}
+
 .axis path.domain {
   stroke : #000;
   stroke-width : 1px;
