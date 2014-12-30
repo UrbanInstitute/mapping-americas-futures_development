@@ -86,39 +86,37 @@ function resizeHeader() {
 */
 function carousel() {
 
-  //scroll to top on page init;
-  scrollTo(getTop(), 0, 0);
-
   // selection references
-  var $win = $(window),
-      $view = $('.view_button'),
-      $car = $('.carousel'),
-      // affix map controls
-      $controls = $('#map-top'),
-      $control_collapse = $('#control-collapse'),
-      $control_toggle = $('#control-collapse-toggle'),
-      $legend_header = $('#legend-header'),
-      $map_container = $('#map_container'),
-      $filler = $('#space-filler'),
-      affix_initialized = false,
-      // Get page to start on from url
-      hash = window.location.hash,
-      // User scroll position for each carousel component
-      view_top = {map : 0, feature : 0},
-      // function to go to index of page in carousel
-      pages = ["feature", "map"],
-      goTo = projections.goTo = function(p) {
-        return $car.carousel(pages.indexOf(p));
-      },
-      // reset affix offset for different div sizes
-      control_bottom = function() {
-        return $controls.get(0).getBoundingClientRect().bottom - 100;
-      },
-      setAffixOffset = function() {
-        if (!$('.affix').length) {
-          $controls.data('bs.affix').options.offset = control_bottom();
-        }
-      };
+  var
+    $win = $(window),
+    $view = $('.view_button'),
+    $car = $('.carousel'),
+    // affix map controls
+    $controls = $('#map-top'),
+    $control_collapse = $('#control-collapse'),
+    $control_toggle = $('#control-collapse-toggle'),
+    $legend_header = $('#legend-header'),
+    $map_container = $('#map_container'),
+    $filler = $('#space-filler'),
+    affix_initialized = false,
+    // Get page to start on from url
+    hash = window.location.hash,
+    // User scroll position for each carousel component
+    view_top = {map : 0, feature : 0},
+    // function to go to index of page in carousel
+    pages = ["feature", "map"],
+    goTo = projections.goTo = function(p) {
+      return $car.carousel(pages.indexOf(p));
+    },
+    // reset affix offset for different div sizes
+    control_bottom = function() {
+      return $controls.get(0).getBoundingClientRect().bottom - 100;
+    },
+    setAffixOffset = function() {
+      if (!$('.affix').length) {
+        $controls.data('bs.affix').options.offset = control_bottom();
+      }
+    };
 
 
   // Bind affix events once affixed div has
@@ -128,7 +126,18 @@ function carousel() {
     // only show control toggle when affixed
     $control_toggle
       .click(function() {
-          $control_collapse.slideToggle();
+        $control_collapse.slideToggle(function() {
+          // change collapse button text
+          $control_toggle.html(
+            ($control_collapse.css('display') === "none") ?
+            ('<span class="settings-dropdown-icon">' +
+              '<i class="fa fa-3 fa-chevron-circle-down"></i>' +
+            '</span>Change settings') :
+            ('<span class="settings-dropdown-icon">' +
+              '<i class="fa fa-3 fa-times-circle"></i>' +
+            '</span>Close Settings')
+          );
+       });
       }).hide();
 
     // bind affix listeners
@@ -138,18 +147,29 @@ function carousel() {
         bottom: function() { return false; }
       })
       .on('affix.bs.affix', function() {
-        $filler.css('height',
-           $controls.get(0).getBoundingClientRect().height
-        );
+        var rect = $controls.get(0).getBoundingClientRect();
+        $filler.css('height', rect.height);
       })
       .on('affixed.bs.affix', function() {
-        $controls.css('width', $map_container.width());
+        var rect = $controls.get(0).getBoundingClientRect();
+        $controls
+          .css('left', 0)
+          .css('width', $(window).width());
+        $control_collapse
+          .css('padding-top', 30)
+          .css('width', $map_container.width())
+          .css('margin-left', rect.left);
         $control_collapse.hide();
         $control_toggle.show();
       })
       .on('affixed-top.bs.affix', function() {
-        $controls.css('width', 'inherit');
-        $control_collapse.show();
+        $controls
+          .css('width', '')
+          .css('padding-top', '')
+          .css('left', '');
+        $control_collapse
+          .css('margin-left', '')
+          .show();
         $control_toggle.hide();
         $filler.css('height', 0);
       });
@@ -171,9 +191,6 @@ function carousel() {
 
   // go to page in url
   goTo(hash);
-
-  // scroll to top
-  scrollTo(getTop(), 0, 0);
 
   // on click of side tab, change to that page
   $view.click( function(){ goTo(this.id); } );
@@ -203,8 +220,11 @@ function carousel() {
   });
 
   if (hash == "map") {
-    init_affix();
-    affix_initialized = true;
+    // scroll to top and init affix
+    scrollTo(getTop(), 0, 0, function() {
+      init_affix();
+      affix_initialized = true;
+    });
   }
 
   $(window).on('resize', function() {

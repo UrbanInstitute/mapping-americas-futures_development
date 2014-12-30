@@ -87,11 +87,11 @@ div.shadow, .affix#map-top {
   position: fixed;
   top: 66px;
   margin-top: 0;
-  margin-left: 15px;
   z-index: 11;
-  background-color: rgba(255,255,255,0.9);
-  text-transform: uppercase;
+  background-color: rgba(255,255,255,0.95);
   padding: 0px;
+  border-bottom: 8px solid black;
+  width: 100%;
 }
 
 .affix .col-sm-12 {
@@ -103,12 +103,10 @@ div.shadow, .affix#map-top {
 }
 
 #control-collapse-toggle {
-  width: 100%;
   display: block;
-  padding : 10px 0;
   text-align: center;
-  color : #fff;
-  background-color: #1696d2;
+  height: 60px;
+  line-height: 60px;
 }
 
 #control-collapse-toggle:hover {
@@ -137,6 +135,7 @@ div.shadow, .affix#map-top {
   background-color: #000;
   color: #fff;
   padding-bottom: 60px;
+  padding-top: 20px;
 }
 
 #footer a {
@@ -147,6 +146,17 @@ div.shadow, .affix#map-top {
   background-color: #eee;
   padding-top: 50px;
   padding-bottom: 50px;
+}
+
+.download-link {
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
+
+.settings-dropdown-icon {
+  font-size: 20px;
+  margin-right: 5px;
+  display: inline-block;
 }
 
 /*---------------------------------------
