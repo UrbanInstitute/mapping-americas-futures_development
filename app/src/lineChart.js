@@ -12,7 +12,7 @@
 */
 
 // protect global scope
-;(function(){
+;(function(projections){
 
 function lineChart(options) {
 
@@ -561,4 +561,4 @@ function lineChart(options) {
 // write to projections module
 projections.lineChart = lineChart;
 
-}).call(this);
+})(projections);

@@ -12,7 +12,7 @@
 */
 
 // protect global scope
-;(function(){
+;(function(projections){
 
 
 //
@@ -826,4 +826,4 @@ function mapper(options) {
 projections.mapper = mapper;
 
 
-}).call(this);
+})(projections);

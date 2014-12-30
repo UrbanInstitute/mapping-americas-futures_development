@@ -13,7 +13,7 @@
 
 
 // protect global scope
-;(function(){
+;(function(projections){
 
 
 // get top offset
@@ -256,4 +256,5 @@ function carousel() {
 projections.carousel = carousel;
 projections.scrollTo = scrollTo;
 projections.getTop = getTop;
-}).call(this);
+
+})(projections);

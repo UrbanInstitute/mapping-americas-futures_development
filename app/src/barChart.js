@@ -12,7 +12,7 @@
 */
 
 // protect global scope
-;(function(){
+;(function(projections){
 
 //
 // bar chart factory function
@@ -277,4 +277,4 @@ function barChart(options) {
 // write to projections module
 projections.barChart = barChart;
 
-}).call(this);
+})(projections);

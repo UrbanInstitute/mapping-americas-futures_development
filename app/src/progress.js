@@ -12,7 +12,7 @@
 */
 
 // protect global scope
-;(function(){
+;(function(projections){
 
 function progress(options) {
   var width = options.width;
@@ -108,4 +108,4 @@ function progress(options) {
 // write to projections module
 projections.progress = progress;
 
-}).call(this);
+})(projections);

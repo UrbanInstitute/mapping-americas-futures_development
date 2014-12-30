@@ -12,7 +12,7 @@
 */
 
 // protect global scope
-;(function() {
+;(function(projections) {
 
 // move node to front
 d3.selection.prototype.moveToFront = function() {
@@ -434,4 +434,4 @@ q.awaitAll(function(error, data) {
 
 
 // protect global scope
-}).call(this);
+})(projections);

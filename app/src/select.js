@@ -12,7 +12,7 @@
 */
 
 // protect global scope
-;(function(){
+;(function(projections){
 
 
 /*
@@ -301,4 +301,4 @@ projections.raceAbbr = raceAbbr;
 projections.yearAbbr = yearAbbr;
 projections.downloadLinks = downloadLinks;
 
-}).call(this);
+})(projections);

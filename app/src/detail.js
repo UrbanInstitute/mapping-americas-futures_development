@@ -12,7 +12,7 @@
 */
 
 // protect global scope
-;(function(){
+;(function(projections){
 
 
 function detail(options) {
@@ -164,4 +164,4 @@ function detail(options) {
 // write to projections module
 projections.detail = detail;
 
-}).call(this);
+})(projections);

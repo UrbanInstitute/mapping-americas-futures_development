@@ -11,7 +11,7 @@
 #
 */
 
-this.projections = {
+var projections = {
   // cache for data and path rendering
   "cache" : {},
   // boolean indicating if a file is currently

@@ -12,7 +12,7 @@
 */
 
 // protect global scope
-;(function(){
+;(function(projections){
 
 
 function dropdown(names) {
@@ -73,4 +73,4 @@ function dropdown(names) {
 // export module
 projections.dropdown = dropdown;
 
-}).call(this);
+})(projections);
