@@ -31,8 +31,12 @@ html,body{
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h6 {
   font-weight: normal;
+}
+
+h5 {
+  text-decoration: underline;
 }
 
 h2 {
@@ -85,10 +89,13 @@ div.shadow, .affix#map-top {
   margin-top: 0;
   margin-left: 15px;
   z-index: 11;
-  background-color: #1696d2;
-  border: 1px solid #ccc;
-  color: #fff;
+  background-color: rgba(255,255,255,0.9);
   text-transform: uppercase;
+  padding: 0px;
+}
+
+.affix .col-sm-12 {
+  padding: 0px;
 }
 
 #control-collapse {
@@ -100,6 +107,8 @@ div.shadow, .affix#map-top {
   display: block;
   padding : 10px 0;
   text-align: center;
+  color : #fff;
+  background-color: #1696d2;
 }
 
 #control-collapse-toggle:hover {
@@ -116,6 +125,30 @@ div.shadow, .affix#map-top {
   display: block;
 }
 
+.credit-title {
+  margin-bottom: 0;
+}
+
+#credits {
+  font-size: 12px;
+}
+
+#footer {
+  background-color: #000;
+  color: #fff;
+  padding-bottom: 60px;
+}
+
+#footer a {
+  color : #fff;
+}
+
+#detail-background {
+  background-color: #eee;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
 /*---------------------------------------
   --------------------------------------*/
 
@@ -126,12 +159,23 @@ div.shadow, .affix#map-top {
     Settings buttons
   ---------------------------------------
   --------------------------------------- */
+
+#detail-well button.settings-button {
+  border-radius: 0px;
+}
+
 button.btn.settings-button {
-background-color: #0096D2;
-color: white;
-text-transform: uppercase;
-font-weight: 400;
-letter-spacing: .5px;
+  background-color: #0096D2;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 400;
+  letter-spacing: .5px;
+}
+
+@media(max-width : 1000px) {
+  button.btn.settings-button, select.year-select {
+    font-size: 9px;
+  }
 }
 
 button.btn.settings-button:not(.active):hover {
@@ -139,7 +183,7 @@ button.btn.settings-button:not(.active):hover {
 }
 
 button.btn.settings-button.active {
-  background-color: #333;
+  background-color: #000;
 }
 /*---------------------------------------
   --------------------------------------*/

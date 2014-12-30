@@ -128,9 +128,8 @@ function carousel() {
     // only show control toggle when affixed
     $control_toggle
       .click(function() {
-        $control_collapse.slideToggle();
-      })
-      .hide();
+          $control_collapse.slideToggle();
+      }).hide();
 
     // bind affix listeners
     $controls
@@ -173,6 +172,9 @@ function carousel() {
   // go to page in url
   goTo(hash);
 
+  // scroll to top
+  scrollTo(getTop(), 0, 0);
+
   // on click of side tab, change to that page
   $view.click( function(){ goTo(this.id); } );
 
@@ -184,9 +186,6 @@ function carousel() {
     var start = view_top[hash];
     // get new view hash
     hash = $('.item:not(.active)').attr('id');
-
-
-
     // get window top of new view
     var end = view_top[hash];
     // alter url to match view

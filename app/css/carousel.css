@@ -25,7 +25,7 @@
   padding-top: 200px;
 }
 
-#carousel a.carousel-control {
+a.carousel-control {
   background-image: none;
   z-index: 1001;
   width: 0;
@@ -78,6 +78,18 @@
     }
 }
 
+/*
+  Move read button closer for small desktops
+*/
+@media (max-width: 1450px) {
+  div.view_button.right {
+    right: 10px;
+  }
+}
+
+
+
+
 /* disable to view feature */
 /*.view_button#feature {
   display: none;
@@ -105,10 +117,7 @@
 }
 
 .view_button:hover {
-  -moz-box-shadow: 5px 5px 4px #ccc;
-  -webkit-box-shadow: 5px 5px 4px #ccc;
-  box-shadow: 5px 5px 4px #ccc;
-  background-color: #fdbf11;
+  background-color: #000;
 }
 
 .view_button.right {

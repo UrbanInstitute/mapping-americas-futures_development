@@ -43,7 +43,7 @@ function dropdown(names) {
       var cz = parseFloat(d.czone);
       var i;
       if (cz !== 0) {
-        i = (cz < 65) ? " (State)" : " Area";
+        i = (cz < 65) ? " (State)" : "";
       } else {
         i = "";
       }

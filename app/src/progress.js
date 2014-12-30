@@ -27,7 +27,9 @@ function progress(options) {
     .range([0, progress_width]);
 
 
-  var helper_svg = d3.select('body').append('svg');
+  var helper_svg = d3.select('body')
+    .append('svg')
+    .attr('class', 'helper-svg');
 
   var plexiglass = svg.append('g');
 
@@ -81,6 +83,8 @@ function progress(options) {
         "rx" : 5,
         "ry" : 5
       });
+
+  helper_svg.remove();
 
   return {
     update : function(value) {

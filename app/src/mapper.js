@@ -435,11 +435,12 @@ function mapper(options) {
         // Width of colored bins
         var binWidth = (legend_width*0.6 / (n_bins+1)) - offset;
         // height of colored bins
-        var binHeight = (binWidth * 0.5);
+        var binHeight = 10;
 
         // add hidden svg canvas for calculating bounding boxes
         // even if the main svg is not yet being displayed
         var helper_svg = d3.select('body').append('svg')
+          .attr('class', 'helper-svg')
           .style('visibility', "hidden");
 
 
@@ -481,7 +482,7 @@ function mapper(options) {
               })
               .style('fill', function(d){ return d; })
               .style('stroke', "#fff")
-              .style('stroke-width', 3);
+              .style('stroke-width', 1);
 
         if (renderOpts.legendMouseover) {
           // show zones with this legend color
@@ -553,7 +554,6 @@ function mapper(options) {
           var w = t.node().getBBox();
           t.remove();
           return w;
-
         })();
 
         growth_text.attr({
@@ -571,7 +571,7 @@ function mapper(options) {
                 "x" : no_pop_position
               })
               .style('stroke', "#fff")
-              .style('stroke-width', 3)
+              .style('stroke-width', 1)
               .style('fill', missingColor);
 
         var pop_text = legend.append('text')
@@ -591,8 +591,6 @@ function mapper(options) {
           "x" : no_pop_position + binWidth + 5,
           "y" : poptext_dims.height
         });
-
-
 
         // remove helper svg from body
         helper_svg.remove();

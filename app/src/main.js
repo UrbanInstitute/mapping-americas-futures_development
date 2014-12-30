@@ -21,6 +21,7 @@ d3.selection.prototype.moveToFront = function() {
   });
 };
 
+
 // load images async
 $('img.async').each(function() {
   $this = $(this);

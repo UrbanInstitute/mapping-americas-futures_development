@@ -169,6 +169,7 @@ function lineChart(options) {
 
     // helper svg
     var helper_svg = d3.select('body').append('svg')
+      .attr('class', 'helper-svg')
       .style('visibility', 'hidden');
 
     // container svg, dynamically sized
