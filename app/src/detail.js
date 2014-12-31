@@ -11,7 +11,6 @@
 #
 */
 
-// protect global scope
 ;(function(projections){
 
 
@@ -73,8 +72,7 @@ function detail(options) {
       if (czone !== 0) czone = zeros(czone);
       // update detail title
       var name = czone_names[parseFloat(czone)] || "United States";
-      d3.select("h1#region").text(name);
-      d3.select("#download-czone span").text(name);
+      $("h1#region").text(name);
 
       // calculate percentage growth
       var start = settings.start_abbr();
@@ -160,8 +158,6 @@ function detail(options) {
 
 }
 
-
-// write to projections module
 projections.detail = detail;
 
 })(projections);

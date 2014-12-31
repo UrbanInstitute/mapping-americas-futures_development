@@ -11,9 +11,7 @@
 #
 */
 
-// protect global scope
 ;(function(projections){
-
 
 function dropdown(names) {
 
@@ -69,8 +67,6 @@ function dropdown(names) {
   return self;
 }
 
-
-// export module
 projections.dropdown = dropdown;
 
 })(projections);

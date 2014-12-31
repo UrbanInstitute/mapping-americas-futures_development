@@ -12,9 +12,7 @@
 */
 
 
-// protect global scope
-;(function(projections){
-
+;(function(projections) {
 
 // get top offset
 function getTop() {
@@ -37,8 +35,7 @@ function scrollTo(start, end, duration, callback){
 /*
 ** resize header based on scroll
 */
-// store selection references
-// (selecting is slowwwww)
+
 var $nav = $('nav.navbar'),
     $title = $('#title-span'),
     $margined = $('.height-adjust'),
@@ -108,9 +105,13 @@ function carousel() {
     goTo = projections.goTo = function(p) {
       return $car.carousel(pages.indexOf(p));
     },
+    // controls bounding rect
+    controlBBox = function() {
+      return $controls.get(0).getBoundingClientRect();
+    },
     // reset affix offset for different div sizes
     control_bottom = function() {
-      return $controls.get(0).getBoundingClientRect().bottom - 100;
+      return controlBBox().bottom - 100;
     },
     setAffixOffset = function() {
       if (!$('.affix').length) {
@@ -122,6 +123,9 @@ function carousel() {
   // Bind affix events once affixed div has
   // rendered bounding rect
   var init_affix = function() {
+
+    // no mobile affix
+    if (projections.mobile()) return false;
 
     // only show control toggle when affixed
     $control_toggle
@@ -138,7 +142,7 @@ function carousel() {
             '</span>Close Settings')
           );
        });
-      }).hide();
+      }).hide(); // hide on load
 
     // bind affix listeners
     $controls
@@ -147,14 +151,19 @@ function carousel() {
         bottom: function() { return false; }
       })
       .on('affix.bs.affix', function() {
-        var rect = $controls.get(0).getBoundingClientRect();
-        $filler.css('height', rect.height);
+        // fill hole left by affix with empty
+        // element of same height
+        $filler.css('height', controlBBox().height);
       })
       .on('affixed.bs.affix', function() {
-        var rect = $controls.get(0).getBoundingClientRect();
+        // The affix needs to stretch
+        // all the way across the screen
+        var rect = controlBBox();
         $controls
           .css('left', 0)
-          .css('width', $(window).width());
+          .css('width', $win.width());
+        // Padd the controls to keep them
+        // in line with the map
         $control_collapse
           .css('padding-top', 30)
           .css('width', $map_container.width())
@@ -163,6 +172,8 @@ function carousel() {
         $control_toggle.show();
       })
       .on('affixed-top.bs.affix', function() {
+        // once controls back on top,
+        // remove padding changes and filler
         $controls
           .css('width', '')
           .css('padding-top', '')
@@ -227,18 +238,16 @@ function carousel() {
     });
   }
 
-  $(window).on('resize', function() {
-    scrollTo(getTop(), 0, 0);
-    $controls.css('width', $map_container.width());
-  });
+  $win
+    .on('resize', function() {
+      scrollTo(getTop(), 0, 0);
+      $controls.css('width', $map_container.width());
+    })
+    .scroll(function(){
+      view_top[hash] = Math.round(getTop());
+      resizeHeader();
+    });
 
-  // record user scroll position
-  $win.scroll(function(){
-    view_top[hash] = Math.round(getTop());
-    resizeHeader();
-  });
-
-  // map scroll top button
   $('#return-to-map').click(function(){
     var map_top = $(".hr-legend").offset().top - 50;
     scrollTo(getTop(), map_top, 750);
@@ -250,9 +259,8 @@ function carousel() {
     }
   };
 
-} // carousel events
+}
 
-// export carousel initialization
 projections.carousel = carousel;
 projections.scrollTo = scrollTo;
 projections.getTop = getTop;

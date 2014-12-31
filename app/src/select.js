@@ -11,14 +11,11 @@
 #
 */
 
-// protect global scope
 ;(function(projections){
-
 
 /*
   Update text at top of detail section
 */
-
 function createDetailString(settings) {
   var full = {
     "avg" : "Average",
@@ -40,7 +37,6 @@ function createYearString(settings) {
     [settings.start, settings.end].join("-")
   );
 }
-
 
 /*
   Links for data download
@@ -77,6 +73,41 @@ function yearAbbr(year) {
   return ("" + year).slice(-2);
 }
 
+// create buttons
+function addButtons(id, values) {
+  d3.select("#" + id)
+    .attr('class', "btn-group btn-group-justified settings")
+    .selectAll('div.btn-group')
+    .data(values).enter()
+    .append('div')
+      .attr("class" , "btn-group btn-group-sm")
+    .append('button')
+      .attr({
+        type : "button",
+        class : function(d, i) {
+          return "btn settings-button" + (!i ? "" : " active");
+        },
+        id : function(d) { return d; }
+      })
+      .text(function(d) {
+        return d.toUpperCase();
+      });
+}
+
+
+var age_range = ["all", "0-19", "20-49", "50-64", "65+"],
+    ethnicities = ["all", "white", "black", "hispanic", "other"],
+    assumptions = ["low", "avg", "high"];
+
+
+// add the buttons to the dom
+addButtons("migration", assumptions);
+addButtons("mortality", assumptions);
+addButtons("fertility", assumptions);
+addButtons("age", age_range);
+addButtons("race", ethnicities);
+
+
 function select(defaults) {
 
   // placeholder callback
@@ -84,12 +115,11 @@ function select(defaults) {
 
   // starting year range
   var year_range = [2010, 2020];
-  // age range
-  var age_range = ["all", "0-19", "20-49", "50-64", "65+"];
 
   // current settings (essentially the "Model" in an MVC sense)
   var settings = defaults;
 
+  // Detail information
   createDetailString(settings);
   createYearString(settings);
 
@@ -112,11 +142,6 @@ function select(defaults) {
   ];
 
 
-  //
-  //
-  // Default settings
-  //
-  //
   var settings_buttons = d3.selectAll('.settings button');
 
 
@@ -263,26 +288,33 @@ function select(defaults) {
   // set model to update
   //
   settings.set = function(update, no_callback) {
+
+    // update current setting values
     for (var varname in update) {
-      if (this[varname] != undefined) {
-        this[varname] = update[varname];
+      if (settings[varname] !== undefined) {
+        settings[varname] = update[varname];
       }
     }
-    // update the detain information
-    createDetailString(this);
-    createYearString(this);
+
+    // update the detail information
+    createDetailString(settings);
+    createYearString(settings);
+
     // update active buttons
     settings_buttons.classed('active', function(){
       // two levels up is the button group container for these settings
       var setting_group = $(this).parents('.settings')[0];
       return settings[setting_group.id] == this.id;
     });
+
     // write default settings
     year_select.property('value', setYear);
+
     // run callback on update settings
     if (!no_callback) {
       callback(settings);
     }
+
     // update download links
     downloadLinks(settings);
   };

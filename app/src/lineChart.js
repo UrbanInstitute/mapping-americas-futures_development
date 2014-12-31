@@ -11,7 +11,6 @@
 #
 */
 
-// protect global scope
 ;(function(projections){
 
 function lineChart(options) {
@@ -270,7 +269,7 @@ function lineChart(options) {
       .attr({
         "class" : "line-title",
         "y" : -50,
-        "x" : -40
+        "x" : -margin.left
       }).text(capitalize(self.category));
 
     // legend

@@ -1,0 +1,281 @@
+<div class="item" id="map">
+
+  <div class="view_button right" id="feature">
+    READ THE <BR/> ARTICLE
+  </div>
+
+  <div class="fill">
+    <div class="container">
+      <div class="col-md-12 item-container  extra-padding" id="map-tool-container">
+
+        <div class="row" id="top-row">
+          <div class="col-md-12">
+            <!-- extra container to keep alignment with lower rows -->
+            <div class="col-md-12">
+              <h1>Mapping America's Futures</h1>
+              <p class="map-more-text">
+                Test possible scenarios for how the US population might change in 2020 and 2030. The map will change depending on whether users choose low, average, or high rates for future births, deaths, or migration.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assumption settings -->
+        <div class="row"
+             id="control-row">
+
+          <div id="space-filler"></div>
+
+          <div class="col-md-12"
+               id="map-top">
+
+            <div id="control-collapse">
+
+              <div class="col-sm-4">
+                <div class="settings-header">1. Select rates: </div>
+                <label class="select-label">Births</label>
+                <div id="fertility"></div>
+                <label class="select-label">Deaths</label>
+                <div id="mortality"></div>
+                <label class="select-label">Migration</label>
+                <div id="migration"></div>
+              </div>
+
+              <div class="col-sm-8 border-group">
+
+                <div class="col-sm-9">
+
+                  <div class="settings-header">2. Filter map by: </div>
+
+                  <label class="select-label">Age</label>
+                  <div  id="age"></div>
+                  <label class="select-label">Race</label>
+                  <div  id="race"></div>
+
+                </div>
+
+                <div class="col-sm-3 border-group" id="year-change-group">
+
+                  <div class="settings-header">3. Year change: </div>
+
+                  <div id="year-select-container">
+                    <label class="select-label">From</label>
+                    <select class="form-control year-select" id="start"></select>
+                    <label class="select-label">To</label>
+                    <select class="form-control year-select" id="end"></select>
+                  </div>
+
+                </div>
+
+                <div class="col-sm-5">
+                  <label class="select-label">Boundary</label>
+
+                  <br/>
+
+                  <div class="btn-group settings btn-group-justified" id="boundary">
+                    <div class="btn-group btn-group-sm">
+                      <button type="button" class="btn settings-button" id="states">
+                        STATES</button>
+                    </div>
+                    <div class="btn-group btn-group-sm">
+                      <button type="button" class="btn settings-button active" id="czones">
+                        ZONES</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-7" id="boundary-info">
+                  The map divides the United States into 740 commuting zones—places connected by local economies, which can cross city and state boundaries, and that include metro and rural areas.
+                </div>
+
+              </div>
+
+            </div>
+            <!-- collapse div -->
+
+            <div class="col-sm-12">
+              <div id="control-collapse-toggle">
+                <span class="settings-dropdown-icon">
+                  <i class="fa fa-3 fa-chevron-circle-down"></i>
+                </span>
+                Change settings
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <hr class="hr-legend" />
+
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="col-sm-12">
+              <div class="settings-header-legend" id="legend-header">
+                Rollover key to isolate population change range on map
+              </div>
+              <div class="legend" id="map_container-legend"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div id="map_container"></div>
+          </div>
+        </div>
+
+
+        <div id="return-to-map">
+          Return to map <i id="return-button" class="fa fa-chevron-circle-up fa-2x"></i>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="detail-background">
+      <div class="container">
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="col-sm-12" id="detail-well">
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <h1 id="region"></h1>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-4 col-sm-push-8" id="right_controls">
+                  <select class="form-control" id="czone-select" data-live-search="true">
+                  </select>
+                </div>
+                <div class="col-sm-8 col-sm-pull-4">
+                  <div id="detail-settings"></div>
+                  <span class="detail-label">  Population growth:
+                    <span id="growth-cell"></span>
+                  </span>
+                  <span class="detail-label">  Population change:
+                    <span id="start-change"></span> to
+                    <span id="end-change"></span>
+                  </span>
+                </div>
+              </div>
+
+              <hr class="detail-hr"/>
+
+              <div class="row padded-row">
+                <div class="col-sm-8">
+                  <h2 class="detail-header">
+                    General Age and Race Trends,
+                    <span id="detail-years"></span>
+                  </h2>
+                  Test possible scenarios for how the US population might change in 2020 and 2030 by selecting different rates for birth, death and migration. Filter by age, race and geographicboundaries to focus on a sub population.
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div id="race-lines"></div>
+                </div>
+                <div class="col-sm-6">
+                  <div id="age-lines"></div>
+                </div>
+              </div>
+
+              <hr class="detail-hr"/>
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <h2 class="detail-header">
+                  Detailed Age and Race</h2>
+                </div>
+                <div class="col-sm-8">
+                  Test possible scenarios for how the US population might change in 2020 and 2030 by selecting different rates for birth, death and migration. Filter by age, race and geographic boundaries to focus on a sub population.
+                </div>
+                <div class="col-sm-4">
+                  <div class="btn-group" id="pyramid-select"></div>
+                </div>
+              </div>
+              <div class="row" id="pyramids">
+                <div class="pyramid col-xs-4 col-sm-2 col-xs-offset-1 col-sm-offset-1" id="all"></div>
+                <div class="pyramid col-xs-4 col-sm-2" id="white"></div>
+                <div class="pyramid col-xs-4 col-sm-2" id="black"></div>
+                <div class="pyramid col-xs-4 col-sm-2" id="hispanic"></div>
+                <div class="pyramid col-xs-4 col-sm-2" id="other"></div>
+              </div>
+
+            </div>
+            <!-- detail view well -->
+            </div>
+
+          </div>
+          <!-- col-sm-12 -->
+        </div>
+        <!-- row -->
+      </div>
+      <!-- col-lg-10 col-lg-offset-1 -->
+    </div>
+    </div>
+    <div>
+    <!-- container -->
+    <div id="footer">
+      <div class="container">
+      <div class="col-lg-10 col-lg-offset-1">
+        <div class="row">
+        <div class="col-lg-12">
+           <div class="col-sm-3">
+            <h3>Data Available for Download</h3>
+            <div class="download-link">
+              <a id="download-czone" href="">All data for all scenarios for the selected area.</a>
+            </div>
+            <div class="download-link">
+              <a id="download-xwalk" href="data/Download/PopProj_GeoXwalk.xlsx">Geographic crosswalk between counties and commuting zones.</a>
+            </div>
+            <div class="download-link">
+              <a id="download-map" href="">Map data for current assumption and boundary settings.</a>
+            </div>
+            <div class="download-link">
+              <a id="download-full" href="data/Download/AllCZ_AllFert_AllMort_AllMig.csv">All available data (0.5GB).</a>
+            </div>
+          </div>
+          <div class="col-sm-3" id="credits">
+            <h3> Project Credits </h3>
+            <h5> WEB TOOL AND FEATURE </h5>
+            <h6 class="credit-title">WEB DESIGN</h6>
+            Adrienne Hapanowicz, Tim Meko
+            <h6 class="credit-title">WEB DEVELOPMENT</h6>
+            Ben Southgate, Graham MacDonald
+            <h6 class="credit-title">STORY</h6>
+            Serena Lei
+            <h6 class="credit-title">EDITING</h6>
+            Elizabeth Forney
+            </div>
+            <div class="col-sm-3">
+            <h3> Project Credits </h3>
+            <h5> RESEARCH TEAM </h5>
+            <h6 class="credit-title">PROJECT DIRECTOR</h6>
+            Rolf Pendall
+            <h6 class="credit-title">LEAD PROGRAMMER</h6>
+            Kait Hildner
+            <h6 class="credit-title">KEY RESEARCHERS</h6>
+            Steven Martin, Nan Astone, Liz Peters, Austin Nichols
+            <h6 class="credit-title">PROJECT MANAGER</h6>
+            Pam Blumenthal
+            </div>
+            <div class="col-sm-3">
+            <h3>Questions or Comments?</h3>
+            <a href="http://www.urban.org/about/contact.cfm">Let us know.</a>
+          </div>
+        </div>
+        </div>
+        <div class="row">
+          <div id="copyright">Copyright &copy; Urban Institute 2014</div>
+        </div>
+      </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

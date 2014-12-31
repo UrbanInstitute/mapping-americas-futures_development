@@ -11,12 +11,9 @@
 #
 */
 
-// protect global scope
 ;(function(projections){
 
-//
-// bar chart factory function
-//
+
 function barChart(options) {
 
   var ages, start_data;
@@ -131,7 +128,9 @@ function barChart(options) {
     // container svg, dynamically sized
     container.classed('chart-svg-container', true)
       .style('width', (2/12)*100 + "%")
-      .style('padding-bottom' , Math.round((full_height/full_width)*(2/12)*100) + "%");
+      .style('padding-bottom' , Math.round(
+          (full_height/full_width)*(2/12)*100
+        ) + "%");
     var svg = container.append('svg')
       .attr({
         "preserveAspectRatio" : "xMinYMin meet",
@@ -139,7 +138,10 @@ function barChart(options) {
         "class" : "chart-svg"
       })
       .append('g')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+        .attr(
+          'transform',
+          'translate(' + margin.left + ',' + margin.top + ')'
+        );
 
     // title text for bar chart
     svg.append('text')
@@ -274,7 +276,6 @@ function barChart(options) {
   return bar;
 }
 
-// write to projections module
 projections.barChart = barChart;
 
 })(projections);

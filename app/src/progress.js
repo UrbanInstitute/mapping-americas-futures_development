@@ -11,7 +11,6 @@
 #
 */
 
-// protect global scope
 ;(function(projections){
 
 function progress(options) {
@@ -105,7 +104,6 @@ function progress(options) {
   };
 }
 
-// write to projections module
 projections.progress = progress;
 
 })(projections);

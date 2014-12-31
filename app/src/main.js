@@ -11,8 +11,10 @@
 #
 */
 
-// protect global scope
-;(function(projections) {
+;(function(projections){
+
+// clone footer for feature
+$('#feature-footer').html($('#footer').clone());
 
 // move node to front
 d3.selection.prototype.moveToFront = function() {
@@ -21,13 +23,11 @@ d3.selection.prototype.moveToFront = function() {
   });
 };
 
-
 // load images async
 $('img.async').each(function() {
   $this = $(this);
   $this.attr('src', $this.data().src);
 });
-
 
 // read more button
 $('a.read-more').click(function () {
@@ -369,7 +369,7 @@ q.awaitAll(function(error, data) {
       czone_dropdown.set(czone);
       update_detail(czone);
       // scroll to detail area of map page
-      var detail_top = $("#detail-well").offset().top - 50;
+      var detail_top = $("#detail-well").offset().top - 180;
       var curr_top = projections.getTop();
       projections.scrollTo(curr_top, detail_top, 750);
     })
@@ -432,6 +432,4 @@ q.awaitAll(function(error, data) {
 
 });
 
-
-// protect global scope
 })(projections);

@@ -35,8 +35,9 @@ h1, h2, h3, h4, h6 {
   font-weight: normal;
 }
 
-h5 {
-  text-decoration: underline;
+
+h1.dropdown-section-header {
+  margin-top: 20px;
 }
 
 h2 {
@@ -71,17 +72,66 @@ h4#title-lead {
   float : none;
 }
 
-.urban-footer ul li{
+.urban-footer ul li {
     list-style-type: none;
 }
 
-div.shadow, .affix#map-top {
+div.shadow {
   -moz-box-shadow: 3px 3px 6px #777;
   -webkit-box-shadow: 3px 3px 6px #777;
   box-shadow: 3px 3px 6px #777;
   -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#777777')";
   filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#777777');
 }
+
+.credit-title {
+  margin-bottom: 0;
+}
+
+#credits {
+  font-size: 12px;
+}
+
+#footer {
+  background-color: #000;
+  color: #fff;
+  padding-bottom: 60px;
+  padding-top: 20px;
+}
+
+#footer a {
+  color : #fff;
+}
+
+.download-link {
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
+
+#mobile-test {
+  display: none;
+  height: 0px;
+  width: 0px;
+}
+
+@media(max-width: 768px) {
+  #mobile-test {
+    display: block;
+  }
+}
+
+#feature-container {
+  padding-bottom: 40px;
+}
+
+/*---------------------------------------
+  --------------------------------------*/
+
+/*---------------------------------------
+  ---------------------------------------
+    Bootstrap Affix Styles
+  ---------------------------------------
+  --------------------------------------- */
 
 .affix#map-top {
   position: fixed;
@@ -123,45 +173,11 @@ div.shadow, .affix#map-top {
   display: block;
 }
 
-.credit-title {
-  margin-bottom: 0;
-}
-
-#credits {
-  font-size: 12px;
-}
-
-#footer {
-  background-color: #000;
-  color: #fff;
-  padding-bottom: 60px;
-  padding-top: 20px;
-}
-
-#footer a {
-  color : #fff;
-}
-
-#detail-background {
-  background-color: #eee;
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-.download-link {
-  margin-bottom: 10px;
-  text-decoration: underline;
-}
-
 .settings-dropdown-icon {
   font-size: 20px;
   margin-right: 5px;
   display: inline-block;
 }
-
-/*---------------------------------------
-  --------------------------------------*/
-
 
 
 /*---------------------------------------
@@ -291,19 +307,19 @@ nav.navbar {
 }
 
 .navbar-collapse {
-    border-top: 1px solid transparent;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+  border-top: 1px solid transparent;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
 }
 .navbar-fixed-top {
-top: 0;
-border-width: 0 0 1px;
+  top: 0;
+  border-width: 0 0 1px;
 }
 .navbar-collapse.collapse {
-    display: none!important;
+  display: none!important;
 }
 .navbar-nav {
-    float: none!important;
-margin-top: 7.5px;
+  float: none!important;
+  margin-top: 7.5px;
 }
 .navbar-nav>li {
     float: none;
@@ -330,7 +346,6 @@ margin-top: 7.5px;
 #briefs {
   color : white;
   background-color: #333;
-  top: 120px;
   position: absolute;
   width: 100%;
 }
@@ -413,6 +428,9 @@ margin-top: 7.5px;
   margin-bottom: 30px;
 }
 
+.row.padded-row {
+  padding-bottom: 30px;
+}
 
 .hr-wrapper {
   width: 100%;
@@ -460,6 +478,7 @@ padding-bottom: 5px;
 }
 
 #return-to-map {
+  float: right;
   font-style: italic;
   display: inline-block;
   margin-bottom: 20px;
@@ -473,23 +492,7 @@ padding-bottom: 5px;
   color : #fff;
 }
 
-#right_controls {
-  text-align: right;
-}
 
-
-#return-button {
-  margin-left: 10px;
-}
-
-#year-select-container {
-  text-align: left;
-  padding: 0px;
-}
-
-#detail-table tr td:nth-child(2){
-  padding-left: 10px;
-}
 
 #param-table {
   margin-bottom: 10px;
@@ -500,17 +503,9 @@ padding-bottom: 5px;
 }
 
 #boundary-info {
-  position: absolute;
-  bottom : 0;
   font-style: italic;
   padding-left: 10px;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-#boundary button {
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-top: 20px;
 }
 
 .navbar {
@@ -537,40 +532,26 @@ padding-bottom: 5px;
   padding-right: 15px;
 }
 
-.year-select {
-  display: block;
-  width: 100%
-}
-
 .color-label {
   color: #000;
   font-size: 18px;
   padding-top:20px;
 }
 
-#detail-years, #start-change, #end-change, #growth-cell{
-    color:#0096D2;
-    font-size: 18px;
-}
-
-#right_controls {
-  margin-bottom: 15px;
-}
-
-#czone-select {
-  float: right;
-}
-
-#detail-settings {
-  font-style: italic;
-  margin-top: -5px;
-  margin-bottom: 15px;
-}
-
 .border-group {
   border-left: 1px solid #eee;
-  border-right: 1px solid #eee;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+
+.border-group#year-change-group {
+  padding-bottom: 0px;
+}
+
+#copyright {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
 }
 
 @media (max-width: 767px) {
@@ -620,6 +601,7 @@ div.extra-padding {
     Adrienne Bootstrap Overrides & New
   ---------------------------------------
   --------------------------------------- */
+
 #feature-container .img-rounded{
     border-radius: 0px;
 }
@@ -650,10 +632,6 @@ h1{
 
 .hr-legend{
     margin: 20px 15px;
-}
-
-#region{
-    margin-top: 30px;
 }
 
 .well col-sm-12 #detail-well{

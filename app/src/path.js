@@ -11,8 +11,7 @@
 #
 */
 
-// protect global scope
-;(function(){
+;(function(projections){
 
 // Capitalize word
 var capitalize = function(s) {
@@ -49,7 +48,6 @@ function path(settings) {
 
 }
 
-
 projections.path = path;
 
-}).call(this);
+})(projections);

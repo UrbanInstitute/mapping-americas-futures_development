@@ -10,6 +10,7 @@ module.exports = (grunt) ->
   full_build = [
     'uglify:js'     # uglify urban js files
     'cssmin'        # uglify urban css files
+    'concat'   # build index html
     'processhtml'   # replace development <script> tags with dist
     'htmlmin'       # minify html
     'copy:deploy'   # copy build to deployment folder
@@ -31,27 +32,38 @@ module.exports = (grunt) ->
   ]
 
   js_src = [
-    "module.js"
-    "path.js"
-    "progress.js"
-    "select.js"
-    "dropdown.js"
-    "mapper.js"
-    "lineChart.js"
-    "barChart.js"
-    "detail.js"
-    "carousel.js"
-    "main.js"
-  ]
+    "projections"
+    "path"
+    "progress"
+    "select"
+    "dropdown"
+    "mapper"
+    "lineChart"
+    "barChart"
+    "detail"
+    "carousel"
+    "main"
+  ].map (f) -> "#{f}.js"
 
   css_src = [
-    "map.css"
-    "charts.css"
-    "carousel.css"
-    "main.css"
-    "full-width-pics.css"
-    "select2-bootstrap.css"
-  ]
+    "map"
+    "charts"
+    "carousel"
+    "detail"
+    "main"
+    "full-width-pics"
+    "select2-bootstrap"
+  ].map (f) -> "#{f}.css"
+
+  layout = [
+    "header"
+    "dropdown"
+    "carousel-start"
+    "feature"
+    "map"
+    "carousel-end"
+    "footer"
+  ].map (f) -> "./app/layout/#{f}.html"
 
   # Register configuration
   grunt.initConfig
@@ -65,6 +77,12 @@ module.exports = (grunt) ->
             dest: path
           } for path in deploy_paths
         )
+    concat :
+      options :
+        separator : " "
+      main :
+        src : layout
+        dest : "./app/views/index_build.html"
     uglify:
       options:
         mangle: true
@@ -78,16 +96,11 @@ module.exports = (grunt) ->
             "./app/lib/#{f}" for f in js_dependencies
           ).concat("./app/src/#{f}" for f in js_src)
     watch:
-      coffee :
-        files: [
-          './app/src/*'
-        ]
       html :
-        files : ['./app/index.html']
+        files : ['./app/layout/*.html']
+        tasks : ['concat']
       css :
-        files : [
-          "./app/css/*"
-        ]
+        files : ["./app/css/*"]
       options :
         livereload : true
     browserSync:
@@ -101,17 +114,18 @@ module.exports = (grunt) ->
         watchTask: true
         server:
             baseDir: "./app/"
+            index : "views/index_build.html"
     processhtml :
       dist :
         files :
-          './app/index_dist.html' : ['./app/index.html']
+          './app/views/index_dist.html' : ['./app/views/index_build.html']
     htmlmin :
       dist :
         options :
           removeComments: true,
           collapseWhitespace: true
         files :
-          './dist/index.html' : './app/index_dist.html'
+          './dist/index.html' : './app/views/index_dist.html'
     cssmin :
       options :
         keepSpecialComments : 0
@@ -128,7 +142,6 @@ module.exports = (grunt) ->
   libs = [
    'grunt-contrib-uglify'
    'grunt-contrib-watch'
-   'grunt-contrib-coffee'
    'grunt-contrib-concat'
    'grunt-contrib-copy'
    'grunt-contrib-htmlmin'
@@ -140,6 +153,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks(pkg) for pkg in libs
 
   grunt.registerTask 'default', [
+    'concat'
     'browserSync'
     'watch'
   ]

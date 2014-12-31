@@ -11,7 +11,6 @@
 //
 */
 
-// protect global scope
 ;(function(projections){
 
 
@@ -71,16 +70,20 @@ function mapper(options) {
 
   // structure data for usage in map
   var prepMapData = function(raw) {
-    var d = {};
-    var id = (raw[0].cz !== undefined) ? "cz" : "stfips";
-    var variable_order = [id, "agegrp", "yr", "r"];
-    var last_index = variable_order.length - 1;
-    var row, path;
+    var
+      d = {},
+      id = (raw[0].cz !== undefined) ? "cz" : "stfips",
+      variable_order = [id, "agegrp", "yr", "r"],
+      last_index = variable_order.length - 1,
+      row,
+      path;
+
     for (var r = 0, l=raw.length; r < l; r++) {
       row = raw[r];
       path = variable_order.map( function(n) { return row[n]; } );
       recurseAssign(d, path, Number(row.pop), last_index);
     }
+
     return d;
   };
 
@@ -432,17 +435,23 @@ function mapper(options) {
         var offset = 0;
         // number of bins to render in legend
         var n_bins = fixed_bins.length;
+        var n_colors = fixed_colors.length;
         // Width of colored bins
         var binWidth = (legend_width*0.6 / (n_bins+1)) - offset;
         // height of colored bins
         var binHeight = 10;
+        var binStrokeWidth = 1;
+
+        var midpad = function(i) {
+          return i >= Math.round(n_colors / 2) ?
+                 binStrokeWidth*2 : 0;
+        };
 
         // add hidden svg canvas for calculating bounding boxes
         // even if the main svg is not yet being displayed
         var helper_svg = d3.select('body').append('svg')
           .attr('class', 'helper-svg')
           .style('visibility', "hidden");
-
 
         var decline_text = legend.append('text')
           .text('decline')
@@ -476,13 +485,19 @@ function mapper(options) {
                 height : binHeight,
                 // position
                 x : function(d, i) {
-                  return offset/2 + i*binWidth + i*offset + dtext_pad;
+                  return (
+                    offset/2 +
+                    i*binWidth +
+                    i*offset +
+                    midpad(i) +
+                    dtext_pad
+                  );
                 },
                 y : 0
               })
               .style('fill', function(d){ return d; })
               .style('stroke', "#fff")
-              .style('stroke-width', 1);
+              .style('stroke-width', binStrokeWidth);
 
         if (renderOpts.legendMouseover) {
           // show zones with this legend color
@@ -521,20 +536,29 @@ function mapper(options) {
                             .attr('class', 'us-map-legend-label');
                   var w = t.node().getBBox().width;
                   t.remove();
-                  return (i+1)*(binWidth + offset) - (w/2) + dtext_pad;
+                  return (
+                    (i+1)*(binWidth + offset) -
+                    (w/2) +
+                    midpad(i+1) +
+                    dtext_pad
+                  );
                 }
               });
 
 
         //half way accross the legend
-        var half_way = ((n_bins+1) / 2)*(binWidth + offset) + dtext_pad;
+        var half_way = (
+          ((n_bins+1) / 2)*(binWidth + offset) +
+          binStrokeWidth +
+          dtext_pad
+        );
         // midway line
         legend.append('line')
           .attr({
             "x1" : half_way,
             "x2" : half_way,
-            "y1" : 0,
-            "y2" : binHeight
+            "y1" : binStrokeWidth/2,
+            "y2" : binHeight - binStrokeWidth/2
           }).style({
             "stroke" : "#000",
             "stroke-width" : 0.5
@@ -571,7 +595,7 @@ function mapper(options) {
                 "x" : no_pop_position
               })
               .style('stroke', "#fff")
-              .style('stroke-width', 1)
+              .style('stroke-width', binStrokeWidth)
               .style('fill', missingColor);
 
         var pop_text = legend.append('text')

@@ -1,0 +1,73 @@
+/*
+#
+#
+# Population Projections 2.0
+# Ben Southgate (bsouthga@gmail.com)
+# 10/31/14
+#
+#
+# Detail Section
+#
+#
+*/
+
+
+hr.detail-hr {
+  border-color: #ccc;
+  border-width: 2px;
+}
+
+h2.detail-header {
+  margin-top: 0px;
+}
+
+#detail-background {
+  background-color: #eee;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+#right_controls {
+  text-align: right;
+}
+
+#return-button {
+  margin-left: 10px;
+}
+
+#year-select-container {
+  text-align: left;
+  padding: 0px;
+}
+
+.year-select {
+  display: block;
+  width: 100%
+}
+
+.detail-label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#start-change, #end-change, #growth-cell{
+    color:#0096D2;
+}
+
+#right_controls {
+  margin-bottom: 15px;
+}
+
+#czone-select {
+  float: right;
+}
+
+#detail-settings {
+  font-style: italic;
+  margin-top: -5px;
+  margin-bottom: 15px;
+}
+
+#region{
+    margin-top: 30px;
+}
