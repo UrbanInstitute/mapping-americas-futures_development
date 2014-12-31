@@ -39,7 +39,7 @@
 }
 
 .bar-title {
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .axis {
@@ -48,7 +48,7 @@
 }
 
 .x.axis {
-  font-size: 14px;
+  font-size: 16px;
   fill : none;
 }
 
@@ -134,7 +134,7 @@
 }
 
 .line-title {
-  font-size: 40px;
+  font-size: 30px;
 }
 
 .grid.linechart .tick {

@@ -140,17 +140,20 @@
             <div class="col-sm-12" id="detail-well">
 
               <div class="row">
-                <div class="col-sm-12">
+                <div class="col-sm-3 col-sm-push-9">
+                  <div id="right_controls">
+                    <select class="form-control" id="czone-select" data-live-search="true">
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-9  col-sm-pull-3">
                   <h1 id="region"></h1>
                 </div>
               </div>
 
               <div class="row">
-                <div class="col-sm-4 col-sm-push-8" id="right_controls">
-                  <select class="form-control" id="czone-select" data-live-search="true">
-                  </select>
-                </div>
-                <div class="col-sm-8 col-sm-pull-4">
+
+                <div class="col-sm-12">
                   <div id="detail-settings"></div>
                   <span class="detail-label">  Population growth:
                     <span id="growth-cell"></span>
@@ -197,11 +200,13 @@
                 </div>
               </div>
               <div class="row" id="pyramids">
-                <div class="pyramid col-xs-4 col-sm-2 col-xs-offset-1 col-sm-offset-1" id="all"></div>
-                <div class="pyramid col-xs-4 col-sm-2" id="white"></div>
-                <div class="pyramid col-xs-4 col-sm-2" id="black"></div>
-                <div class="pyramid col-xs-4 col-sm-2" id="hispanic"></div>
-                <div class="pyramid col-xs-4 col-sm-2" id="other"></div>
+                <div class="col-sm-12">
+                  <div class="pyramid col-xs-4 col-sm-15" id="all"></div>
+                  <div class="pyramid col-xs-4 col-sm-15" id="white"></div>
+                  <div class="pyramid col-xs-4 col-sm-15" id="black"></div>
+                  <div class="pyramid col-xs-4 col-sm-15" id="hispanic"></div>
+                  <div class="pyramid col-xs-4 col-sm-15" id="other"></div>
+                </div>
               </div>
 
             </div>

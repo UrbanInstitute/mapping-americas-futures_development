@@ -157,13 +157,13 @@ function lineChart(options) {
     self.category = renderOpts.category;
 
     var container = d3.select(renderOpts.renderTo);
-    var margin = { top: 90, right: 40, bottom: 60, left: 65 };
+    var margin = self.margin = { top: 90, right: 40, bottom: 60, left: 65 };
 
     // chart h/w vs full svg h/w
     var width = 800 - margin.left - margin.right;
     var height = 550 - margin.top - margin.bottom;
-    var full_width = width + margin.left + margin.right;
-    var full_height = height + margin.top + margin.bottom;
+    var full_width = self.width = width + margin.left + margin.right;
+    var full_height = self.height = height + margin.top + margin.bottom;
 
 
     // helper svg
@@ -175,7 +175,7 @@ function lineChart(options) {
     container.classed('chart-svg-container', true)
       .style('width', 100 + "%")
       .style('padding-bottom' , Math.round((full_height/full_width)*100) + "%");
-    var svg = container.append('svg')
+    var svg = self.svg = container.append('svg')
       .attr({
         "preserveAspectRatio" : "xMinYMin meet",
         "viewBox" :  "0 0 " + full_width + " " + full_height,

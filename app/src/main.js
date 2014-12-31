@@ -399,8 +399,20 @@ q.awaitAll(function(error, data) {
       update_from_cache('races_black');
       update_from_cache('races_hispanic');
 
-    }).update_callback(function(settings) {
-      detail.update(settings);
+    })
+    // callbacks to show loading progress
+    // in detail plots while map is downloading
+    .pre_update(function() {
+      // start loading icons
+      detail.progress_start();
+    })
+    .on_progress(function(value) {
+      detail.progress_update(value);
+    })
+    .post_update(function(settings) {
+      detail
+        .progress_end()
+        .update(settings);
     })
   );
 

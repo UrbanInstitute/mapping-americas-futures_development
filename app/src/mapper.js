@@ -667,21 +667,45 @@ function mapper(options) {
       return self;
     };
 
-
     /* ----------------------------------
-        callback to be fired on every update
+        callback to be fired before every update
        ---------------------------------- */
-    var update_callback = function() {};
-    self.update_callback = function(callback) {
+    var pre_update = function() {};
+    self.pre_update = function(callback) {
       if (callback) {
-        update_callback = callback;
+        pre_update = callback;
         return self;
       } else {
-        return update_callback;
+        return pre_update;
       }
     };
 
 
+    /* ----------------------------------
+        callback to be fired after every update
+       ---------------------------------- */
+    var post_update = function() {};
+    self.post_update = function(callback) {
+      if (callback) {
+        post_update = callback;
+        return self;
+      } else {
+        return post_update;
+      }
+    };
+
+    /* ----------------------------------
+        callback to be fired on progress change
+       ---------------------------------- */
+    var on_progress = function() {};
+    self.on_progress = function(callback) {
+      if (callback) {
+        on_progress = callback;
+        return self;
+      } else {
+        return on_progress;
+      }
+    };
 
     /* ----------------------------------
         center the map on a target czone
@@ -785,7 +809,7 @@ function mapper(options) {
         // callback to execute on every update
         // used to render detail charts after
         // assumption changes have been downloaded
-        update_callback(settings);
+        post_update(settings);
       };
 
 
@@ -795,6 +819,7 @@ function mapper(options) {
         end_callback();
       } else {
         projections.loading_indicator = true;
+        pre_update();
         // progress bar for loading
         var start_seconds = Date.now();
         // progress bar, only show if loading is slow
@@ -824,6 +849,7 @@ function mapper(options) {
             var percentComplete = Math.round(
               d3.event.loaded * 100 / d3.event.total
             );
+            on_progress(percentComplete);
             if (progress_bar) progress_bar.update(percentComplete);
           }
         });

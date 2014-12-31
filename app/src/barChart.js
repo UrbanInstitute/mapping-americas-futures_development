@@ -71,13 +71,13 @@ function barChart(options) {
 
     var container = d3.select(renderOpts.renderTo);
     var race = projections.raceAbbr(renderOpts.race);
-    var margin = { top: 50, right: 40, bottom: 40, left: 65 };
+    var margin = self.margin = { top: 50, right: 40, bottom: 40, left: 65 };
 
     // chart h/w vs full svg h/w
-    var width = 230 - margin.left - margin.right;
-    var height = 600 - margin.top - margin.bottom;
-    var full_width = width + margin.left + margin.right;
-    var full_height = height + margin.top + margin.bottom;
+    var width = 300 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom;
+    var full_width = self.width = width + margin.left + margin.right;
+    var full_height = self.height = height + margin.top + margin.bottom;
 
     // get population number for age, year, race
     var value = function(a){
@@ -127,11 +127,11 @@ function barChart(options) {
 
     // container svg, dynamically sized
     container.classed('chart-svg-container', true)
-      .style('width', (2/12)*100 + "%")
+      .style('width', (1/5)*100 + "%")
       .style('padding-bottom' , Math.round(
-          (full_height/full_width)*(2/12)*100
+          (full_height/full_width)*(1/5)*100
         ) + "%");
-    var svg = container.append('svg')
+    var svg = self.svg = container.append('svg')
       .attr({
         "preserveAspectRatio" : "xMinYMin meet",
         "viewBox" :  "0 0 " + full_width + " " + full_height,
@@ -256,7 +256,8 @@ function barChart(options) {
         .duration(300)
         .attr("width" , function(d) { return x(pop_percent(d)); });
 
-      x_axis_g.transition()
+      x_axis_g
+        .transition()
         .duration(300)
         .call(xAxis);
 

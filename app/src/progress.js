@@ -14,9 +14,13 @@
 ;(function(projections){
 
 function progress(options) {
+  var margin = options.margin;
   var width = options.width;
   var height = options.height;
   var svg = options.svg;
+  var color = options.color;
+
+  var ml = (margin ? margin.left : 0);
 
   var progress_width = width / 2.5;
   var progress_height = 30;
@@ -36,7 +40,9 @@ function progress(options) {
     .attr({
       "width" : width,
       "height" : height,
-      "class" : "us-map-plexiglass"
+      "x" : -ml,
+      "class" : "us-map-plexiglass",
+      "fill" : color || "rgba(255,255,255,0.7)"
     });
 
   var dims = function(text, class_name) {
@@ -49,14 +55,14 @@ function progress(options) {
   };
 
   plexiglass.append('text')
-      .text('Downloading Assumptions...')
+      .text('Downloading...')
       .attr({
         "class" : "us-map-progress-text",
         "x" : function() {
           var d = dims(
-            'Downloading Assumptions...', "us-map-progress-text"
+            $(this).text(), "us-map-progress-text"
           );
-          return (width / 2) - d.width/2;
+          return (width / 2) - d.width/2 - ml;
         },
         "y" : (height / 2) - 20
       });
@@ -66,7 +72,7 @@ function progress(options) {
         "class" : "us-map-progress-background",
         "width" : progress_width,
         "height" : progress_height,
-        "x" : (width / 2) - (progress_width / 2),
+        "x" : (width / 2) - (progress_width / 2) - ml,
         "y" : (height / 2),
         "rx" : 5,
         "ry" : 5
@@ -77,7 +83,7 @@ function progress(options) {
         "class" : "us-map-progress-bar",
         "width" : 0,
         "height" : progress_height,
-        "x" : (width / 2) - (progress_width / 2),
+        "x" : (width / 2) - (progress_width / 2) - ml,
         "y" : (height / 2),
         "rx" : 5,
         "ry" : 5
@@ -96,7 +102,7 @@ function progress(options) {
         .style('opacity', 0)
         .each("end", function (d, i) {
           if (i === 0) {
-            callback();
+            if (callback) callback();
             plexiglass.remove();
           }
         });

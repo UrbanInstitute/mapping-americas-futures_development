@@ -44,6 +44,10 @@ h2 {
   font-size: 25px;
 }
 
+h5 {
+  font-weight: bold;
+}
+
 p {
     font-size: 18px;
     line-height: 24px;
@@ -400,6 +404,39 @@ nav.navbar {
     Misc
   ---------------------------------------
   --------------------------------------- */
+
+div.pyramid.col-xs-15,
+div.pyramid.col-sm-15,
+div.pyramid.col-md-15,
+div.pyramid.col-lg-15 {
+    position: relative;
+    min-height: 1px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+div.pyramid.col-xs-15 {
+    width: 20% !important;
+    float: left;
+}
+@media (min-width: 768px) {
+div.pyramid.col-sm-15 {
+        width: 20% !important;
+        float: left;
+    }
+}
+@media (min-width: 992px) {
+    div.pyramid.col-md-15 {
+        width: 20% !important;
+        float: left;
+    }
+}
+@media (min-width: 1200px) {
+    div.pyramid.col-lg-15 {
+        width: 20% !important;
+        float: left;
+    }
+}
 
 .feature-image {
   margin: 90px 0 40px 0;

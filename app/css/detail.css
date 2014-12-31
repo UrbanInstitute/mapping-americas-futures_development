@@ -14,7 +14,7 @@
 
 hr.detail-hr {
   border-color: #ccc;
-  border-width: 2px;
+  border-width: 1px;
 }
 
 h2.detail-header {
@@ -23,7 +23,7 @@ h2.detail-header {
 
 #detail-background {
   background-color: #eee;
-  padding-top: 50px;
+  padding-top: 80px;
   padding-bottom: 50px;
 }
 
@@ -69,5 +69,5 @@ h2.detail-header {
 }
 
 #region{
-    margin-top: 30px;
+    margin-top: 0px;
 }

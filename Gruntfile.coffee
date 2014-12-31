@@ -106,8 +106,8 @@ module.exports = (grunt) ->
     browserSync:
       bsFiles:
         src : [
-          './app/css/main.css'
-          './app/index.html'
+          './app/css/*'
+          './app/views/index_build.html'
         ].concat("./app/src/#{f}" for f in js_src)
       options:
         notify: false

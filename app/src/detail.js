@@ -126,6 +126,32 @@ function detail(options) {
 
 
   return {
+
+    progress_bars : [],
+
+    progress_start : function() {
+      this.progress_bars.forEach(function(p) { p.remove();});
+      this.progress_bars = detail_visuals.map(function(chart) {
+        return projections.progress({
+          "svg" : chart.svg,
+          "width" : chart.width,
+          "height" : chart.height,
+          "margin" : chart.margin,
+          "color"  : "rgba(238,238,238, 0.7)"
+        });
+      });
+      return this;
+    },
+    progress_update : function(value) {
+      this.progress_bars.forEach(function(p) {
+        p.update(value);
+      });
+      return this;
+    },
+    progress_end : function() {
+      this.progress_bars.forEach(function(p) { p.remove();});
+      return this;
+    },
     update : function(settings) {
 
       // update all the individual detail charts
