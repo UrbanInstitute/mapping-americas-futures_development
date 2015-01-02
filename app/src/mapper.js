@@ -26,16 +26,16 @@ function mapper(options) {
   // which tightly bounds the map. The actual visible
   // dimensions are set by the svg viewbox.
   //
-  var width = 1011;
-  var height = 588;
+  var width = 1011*2;
+  var height = 588*2;
   // the assumption / age / race settings object
   var settings = options.settings;
-  // standard projection function for the maps
-  var geoPath = d3.geo.path().projection(
-    d3.geo.albersUsa()
+  // projection function
+  var d3Albers = d3.geo.albersUsa()
       .scale(width*1.2)
-      .translate([width/2, height/2])
-  );
+      .translate([width/2, height/2]);
+  // standard projection function for the maps
+  var geoPath = d3.geo.path().projection(d3Albers);
 
   // cache for path strings (check for existence already)
   var pathcache = projections.cache.path = projections.cache.path || {};
@@ -176,6 +176,31 @@ function mapper(options) {
       if (d3.event.defaultPrevented) d3.event.stopPropagation();
     };
 
+    // add hidden svg canvas for calculating bounding boxes
+    // even if the main svg is not yet being displayed
+    var helper_svg = d3.select('body').append('svg')
+      .attr('class', 'helper-svg')
+      .style('visibility', "hidden");
+
+    // calculate text bounds
+    var getTextBBox = function(text, classname, modifier) {
+      // cache bound to function
+      this.cache = this.cache || {};
+      var id = text + "_" + classname;
+
+      if (this.cache[id] && !modifier) return this.cache[id];
+
+      var t = helper_svg.append('text')
+                .text(text)
+                .attr('class', classname);
+      if (modifier) t = modifier(t);
+      var bb = t.node().getBBox();
+      t.remove();
+
+      return this.cache[id] = bb;
+    };
+
+
     // map control icons (fontawesome)
     container.selectAll('i')
       .data(['search-plus', 'search-minus', 'arrows-alt'])
@@ -251,6 +276,107 @@ function mapper(options) {
       czone_topology, 'us-map-czones-hover us-map-boundary'
     );
 
+
+    // add city paths
+    if (renderOpts.cities) {
+
+      (function(self) {
+
+        self.cities = {};
+
+        var cities = renderOpts.cities,
+            point_coords = self.cities.coords = {},
+            city_r = self.cities.start_r = 8,
+            start_font = self.cities.start_font = 22,
+            start_swidth = self.cities.start_swidth = 5,
+            start_pad = self.cities.start_pad = {x: 12, y: 8},
+            // calculate bounding box for city label
+            // of given font size
+            bb = self.getCityLabelBBox = function(d, font_size) {
+              // cache bound to function
+              this.cache = this.cache || {};
+
+              var text = d.properties.NAME;
+              var id = text + Math.round(font_size*1000);
+
+              if (this.cache[id]) return this.cache[id];
+
+              var t = helper_svg.append('text')
+                        .text(text)
+                        .style('font-size', font_size + "px")
+                        .attr('class', 'city-label');
+
+              var bb = t.node().getBBox();
+              t.remove();
+              return this.cache[id] = bb;
+
+            };
+
+        // calculate center of city point
+        cities.features.forEach(function(d) {
+          point_coords[d.properties.NAME] = d3Albers(
+            d.geometry.coordinates
+          );
+        });
+
+        self.cities.points = features.append('g').selectAll('.cities')
+          .data(cities.features)
+          .enter()
+          .append('circle')
+          .attr({
+            r : city_r,
+            rx : city_r/2,
+            ry : city_r/2,
+            cx : function(d) {
+              return point_coords[d.properties.NAME][0];
+            },
+            cy : function(d) {
+              return point_coords[d.properties.NAME][1];
+            },
+            "stroke-width" : start_swidth,
+            class : 'cities'
+          });
+
+
+        // weave labels to stack nicely
+        var city_labels = features.append('g');
+
+        cities.features.forEach(function(d) {
+
+          var t = d.properties.NAME,
+              dims = bb(d, start_font),
+              px = point_coords[t][0],
+              py = point_coords[t][1];
+
+          city_labels.append('rect')
+            .datum(d)
+            .attr({
+              class : "city-label-background",
+              width : dims.width + start_pad.x*2,
+              height : dims.height + start_pad.y*2,
+              x : px + city_r*2,
+              y : py - dims.height/2 - + start_pad.y
+            });
+
+          city_labels.append('text')
+            .datum(d)
+            .attr({
+              class : 'city-label',
+              x : px + city_r*2 + start_pad.x,
+              y : py + dims.height/4
+            }).text(t);
+
+        });
+
+        self.cities.rects = city_labels.selectAll('rect');
+        self.cities.labels = city_labels.selectAll('text');
+
+      })(self);
+
+
+
+    }
+
     var fill_boundary = fill_czones;
     var hover_boundary = hover_czones;
 
@@ -258,6 +384,9 @@ function mapper(options) {
     /* ---------------------------
       Zooming behavior
     -----------------------------*/
+
+    var zoom_extent = [1, 8];
+    var lag_scale = null;
 
     var zoomed = function() {
 
@@ -273,6 +402,63 @@ function mapper(options) {
         .style("stroke-width", swidth)
         .attr("transform",trans);
 
+      // semantic zooming for city labels
+      if (self.cities && lag_scale != d3.event.scale) {
+        lag_scale = d3.event.scale;
+
+        var c = self.cities,
+            s = d3.event.scale,
+            new_r = c.start_r/s,
+            new_font = c.start_font/s,
+            new_swidth = c.start_swidth/s,
+            spad = c.start_pad,
+            new_pad = {x : spad.x/s, y: spad.y/s},
+            coords = self.cities.coords,
+            bb = self.getCityLabelBBox;
+
+        c.points.attr({
+          'r' : new_r
+        }).style({
+          'stroke-width' : new_swidth
+        });
+
+        c.labels
+          .style('font-size', new_font + "px")
+          .attr({
+            x : function(d) {
+              var t = d.properties.NAME;
+              return coords[t][0] + new_r*2 + new_pad.x;
+            },
+            y : function(d) {
+              var t = d.properties.NAME;
+              return coords[t][1] + bb(d, new_font).height/4;
+            }
+          });
+
+        c.rects
+          .attr({
+            width : function(d) {
+              return bb(d, new_font).width + new_pad.x*2;
+            },
+            height : function(d) {
+              return bb(d, new_font).height + new_pad.y*2;
+            },
+            rx: new_r/2,
+            ry: new_r/2,
+            x : function(d) {
+              var t = d.properties.NAME;
+              return coords[t][0] + new_r*2;
+            },
+            y : function(d) {
+              var t = d.properties.NAME;
+              return coords[t][1] - bb(d, new_font).height/2 - new_pad.y;
+            }
+          });
+
+
+      }
+
+
       if (options.multizoom) {
         // Select all features with common zoomclass
         var other_features = d3.selectAll(
@@ -287,7 +473,7 @@ function mapper(options) {
 
     var zoom = d3.behavior.zoom()
         .center([width/2, height/2])
-        .scaleExtent([1, 8])
+        .scaleExtent(zoom_extent)
         .on("zoom", zoomed);
 
     svg.call(zoom)
@@ -392,7 +578,7 @@ function mapper(options) {
     container.selectAll(".fa-search-plus, .fa-search-minus")
       .on('click', function(){
         zoomByFactor(
-          d3.select(this).classed('fa-search-plus') ? 1.5 : (1/1.5)
+          d3.select(this).classed('fa-search-plus') ? 1.5 : (1/1.5), 10
         );
       });
     /* ---------------------------
@@ -447,24 +633,14 @@ function mapper(options) {
                  binStrokeWidth*2 : 0;
         };
 
-        // add hidden svg canvas for calculating bounding boxes
-        // even if the main svg is not yet being displayed
-        var helper_svg = d3.select('body').append('svg')
-          .attr('class', 'helper-svg')
-          .style('visibility', "hidden");
-
         var decline_text = legend.append('text')
           .text('decline')
           .attr('class', 'growth-text');
 
-        var dtext_dims = (function() {
-          var t = helper_svg.append('text')
-                    .text(decline_text.text())
-                    .attr('class', 'growth-text');
-          var w = t.node().getBBox();
-          t.remove();
-          return w;
-        })();
+        var dtext_dims = getTextBBox(
+          decline_text.text(),
+          'growth-text'
+        );
 
         decline_text.attr({
           "x" : 0,
@@ -525,20 +701,13 @@ function mapper(options) {
               .attr({
                 y : (binHeight + 10),
                 x : function(d, i) {
-                  // create text node in helper svg
-                  // and use it to calculate the bounding box
-                  // this is necessary if the client
-                  // lands on the feature page, resulting
-                  // in the map legend not being rendered and
-                  // the text nodes having no width
-                  var t = helper_svg.append('text')
-                            .text(formatter(d))
-                            .attr('class', 'us-map-legend-label');
-                  var w = t.node().getBBox().width;
-                  t.remove();
+                  var dims = getTextBBox(
+                    formatter(d),
+                    'us-map-legend-label'
+                  );
                   return (
                     (i+1)*(binWidth + offset) -
-                    (w/2) +
+                    (dims.width/2) +
                     midpad(i+1) +
                     dtext_pad
                   );
@@ -571,14 +740,10 @@ function mapper(options) {
           .text('growth')
           .attr('class', 'growth-text');
 
-        var gtext_dims = (function() {
-          var t = helper_svg.append('text')
-                    .text(growth_text.text())
-                    .attr('class', 'growth-text');
-          var w = t.node().getBBox();
-          t.remove();
-          return w;
-        })();
+        var gtext_dims = getTextBBox(
+          growth_text.text(),
+          'growth-text'
+        );
 
         growth_text.attr({
           "x" : past_legend + 5,
@@ -602,27 +767,20 @@ function mapper(options) {
           .text('no population')
           .attr('class', 'growth-text');
 
-        var poptext_dims = (function() {
-          var t = helper_svg.append('text')
-                    .text(pop_text.text())
-                    .attr('class', 'growth-text');
-          var w = t.node().getBBox();
-          t.remove();
-          return w;
-        })();
+        var poptext_dims = getTextBBox(
+          pop_text.text(),
+          'growth-text'
+        );
 
         pop_text.attr({
           "x" : no_pop_position + binWidth + 5,
           "y" : poptext_dims.height
         });
 
-        // remove helper svg from body
-        helper_svg.remove();
       }
 
-
-
     }
+
     /* ---------------------------
     -----------------------------*/
 

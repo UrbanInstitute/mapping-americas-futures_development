@@ -75,7 +75,7 @@ function yearAbbr(year) {
 
 // create buttons
 function addButtons(id, values) {
-  d3.select("#" + id)
+  return d3.select("#" + id)
     .attr('class', "btn-group btn-group-justified settings")
     .selectAll('div.btn-group')
     .data(values).enter()
@@ -85,7 +85,7 @@ function addButtons(id, values) {
       .attr({
         type : "button",
         class : function(d, i) {
-          return "btn settings-button" + (!i ? "" : " active");
+          return "btn settings-button" + (!i ? " active" : "");
         },
         id : function(d) { return d; }
       })
@@ -93,7 +93,6 @@ function addButtons(id, values) {
         return d.toUpperCase();
       });
 }
-
 
 var age_range = ["all", "0-19", "20-49", "50-64", "65+"],
     ethnicities = ["all", "white", "black", "hispanic", "other"],
@@ -141,9 +140,7 @@ function select(defaults) {
     "boundary"
   ];
 
-
   var settings_buttons = d3.selectAll('.settings button');
-
 
   //
   //
@@ -207,7 +204,6 @@ function select(defaults) {
     .attr('value', year)
     .text(year);
 
-
   // action on change of year
   year_select.on('change', function(){
     // assumptions have not changed
@@ -243,23 +239,14 @@ function select(defaults) {
   });
 
   // add population pyramid settings
-  var pyramid_years = d3.select("#pyramid-select")
-    .selectAll('div')
-    .data(year_range.concat(year_range.slice(-1)[0]+10))
-    .enter()
-    .append('div')
-    .attr("class" , "btn-group btn-group-sm")
-    .append('button')
-    .attr({
-      "type" : "button",
-      "class" : function(d, i) {
-        return "btn settings-button"+(i===0?" active":"");
-      },
-      "id" : function(d) {return d;}
-    }).text(function(d) {return d;});
-
-  // pyramid year settings
-  pyramid_years.on('click', function() {
+  var pyramid_years = addButtons(
+    "pyramid-select",
+    year_range
+      .concat(year_range.slice(-1)[0]+10)
+      .map(String)
+  )
+  .classed("pyramid-button", true)
+  .on('click', function() {
     // assumptions have not changed
     settings.assumption_change = false;
     // don't allow settings changes if currently loading a file

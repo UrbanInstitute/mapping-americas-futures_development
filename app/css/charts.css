@@ -40,6 +40,7 @@
 
 .bar-title {
   font-size: 20px;
+  font-weight: bold;
 }
 
 .axis {
@@ -134,7 +135,8 @@
 }
 
 .line-title {
-  font-size: 30px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 .grid.linechart .tick {
@@ -144,7 +146,7 @@
 
 .legend-text.linechart {
   fill : #000;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 .legend.linechart:hover {

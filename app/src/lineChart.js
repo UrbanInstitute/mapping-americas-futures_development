@@ -165,17 +165,22 @@ function lineChart(options) {
     var full_width = self.width = width + margin.left + margin.right;
     var full_height = self.height = height + margin.top + margin.bottom;
 
+    container.append('div')
+      .attr('class', 'line-title')
+      .text(capitalize(self.category));
 
     // helper svg
     var helper_svg = d3.select('body').append('svg')
       .attr('class', 'helper-svg')
       .style('visibility', 'hidden');
 
+    var svg_container = container.append('div');
+
     // container svg, dynamically sized
-    container.classed('chart-svg-container', true)
+    svg_container.classed('chart-svg-container', true)
       .style('width', 100 + "%")
       .style('padding-bottom' , Math.round((full_height/full_width)*100) + "%");
-    var svg = self.svg = container.append('svg')
+    var svg = self.svg = svg_container.append('svg')
       .attr({
         "preserveAspectRatio" : "xMinYMin meet",
         "viewBox" :  "0 0 " + full_width + " " + full_height,
@@ -264,33 +269,42 @@ function lineChart(options) {
             d : function(d) { return line(d.values); }
           });
 
-    // title text for bar chart
-    svg.append('text')
-      .attr({
-        "class" : "line-title",
-        "y" : -50,
-        "x" : -margin.left
-      }).text(capitalize(self.category));
-
     // legend
     var num_series = prepped.length;
-    var legend_length = width*0.85;
-    var component_width = legend_length / num_series;
-    var legend_line_width = 40;
+    var legend_length = full_width;
     var legend_line_padding = 15;
     var tween_text_padding = 5;
     var legend_vertical_margin = 50;
 
     // calcuate bounds of svg text element
     var getTextBBox = function(text, class_name) {
+      // memoize
+      this.cache = this.cache || {};
+      if (this.cache[text]) return this.cache[text];
+
       class_name = class_name || 'legend-text linechart';
       var t = helper_svg.append('text')
                 .text(text)
                 .attr('class', class_name);
       var dims = t.node().getBBox();
       t.remove();
-      return dims;
+      // store and return
+      return this.cache[text] = dims;
     };
+
+    var text_total_width = d3.sum(prepped, function(d) {
+      return getTextBBox(capitalize(d.id)).width;
+    });
+
+    var legend_line_width = (
+      (
+          (legend_length - text_total_width) /
+          (num_series + 1)
+      ) -
+      legend_line_padding -
+      tween_text_padding
+    );
+
 
     var legend_containers = svg.append('g')
       .selectAll('.legend')
@@ -298,9 +312,9 @@ function lineChart(options) {
       .enter()
       .append('g')
       .attr('transform', function(d, i) {
-        var padding = 80;
+        var padding = -margin.left - legend_line_padding;
         // add padding for all previous legend entries
-        while(i > 0) {
+        while(i) {
           lag_text = capitalize(prepped[i-1].id);
           padding += (
             legend_line_padding +

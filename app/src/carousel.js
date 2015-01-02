@@ -14,6 +14,8 @@
 
 ;(function(projections) {
 
+$(':focus').blur();
+
 // get top offset
 function getTop() {
   var doc = document.documentElement;

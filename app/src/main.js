@@ -73,6 +73,7 @@ var files = [
   "json/czone.geo.json",
   "json/czone.names.json",
   "json/us.small.geo.json",
+  "json/cities.json",
   start_detail // include download of starting data
 ];
 
@@ -100,6 +101,9 @@ q.awaitAll(function(error, data) {
 
   // czone names
   var names = loaded['json/czone.names.json'];
+
+  // populated cities
+  var cities = loaded['json/cities.json'];
 
   // initalize czone dropdown
   var czone_dropdown = projections.dropdown(names);
@@ -296,7 +300,8 @@ q.awaitAll(function(error, data) {
     renderTo : "#map_container",
     legendRenderTo : "#map_container-legend",
     legendMouseover : true,
-    zoomClass : "main_map"
+    zoomClass : "main_map",
+    cities : cities
   });
 
   // draw topology for all small maps
