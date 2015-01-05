@@ -286,10 +286,9 @@ function mapper(options) {
 
         var cities = renderOpts.cities,
             point_coords = self.cities.coords = {},
-            city_r = self.cities.start_r = 8,
+            city_r = self.cities.start_r = 6,
             start_font = self.cities.start_font = 22,
             start_swidth = self.cities.start_swidth = 5,
-            start_pad = self.cities.start_pad = {x: 12, y: 8},
             // calculate bounding box for city label
             // of given font size
             bb = self.getCityLabelBBox = function(d, font_size) {
@@ -333,7 +332,6 @@ function mapper(options) {
             cy : function(d) {
               return point_coords[d.properties.NAME][1];
             },
-            "stroke-width" : start_swidth,
             class : 'cities'
           });
 
@@ -348,27 +346,16 @@ function mapper(options) {
               px = point_coords[t][0],
               py = point_coords[t][1];
 
-          city_labels.append('rect')
-            .datum(d)
-            .attr({
-              class : "city-label-background",
-              width : dims.width + start_pad.x*2,
-              height : dims.height + start_pad.y*2,
-              x : px + city_r*2,
-              y : py - dims.height/2 - + start_pad.y
-            });
-
           city_labels.append('text')
             .datum(d)
             .attr({
               class : 'city-label',
-              x : px + city_r*2 + start_pad.x,
+              x : px + city_r*2,
               y : py + dims.height/4
             }).text(t);
 
         });
 
-        self.cities.rects = city_labels.selectAll('rect');
         self.cities.labels = city_labels.selectAll('text');
 
       })(self);
@@ -412,46 +399,23 @@ function mapper(options) {
             new_font = c.start_font/s,
             new_swidth = c.start_swidth/s,
             spad = c.start_pad,
-            new_pad = {x : spad.x/s, y: spad.y/s},
             coords = self.cities.coords,
             bb = self.getCityLabelBBox;
 
         c.points.attr({
           'r' : new_r
-        }).style({
-          'stroke-width' : new_swidth
-        });
+        })
 
         c.labels
           .style('font-size', new_font + "px")
           .attr({
             x : function(d) {
               var t = d.properties.NAME;
-              return coords[t][0] + new_r*2 + new_pad.x;
-            },
-            y : function(d) {
-              var t = d.properties.NAME;
-              return coords[t][1] + bb(d, new_font).height/4;
-            }
-          });
-
-        c.rects
-          .attr({
-            width : function(d) {
-              return bb(d, new_font).width + new_pad.x*2;
-            },
-            height : function(d) {
-              return bb(d, new_font).height + new_pad.y*2;
-            },
-            rx: new_r/2,
-            ry: new_r/2,
-            x : function(d) {
-              var t = d.properties.NAME;
               return coords[t][0] + new_r*2;
             },
             y : function(d) {
               var t = d.properties.NAME;
-              return coords[t][1] - bb(d, new_font).height/2 - new_pad.y;
+              return coords[t][1] + new_font/4;
             }
           });
 

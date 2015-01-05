@@ -65,7 +65,7 @@ function lineChart(options) {
         var colors = [
           "#1696d2",
           "#fcb918",
-          "#c6c6c6",
+          "rgb(255, 79, 0)",
           "#000000"
         ];
         var races = [
@@ -180,6 +180,7 @@ function lineChart(options) {
     svg_container.classed('chart-svg-container', true)
       .style('width', 100 + "%")
       .style('padding-bottom' , Math.round((full_height/full_width)*100) + "%");
+
     var svg = self.svg = svg_container.append('svg')
       .attr({
         "preserveAspectRatio" : "xMinYMin meet",
@@ -364,8 +365,7 @@ function lineChart(options) {
     // legend hover behavior
     legend_containers
       .on('mouseover', function(d) {
-        line_paths.attr('stroke', "#aaa")
-          .attr("stroke-dasharray" , "10, 7");
+        line_paths.attr('stroke', "#ccc");
         svg.selectAll('path.line#' + this.id)
           .attr('stroke', function(d) { return d.color; })
           .attr("stroke-dasharray" , "none");

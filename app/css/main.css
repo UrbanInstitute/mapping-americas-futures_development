@@ -138,6 +138,11 @@ div.shadow {
   padding-bottom: 40px;
 }
 
+div.no-left-pad {
+  padding-left: 0px !important;
+}
+
+
 /*---------------------------------------
   --------------------------------------*/
 
@@ -156,7 +161,9 @@ div.shadow {
   padding: 0px;
   border-bottom: 8px solid black;
   width: 100%;
+  box-sizing:content-box;
 }
+
 
 .affix .col-sm-12 {
   padding: 0px;
@@ -258,7 +265,6 @@ button.btn.settings-button.active {
   visibility: hidden;
   opacity: 0;
   display: inline-block;
-  border-right: 1px solid #fff;
   padding-bottom: 10px;
   margin-right: 5px;
   padding-right: 5px
@@ -266,6 +272,11 @@ button.btn.settings-button.active {
   -moz-transition: opacity .3s ease;
   -o-transition: opacity .3s ease;
   transition: opacity .3s ease;
+}
+
+#hidden-share {
+  color: inherit;
+  text-decoration: none;
 }
 
 #share-container {
@@ -287,6 +298,10 @@ button.btn.settings-button.active {
   position: relative;
   background-color: #0096D2;
   color : #fff;
+}
+
+#social {
+  margin-right: 10px;
 }
 
 div#twitter {
@@ -524,20 +539,7 @@ padding-bottom: 5px;
   border-top: 8px solid #000;
 }
 
-#return-to-map {
-  float: right;
-  font-style: italic;
-  display: inline-block;
-  margin-bottom: 20px;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
-#return-to-map:hover {
-  background-color: #0096D2;
-  color : #fff;
-}
 
 
 
@@ -552,7 +554,7 @@ padding-bottom: 5px;
 #boundary-info {
   font-style: italic;
   padding-left: 10px;
-  padding-top: 20px;
+  padding-top: 44px;
 }
 
 .navbar {

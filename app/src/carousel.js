@@ -113,7 +113,7 @@ function carousel() {
     },
     // reset affix offset for different div sizes
     control_bottom = function() {
-      return controlBBox().bottom - 100;
+      return $win.scrollTop() + controlBBox().bottom - 150;
     },
     setAffixOffset = function() {
       if (!$('.affix').length) {
@@ -127,7 +127,10 @@ function carousel() {
   var init_affix = function() {
 
     // no mobile affix
-    if (projections.mobile()) return false;
+    if (projections.mobile()) {
+      $control_toggle.remove();
+      return false;
+    }
 
     // only show control toggle when affixed
     $control_toggle
@@ -147,11 +150,9 @@ function carousel() {
       }).hide(); // hide on load
 
     // bind affix listeners
+    // need to bind events before affix init 
+    // (https://github.com/twbs/bootstrap/pull/14331)
     $controls
-      .affix({
-        offset: control_bottom(),
-        bottom: function() { return false; }
-      })
       .on('affix.bs.affix', function() {
         // fill hole left by affix with empty
         // element of same height
@@ -185,6 +186,10 @@ function carousel() {
           .show();
         $control_toggle.hide();
         $filler.css('height', 0);
+      })
+      .affix({
+        offset: control_bottom(),
+        bottom: function() { return false; }
       });
 
   };
@@ -243,7 +248,9 @@ function carousel() {
   $win
     .on('resize', function() {
       scrollTo(getTop(), 0, 0);
-      $controls.css('width', $map_container.width());
+      $control_collapse.css('width', '')
+      $controls
+        .css('width', $map_container.width());
     })
     .scroll(function(){
       view_top[hash] = Math.round(getTop());

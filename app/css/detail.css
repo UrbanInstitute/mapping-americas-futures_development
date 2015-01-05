@@ -28,12 +28,24 @@ h2.detail-header {
   padding-bottom: 50px;
 }
 
-#right_controls {
-  text-align: right;
-}
-
 #return-button {
   margin-left: 10px;
+}
+
+#return-to-map {
+  float: left;
+  font-style: italic;
+  display: inline-block;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#return-to-map:hover {
+  background-color: #0096D2;
+  color : #fff;
 }
 
 #year-select-container {
