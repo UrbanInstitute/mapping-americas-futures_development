@@ -99,12 +99,54 @@ var age_range = ["all", "0-19", "20-49", "50-64", "65+"],
     assumptions = ["low", "avg", "high"];
 
 
-// add the buttons to the dom
-addButtons("migration", assumptions);
-addButtons("mortality", assumptions);
-addButtons("fertility", assumptions);
+
+// gray out assumptions when "2000 to 2010"
+// is selected, as the data is not from
+// the model
+var assumption_buttons = {
+  disable : function() {
+
+    this.plexiglass = this.plexiglass || d3.select('#assumption-buttons')
+      .append('div')
+      .style({
+        "top" : 0,
+        "display" : "block",
+        "position" : "absolute",
+        "width" : "100%",
+        "height" : "100%",
+        "z-index" : 20,
+        "opacity" : 0
+      })
+
+    this.buttons.forEach(function(b) {
+      b.style('background-color', '#ccc');
+    })
+
+  },
+  enable : function() {
+
+    if (this.plexiglass) {
+      this.plexiglass.remove();
+      this.plexiglass = null;
+    }
+
+    this.buttons.forEach(function(b) {
+      b.style('background-color', '');
+    })
+  },
+  buttons : [
+    addButtons("migration", assumptions),
+    addButtons("mortality", assumptions),
+    addButtons("fertility", assumptions)
+  ]
+};
+
+
 addButtons("age", age_range);
 addButtons("race", ethnicities);
+
+
+
 
 
 function select(defaults) {
@@ -112,8 +154,8 @@ function select(defaults) {
   // placeholder callback
   var callback = function(){ };
 
-  // starting year range
-  var year_range = [2010, 2020];
+  // starting years
+  var starting_years = [2000, 2010, 2020];
 
   // current settings (essentially the "Model" in an MVC sense)
   var settings = defaults;
@@ -189,16 +231,11 @@ function select(defaults) {
     return d + end*10;
   };
 
-  // set the property of the year select to
-  // the current setting
-  var setYear = function() {
-    return settings[this.id];
-  };
 
   // add year options to select
   var year_select = d3.selectAll('.year-select');
   year_select.selectAll('option')
-    .data(year_range)
+    .data(starting_years)
     .enter()
     .append('option')
     .attr('value', year)
@@ -229,7 +266,17 @@ function select(defaults) {
     settings.start =  end ? other_year : this_year;
     settings.end   = !end ? other_year : this_year;
     // update select values after constraining
-    year_select.property('value', setYear);
+    year_select.property('value', function() {
+      return settings[this.id];
+    });
+
+
+    if (settings.start === 2000 && settings.end === 2010) {
+      assumption_buttons.disable();
+    } else {
+      assumption_buttons.enable();
+    }
+
     // run callback
     callback(settings);
     // update detail year string
@@ -241,8 +288,8 @@ function select(defaults) {
   // add population pyramid settings
   var pyramid_years = addButtons(
     "pyramid-select",
-    year_range
-      .concat(year_range.slice(-1)[0]+10)
+    starting_years
+      .concat(starting_years.slice(-1)[0]+10)
       .map(String)
   )
   .classed("pyramid-button", true)
@@ -294,8 +341,9 @@ function select(defaults) {
       return settings[setting_group.id] == this.id;
     });
 
-    // write default settings
-    year_select.property('value', setYear);
+    year_select.property('value', function() {
+      return settings[this.id];
+    });
 
     // run callback on update settings
     if (!no_callback) {
