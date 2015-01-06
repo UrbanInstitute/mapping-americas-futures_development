@@ -289,7 +289,7 @@ button.btn.settings-button.active {
   opacity: 1;
 }
 
-#social, #hidden-share div {
+#social, #hidden-share span {
   display: inline-block;
   padding : 3px 6px;
   border-radius: 15px;
@@ -304,17 +304,17 @@ button.btn.settings-button.active {
   margin-right: 10px;
 }
 
-div#twitter {
+span#twitter {
   padding: 3px 7px;
   background-color: #55ACEE;
 }
 
-div#facebook {
+span#facebook {
   padding: 3px 9px;
   background-color: #3B5998;
 }
 
-div#mail {
+span#mail {
   background-color: #999;
 }
 
@@ -326,7 +326,7 @@ div#mail {
 }
 
 #hamburger-bun .navbar-toggle:hover,
-#share-container div:hover {
+#share-container span.nav-icon:hover {
   background-color: #777;
   cursor: pointer;
 }
@@ -538,10 +538,6 @@ padding-bottom: 5px;
 #map-tool-container, #feature-top-row {
   border-top: 8px solid #000;
 }
-
-
-
-
 
 #param-table {
   margin-bottom: 10px;
