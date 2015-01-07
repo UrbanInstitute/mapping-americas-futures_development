@@ -72,7 +72,7 @@ function detail(options) {
       if (czone !== 0) czone = zeros(czone);
       // update detail title
       var name = czone_names[parseFloat(czone)] || "United States";
-      $("h1#region").text(name);
+      $("h1 #region").text(name);
 
       // calculate percentage growth
       var start = settings.start_abbr();

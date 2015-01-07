@@ -127,7 +127,7 @@ function carousel() {
   var init_affix = function() {
 
     // no mobile affix
-    if (projections.mobile()) {
+    if (projections.mobile || projections.ie9) {
       $control_toggle.remove();
       return false;
     }
@@ -150,7 +150,7 @@ function carousel() {
       }).hide(); // hide on load
 
     // bind affix listeners
-    // need to bind events before affix init 
+    // need to bind events before affix init
     // (https://github.com/twbs/bootstrap/pull/14331)
     $controls
       .on('affix.bs.affix', function() {

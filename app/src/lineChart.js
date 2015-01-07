@@ -15,7 +15,7 @@
 
 function lineChart(options) {
 
-  var years = [2010, 2020, 2030];
+  var years = [2000, 2010, 2020, 2030];
   var yvalue_extent = [0, 2*10e7];
   var start_settings = options.settings;
 

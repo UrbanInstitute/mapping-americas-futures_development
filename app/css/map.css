@@ -74,6 +74,11 @@ rect.city-label-background {
   stroke : #777;
 }
 
+path.us-map-boundary.targeted {
+  stroke : #000;
+}
+
+
 /*---------------------------------------
   --------------------------------------*/
 
@@ -100,8 +105,6 @@ rect.city-label-background {
   vertical-align: middle;
   background-color: #fff;
   cursor: pointer;
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
   margin-bottom: 20px;
 }
 

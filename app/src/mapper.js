@@ -383,7 +383,7 @@ function mapper(options) {
         ")scale(" + d3.event.scale + ")"
       );
 
-      var swidth = 1.5 / d3.event.scale + "px";
+      var swidth = 1 / d3.event.scale + "px";
 
       features
         .style("stroke-width", swidth)
@@ -404,7 +404,7 @@ function mapper(options) {
 
         c.points.attr({
           'r' : new_r
-        })
+        });
 
         c.labels
           .style('font-size', new_font + "px")
@@ -418,7 +418,6 @@ function mapper(options) {
               return coords[t][1] + new_font/4;
             }
           });
-
 
       }
 
@@ -441,8 +440,13 @@ function mapper(options) {
         .on("zoom", zoomed);
 
     svg.call(zoom)
-       .call(zoom.event)
-       .on("dblclick.zoom", null);
+        .call(zoom.event)
+        // disable unwanted zoom events
+        .on("dblclick.zoom", null)
+        .on("wheel.zoom", null)
+        .on("mousewheel.zoom", null)
+        .on("MozMousePixelScroll.zoom", null);
+
     /* ---------------------------
     -----------------------------*/
 
@@ -542,7 +546,10 @@ function mapper(options) {
     container.selectAll(".fa-search-plus, .fa-search-minus")
       .on('click', function(){
         zoomByFactor(
-          d3.select(this).classed('fa-search-plus') ? 1.5 : (1/1.5), 10
+          d3.select(this).classed('fa-search-plus') ?
+            1.5 :
+            (1/1.5),
+          750
         );
       });
     /* ---------------------------
@@ -756,6 +763,7 @@ function mapper(options) {
 
     // reset zoom
     self.reset = function(duration) {
+      self.highlight(0);
       svg.transition()
             .duration(duration || 750)
             .call(zoom.translate([0, 0]).scale(1).event);
@@ -766,6 +774,7 @@ function mapper(options) {
         center the map on a target boundary
        ---------------------------------- */
     self.target = function(boundary_id, duration) {
+      self.highlight(boundary_id);
       // reset map if US is selected
       if (boundary_id == "0") return self.reset(duration);
       // get boundary dom node
@@ -830,13 +839,17 @@ function mapper(options) {
     };
 
     /* ----------------------------------
-        center the map on a target czone
+        highlight a czone with an outline
        ---------------------------------- */
     self.highlight = function(czone) {
-      if (czone == "0") return self;
-      svg.select('path.us-map-boundary#z' + czone)
-        .classed('highlight', true);
+
+      svg.selectAll('path.us-map-boundary')
+          .classed('highlight', function() {
+            return this.id === "z" + czone;
+          });
+
       return self;
+
     };
 
 

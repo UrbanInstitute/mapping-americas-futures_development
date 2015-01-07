@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<!--[if (lte IE 9) ]>    <html class="lte_ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class=""> <!--<![endif]-->
 <head>
 
     <!--
@@ -35,21 +35,29 @@
             <img class="logo-image hidden-xs hidden-sm hidden-md async" data-src="images/logo_revblue_trans.png" />
         </a>
         <span id="title-span" class="hidden-xs">MAPPING AMERICA'S FUTURES</span>
-        <div id="hamburger-bun" class="height-adjust">
-            <div id="share-container">
+        <span id="hamburger-bun" class="height-adjust">
+            <span id="share-container">
                 <span id="hidden-share">
-                <div id="twitter"><i class="fa fa-twitter"></i></div>
-                <div id="facebook"><i class="fa fa-facebook"></i></div>
-                <div id="mail"><i class="fa fa-envelope-o"></i></div>
+                <a href="http://twitter.com/intent/tweet?text=Interactive%3A%20Test%20possible%20scenarios%20for%20how%20the%20US%20population%20might%20change%20in%202020%20%26%202030%20http%3A%2F%2Furbn.is%2FAmericasFutures%20%23AmericasFutures">
+                    <span id="twitter" class="nav-icon">
+                        <i class="fa fa-twitter"></i>
+                    </span>
+                </a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=http://urbn.is/AmericasFutures">
+                    <span id="facebook" class="nav-icon"><i class="fa fa-facebook"></i></span>
+                </a>
+                <a href="mailto:%20?Subject=New interactive from the Urban Institute&amp;Body=Hi! I thought you might be interested in this new interactive from the Urban Institute: &quot;Mapping America\'s Futures&quot; http://urbn.is/AmericasFutures">
+                    <span id="mail" class="nav-icon"><i class="fa fa-envelope-o"></i></span>
+                </a>
               </span>
-                <div id="social">
+                <span id="social" class="nav-icon">
                     <i class="fa fa-share"></i>
-                </div>
-            </div>
-            <div class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                </span>
+            </span>
+            <span class="navbar-toggle nav-icon" data-toggle="collapse" data-target=".navbar-collapse">
                 <i class="fa fa-bars"></i>
-            </div>
-        </div>
+            </span>
+        </span>
     </div>
     <div class="navbar-collapse collapse" id="briefs">
         <div class="container" id="hamburger-meat">
@@ -451,7 +459,7 @@
 
             <div id="control-collapse">
 
-              <div class="col-sm-4">
+              <div class="col-sm-4" id="assumption-buttons">
                 <div class="settings-header">1. Select rates: </div>
                 <label class="select-label">Births</label>
                 <div id="fertility"></div>
@@ -463,7 +471,7 @@
 
               <div class="col-sm-8 border-group">
 
-                <div class="col-sm-9">
+                <div class="col-sm-9 no-left-pad">
 
                   <div class="settings-header">2. Filter map by: </div>
 
@@ -487,7 +495,7 @@
 
                 </div>
 
-                <div class="col-sm-5">
+                <div class="col-sm-5 no-left-pad">
                   <label class="select-label">Boundary</label>
 
                   <br/>
@@ -499,12 +507,13 @@
                     </div>
                     <div class="btn-group btn-group-sm">
                       <button type="button" class="btn settings-button active" id="czones">
-                        ZONES</button>
+                        CZ</button>
                     </div>
                   </div>
                 </div>
+
                 <div class="col-sm-7" id="boundary-info">
-                  The map divides the United States into 740 commuting zones—places connected by local economies, which can cross city and state boundaries, and that include metro and rural areas.
+                  The map divides the United States into 740 commuting zones- places connected by local economies.
                 </div>
 
               </div>
@@ -544,11 +553,6 @@
           </div>
         </div>
 
-
-        <div id="return-to-map">
-          Return to map <i id="return-button" class="fa fa-chevron-circle-up fa-2x"></i>
-        </div>
-
       </div>
     </div>
 
@@ -564,17 +568,23 @@
                   <div id="right_controls">
                     <select class="form-control" id="czone-select" data-live-search="true">
                     </select>
+                    <div id="return-to-map">
+                      Return to map <i id="return-button" class="fa fa-chevron-circle-up"></i>
+                    </div>
                   </div>
                 </div>
                 <div class="col-sm-9  col-sm-pull-3">
-                  <h1 id="region"></h1>
+                  <h1 id="region-header">
+                    <span id="region"></span>,
+                    <span id="detail-years"></span>
+                  </h1>
+                  <div id="detail-settings"></div>
                 </div>
               </div>
 
               <div class="row">
 
                 <div class="col-sm-12">
-                  <div id="detail-settings"></div>
                   <span class="detail-label">  Population growth:
                     <span id="growth-cell"></span>
                   </span>
@@ -590,8 +600,7 @@
               <div class="row padded-row">
                 <div class="col-sm-8">
                   <h2 class="detail-header">
-                    General Age and Race Trends,
-                    <span id="detail-years"></span>
+                    General Age and Race Trends, 2000-2030
                   </h2>
                   Test possible scenarios for how the US population might change in 2020 and 2030 by selecting different rates for birth, death and migration. Filter by age, race and geographicboundaries to focus on a sub population.
                 </div>
@@ -645,8 +654,6 @@
     <!-- container -->
     <div id="footer">
       <div class="container">
-      <div class="col-lg-10 col-lg-offset-1">
-        <div class="row">
         <div class="col-lg-12">
            <div class="col-sm-3">
             <h3>Data Available for Download</h3>
@@ -682,24 +689,19 @@
               <h5> RESEARCH TEAM </h5>
               <h6 class="credit-title">PROJECT DIRECTOR</h6>
               Rolf Pendall
-              <h6 class="credit-title">LEAD PROGRAMMER</h6>
-              Kait Hildner
-              <h6 class="credit-title">KEY RESEARCHERS</h6>
-              Steven Martin, Nan Astone, Liz Peters, Austin Nichols
-              <h6 class="credit-title">PROJECT MANAGER</h6>
-              Pam Blumenthal
+              <h6 class="credit-title">RESEARCH</h6>
+              Nan Astone, Steven Martin, Liz Peters, Austin Nichols, Kait Hildner, Allison Stolte, Pam Blumenthal
             </div>
           </div>
           <div class="col-sm-3">
-            <h3>Questions or Comments?</h3>
-            <a href="http://www.urban.org/about/contact.cfm">Let us know.</a>
+            <h3>Questions or comments? We're listening</h3>
+            share your feedback with researchers. AmericasFutures[at]urban.org  <a href="https://twitter.com/search?f=realtime&q=%23americasfutures&src=typd">#AmericasFutures</a>    
           </div>
         </div>
         </div>
         <div class="row">
           <div id="copyright">Copyright &copy; Urban Institute 2014</div>
         </div>
-      </div>
       </div>
 
     </div>

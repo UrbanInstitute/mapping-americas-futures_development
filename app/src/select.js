@@ -116,11 +116,11 @@ var assumption_buttons = {
         "height" : "100%",
         "z-index" : 20,
         "opacity" : 0
-      })
+      });
 
     this.buttons.forEach(function(b) {
       b.style('background-color', '#ccc');
-    })
+    });
 
   },
   enable : function() {
@@ -132,7 +132,7 @@ var assumption_buttons = {
 
     this.buttons.forEach(function(b) {
       b.style('background-color', '');
-    })
+    });
   },
   buttons : [
     addButtons("migration", assumptions),

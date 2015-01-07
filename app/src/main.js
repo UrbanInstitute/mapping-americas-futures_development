@@ -370,12 +370,12 @@ q.awaitAll(function(error, data) {
     main_map
     // update the detail map on click of a county
     .click(function(czone) {
+      var detail_top = $("#detail-well").offset().top - 180,
+          curr_top = projections.getTop();
       // update detail page to czone
       czone_dropdown.set(czone);
       update_detail(czone);
       // scroll to detail area of map page
-      var detail_top = $("#detail-well").offset().top - 180;
-      var curr_top = projections.getTop();
       projections.scrollTo(curr_top, detail_top, 750);
     })
     .update(select_settings, function(){

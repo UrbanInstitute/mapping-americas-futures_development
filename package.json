@@ -1,6 +1,11 @@
 {
-  "name": "coffeeviz",
-  "version": "0.0.0",
+  "name": "Mapping America's Futures",
+  "version": "0.2.0",
+  "author" : "Ben Southgate",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/UI-Research/population-projections"
+  },
   "dependencies": {
     "grunt-contrib-concat": "latest",
     "grunt-contrib-uglify": "latest",
