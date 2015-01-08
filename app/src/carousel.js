@@ -195,7 +195,7 @@ function carousel() {
   };
 
   // Check hash in request, default to feature
-  hash = hash ? hash.slice(1) : "feature";
+  hash = hash ? hash.slice(1) : "map";
   hash = hash != "map" ? "feature" : "map";
 
   // initialize carousel with no wrapping
