@@ -85,7 +85,7 @@ function detail(options) {
       // used to calculate the maximum percent change
       var race_totals = {};
       // first pass to get totals
-      data.map(function(row) {
+      data.forEach(function(row) {
         if (row.age == "99" && row.r == "T") {
           if (row.yr == start) start_total += parseFloat(row.pop);
           if (row.yr == end) end_total += parseFloat(row.pop);
@@ -96,7 +96,7 @@ function detail(options) {
       });
       // second pass to find max percent growth
       var max_growth = {};
-      data.map(function(row) {
+      data.forEach(function(row) {
         if (row.age != "99" && row.yr == pyramid_year) {
           // get the current maximum for this race
           var curr_max = max_growth[row.r] || 0;

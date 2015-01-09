@@ -217,12 +217,16 @@ select.form-control {
 select.form-control {
   border-radius: 0px;
   -webkit-appearance: none;
+  background-color: #fff;
+  background-image: url('http://datatools.urban.org/features/test/dropdown-test.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right center;
 }
 
 button.btn.settings-button {
   background-color: #0096D2;
   color: white;
-  text-transform: uppercase;
   font-weight: 400;
   letter-spacing: .5px;
 }
@@ -571,6 +575,14 @@ padding-bottom: 5px;
   padding-left: 10px;
   padding-top: 44px;
 }
+
+#boundary-info {
+  padding-top: 25px;
+}
+label#boundary_label {
+  padding-top: 5px;
+}
+
 
 .navbar {
   background-color: #000;

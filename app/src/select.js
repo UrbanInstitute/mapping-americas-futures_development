@@ -18,18 +18,23 @@
 */
 function createDetailString(settings) {
   var full = {
-    "avg" : "Average",
-    "low" : "Low",
-    "high" : "High"
-  };
-  var b = settings.fertility;
-  var d = settings.mortality;
-  var m = settings.migration;
+        "avg" : "average",
+        "low" : "low",
+        "high" : "high"
+      },
+      b = settings.fertility,
+      d = settings.mortality,
+      m = settings.migration,
+      cap = function(s) {
+        return s.charAt(0).toUpperCase() + s.slice(1);
+      };
+
   $('#detail-settings').text(
-    full[b] + " Birth, " +
-    full[d] + " Death, " +
-    full[m] + " Migration"
+    cap(full[b]) + " birth, " +
+    full[d] + " death, " +
+    full[m] + " migration." 
   );
+
 }
 
 function createYearString(settings) {

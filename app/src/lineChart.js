@@ -388,9 +388,12 @@ function lineChart(options) {
       .selectAll('g')
       .data(add_scale)
     .enter().append('g')
-      .selectAll('circle')
+      
+    static_circles.selectAll('circle')
       .data(function(d) {
-        d.values.forEach(function(v){ v.color = d.color });
+        d.values.forEach(function(v){ 
+          v.color = d.color;
+        });
         return d.values;
       })
     .enter().append('circle')
@@ -559,31 +562,54 @@ function lineChart(options) {
       self.data = prepData(new_data);
       // prepare new data
       var prepped = getDataPrepper(self.category)(self.data);
+
+      // animation duration
+      var dur = 400;
+
       // update y scale domain
       y.domain(get_y_domain(prepped));
+
       // update the scale used in the circles
-      mouseover_circles.data(prepped.map(function(o) {
+      var add_scale = prepped.map(function(o) {
         o.y = y;
         return o;
-      }));
+      });
+
+      // update data for mouseover circle
+      mouseover_circles.data(add_scale);
+
+      // update circles on lines
+      static_circles
+          .data(add_scale)
+        .selectAll('circle')
+          .data(function(d) { return d.values; })
+          .transition()
+          .duration(dur)
+          .attr('cx', function(d) { return x(d.year); })
+          .attr('cy', function(d) { return y(d.population); });
+
       // update data for tooltip
       tt_values.data(prepped);
       moveTooltip(lag_year);
+
       // update y axis
       y_axis_g
         .transition()
-        .duration(400)
+        .duration(dur)
         .call(yAxis);
+
       // update y axis
       y_grid_g
         .transition()
-        .duration(400)
+        .duration(dur)
         .call(yGrid);
+
       // transition lines
       line_paths.data(prepped)
           .transition()
-          .duration(400)
+          .duration(dur)
           .attr("d" , function(d) { return line(d.values); });
+
       return self;
     };
 
