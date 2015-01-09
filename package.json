@@ -1,5 +1,5 @@
 {
-  "name": "Mapping America's Futures",
+  "name": "Mapping-Americas-Futures",
   "version": "0.2.0",
   "author" : "Ben Southgate",
   "repository": {
@@ -7,6 +7,7 @@
     "url": "git@github.com/UI-Research/population-projections"
   },
   "dependencies": {
+    "grunt-cli" : "latest",
     "grunt-contrib-concat": "latest",
     "grunt-contrib-uglify": "latest",
     "grunt-contrib-cssmin": "latest",

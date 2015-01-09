@@ -490,6 +490,15 @@ div.pyramid.col-sm-15 {
   margin-bottom: 40px;
 }
 
+
+.photo-credits {
+  width: 100%;
+  text-align: right;
+  display: block;
+  font-style: italic;
+  margin-top: -40px;
+}
+
 .jump-to-map {
   color : #0096D2;
   cursor: pointer;
