@@ -235,38 +235,6 @@ q.awaitAll(function(error, data) {
   // the small maps
   var small_maps = {
     //
-    // youngstown
-    //
-    youngstown_low : {
-      id : "#youngstown-low",
-      cz : "16400",
-      legend: "#youngstown",
-      d : {"migration" : "low"},
-      zoomClass : "youngstown"
-    },
-    youngstown_high : {
-      id : "#youngstown-high",
-      cz : "16400",
-      d : {"migration" : "high"},
-      zoomClass : "youngstown"
-    },
-    //
-    // atlanta
-    //
-    atlanta_low : {
-      id : "#atlanta-low",
-      cz : "09100",
-      legend: "#atlanta",
-      d : {"migration" : "low"},
-      zoomClass : "atlanta"
-    },
-    atlanta_high : {
-      id : "#atlanta-high",
-      cz : "09100",
-      d : {"migration" : "high"},
-      zoomClass : "atlanta"
-    },
-    //
     // race groupings
     //
     races_all : {
@@ -384,18 +352,6 @@ q.awaitAll(function(error, data) {
       // The small maps are not added to the
       // visuals list as they are not to be changed
       // when the selections are updated
-
-      // since the "high" charts are using the same data
-      // we only want to download it once
-      update_from_cache('youngstown_high', function() {
-        update_from_cache('atlanta_high');
-      });
-
-      // since the "low" charts are using the same data
-      // we only want to download it once
-      update_from_cache('atlanta_low', function() {
-        update_from_cache('youngstown_low');
-      });
 
       // since the race charts are use the same
       // data as the main map, wait until it is cached

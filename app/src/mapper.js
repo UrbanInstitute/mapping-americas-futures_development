@@ -128,17 +128,17 @@ function mapper(options) {
         start_data = curr_settings;
       }
 
-      var settings = start_data || curr_settings;
+      var settings = start_data || curr_settings,
+        // !!hacky -- 2000 -> 00 needs to be 0
+        start = parseInt(settings.start_abbr()),
+        end = parseInt(settings.end_abbr()),
+        age = settings.age_number(),
+        race = settings.race_abbr(),
+        uid, v_start, v_end;
 
-      // get the different settigns
-      var start = settings.start_abbr();
-      var end = settings.end_abbr();
-      var age = settings.age_number();
-      var race = settings.race_abbr();
       // return a function which provides
       // the population values in the two periods
       // for a given czone
-      var uid, v_start, v_end;
       return function(d) {
         uid = parseInt(d.id);
         if (data[uid]) {
@@ -289,6 +289,7 @@ function mapper(options) {
             city_r = self.cities.start_r = 6,
             start_font = self.cities.start_font = 22,
             start_swidth = self.cities.start_swidth = 5,
+            start_text_offset = self.cities.start_text_offset = 2,
             // calculate bounding box for city label
             // of given font size
             bb = self.getCityLabelBBox = function(d, font_size) {
@@ -337,6 +338,7 @@ function mapper(options) {
 
 
         // weave labels to stack nicely
+        var city_label_highlights = features.append('g');
         var city_labels = features.append('g');
 
         cities.features.forEach(function(d) {
@@ -354,9 +356,19 @@ function mapper(options) {
               y : py + dims.height/4
             }).text(t);
 
+          city_label_highlights.append('text')
+            .datum(d)
+            .datum(d)
+            .attr({
+              class : 'city-label-highlight',
+              x : px + city_r*2 + start_text_offset,
+              y : py + dims.height/4 + start_text_offset
+            }).text(t);
+
         });
 
         self.cities.labels = city_labels.selectAll('text');
+        self.cities.label_highlights = city_label_highlights.selectAll('text');
 
       })(self);
 
@@ -398,6 +410,7 @@ function mapper(options) {
             new_r = c.start_r/s,
             new_font = c.start_font/s,
             new_swidth = c.start_swidth/s,
+            new_offset = c.start_text_offset/s,
             spad = c.start_pad,
             coords = self.cities.coords,
             bb = self.getCityLabelBBox;
@@ -416,6 +429,19 @@ function mapper(options) {
             y : function(d) {
               var t = d.properties.NAME;
               return coords[t][1] + new_font/4;
+            }
+          });
+
+        c.label_highlights
+          .style('font-size', new_font + "px")
+          .attr({
+            x : function(d) {
+              var t = d.properties.NAME;
+              return coords[t][0] + new_r*2 + new_offset;
+            },
+            y : function(d) {
+              var t = d.properties.NAME;
+              return coords[t][1] + new_font/4 + new_offset;
             }
           });
 

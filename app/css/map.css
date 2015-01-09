@@ -68,10 +68,13 @@ circle.cities {
   fill : #000;
 }
 
+text.city-label-highlight,
+text.city-label {
+  font-weight: bold;
+}
 
-rect.city-label-background {
-  fill : rgba(255,255,255,0.85);
-  stroke : #777;
+text.city-label-highlight {
+  stroke : #fff;
 }
 
 path.us-map-boundary.targeted {

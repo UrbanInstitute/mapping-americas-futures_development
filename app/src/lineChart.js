@@ -233,11 +233,8 @@ function lineChart(options) {
             .orient("left");
 
     var line = d3.svg.line()
-                .interpolate("cardinal")
                 .x(function(d) { return x(d.year); })
                 .y(function(d) { return y(d.population); });
-
-
 
     // id formatting
     var idf = function(s) { return "id_" + s.replace(/\W/g, ""); };
@@ -271,11 +268,11 @@ function lineChart(options) {
           });
 
     // legend
-    var num_series = prepped.length;
-    var legend_length = full_width;
-    var legend_line_padding = 15;
-    var tween_text_padding = 5;
-    var legend_vertical_margin = 50;
+    var num_series = prepped.length,
+        legend_length = full_width,
+        legend_line_padding = 15,
+        tween_text_padding = 5,
+        legend_vertical_margin = 50;
 
     // calcuate bounds of svg text element
     var getTextBBox = function(text, class_name) {
@@ -382,17 +379,42 @@ function lineChart(options) {
       return o;
     });
 
+
+
+
+
     // mouseover circles
-    var circles = svg.append('g')
+    var static_circles = svg.append('g')
+      .selectAll('g')
+      .data(add_scale)
+    .enter().append('g')
+      .selectAll('circle')
+      .data(function(d) {
+        d.values.forEach(function(v){ v.color = d.color });
+        return d.values;
+      })
+    .enter().append('circle')
+      .attr('class', 'linechart static-circle')
+      .attr('r', 7)
+      .attr('cx', function(d) {
+        return x(d.year);
+      })
+      .attr('cy', function(d) {
+        return y(d.population);
+      })
+      .style('fill', function(d) { return d.color; });
+
+    // mouseover circles
+    var mouseover_circles = svg.append('g')
       .selectAll('circle')
       .data(add_scale)
       .enter().append('circle')
           .attr('class', 'linechart mouseover circle')
           .attr('id', function(d) { return idf(d.id); })
           .attr('r', 7)
-          .style('fill', function(d) { return d.color; })
-          .style('stroke', "#fff")
-          .style('stroke-width', 2)
+          .style('stroke', function(d) { return d.color; })
+          .style('fill', "#fff")
+          .style('stroke-width', 4)
           .style('opacity', 0);
 
     // tooltip
@@ -540,7 +562,7 @@ function lineChart(options) {
       // update y scale domain
       y.domain(get_y_domain(prepped));
       // update the scale used in the circles
-      circles.data(prepped.map(function(o) {
+      mouseover_circles.data(prepped.map(function(o) {
         o.y = y;
         return o;
       }));
