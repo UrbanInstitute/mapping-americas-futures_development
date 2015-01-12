@@ -80,7 +80,9 @@ function mapper(options) {
 
     for (var r = 0, l=raw.length; r < l; r++) {
       row = raw[r];
-      path = variable_order.map( function(n) { return row[n]; } );
+      path = variable_order.map(function(n) {
+        return n === "yr" ? parseInt(row[n]) : row[n];
+      });
       recurseAssign(d, path, Number(row.pop), last_index);
     }
 

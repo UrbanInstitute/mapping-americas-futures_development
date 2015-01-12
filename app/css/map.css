@@ -74,7 +74,7 @@ text.city-label {
 }
 
 text.city-label-highlight {
-  stroke : #fff;
+  stroke : #dcdcdc;
 }
 
 path.us-map-boundary.targeted {
@@ -110,6 +110,8 @@ path.us-map-boundary.targeted {
   cursor: pointer;
   margin-bottom: 20px;
 }
+
+
 
 .map-svg-container:active {
   cursor: all-scroll;
@@ -336,6 +338,43 @@ text.us-map-legend-label {
 
 /*---------------------------------------
   ---------------------------------------
-    Adrienne Bootstrap Overrides
+    Hide on mobile
   ---------------------------------------
   --------------------------------------- */
+
+@media(max-width: 767px) {
+
+  #map_container .map-svg,
+  #map_container.map-svg-container,
+  #map_container-legend,
+  #legend-header,
+  .hr-legend,
+  #boundary,
+  #boundary-info,
+  #boundary_label,
+  #ethicity-select,
+  .map-control,
+  #space-filler,
+  #control-collapse-toggle
+  {
+    display: none !important;
+  }
+
+  .map-box {
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    float: left;
+  }
+
+  .map-plexiglass {
+    display: block;
+    position: absolute;
+    width: 100%;
+    opacity: 0.2;
+    padding:0px;
+    padding-bottom: 80%;
+    z-index: 100;
+  }
+
+}

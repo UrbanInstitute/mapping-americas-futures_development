@@ -18,7 +18,9 @@ var projections = {
   // being downloaded
   loading_indicator : false,
   // land on mobile sized (768px)
-  mobile : $("#mobile-test").css("display") === "block",
+  mobile : function() {
+    return $("#mobile-test").css("display") === "block";
+  },
   // land on ie9 or less
   ie9 : $('html').is("lte_ie9")
 };

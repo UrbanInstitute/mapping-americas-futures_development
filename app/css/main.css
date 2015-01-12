@@ -102,6 +102,10 @@ div.shadow {
   margin-bottom: 0;
 }
 
+.credit-name {
+  display: inline-block;
+}
+
 #credits {
   font-size: 12px;
 }
@@ -138,9 +142,6 @@ div.shadow {
   padding-bottom: 40px;
 }
 
-div.no-left-pad {
-  padding-left: 0px !important;
-}
 
 
 /*---------------------------------------
@@ -199,53 +200,6 @@ div.no-left-pad {
   margin-right: 5px;
   display: inline-block;
 }
-
-
-/*---------------------------------------
-  ---------------------------------------
-    Settings buttons
-  ---------------------------------------
-  --------------------------------------- */
-
-button.btn, 
-div.btn-group,
-select.form-control {
-  border-radius: 0px !important;
-}
-
-
-select.form-control {
-  border-radius: 0px;
-  -webkit-appearance: none;
-  background-color: #fff;
-  background-image: url('http://datatools.urban.org/features/test/dropdown-test.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: right center;
-}
-
-button.btn.settings-button {
-  background-color: #0096D2;
-  color: white;
-  font-weight: 400;
-  letter-spacing: .5px;
-}
-
-@media(max-width : 1000px) {
-  button.btn.settings-button, select.year-select {
-    font-size: 9px;
-  }
-}
-
-button.btn.settings-button:not(.active):hover {
-  background-color: #777;
-}
-
-button.btn.settings-button.active {
-  background-color: #000;
-}
-/*---------------------------------------
-  --------------------------------------*/
 
 
 /*---------------------------------------
@@ -554,18 +508,6 @@ div.pyramid.col-sm-15 {
   padding-top:100px;
 }
 
-label.centered {
-  width: 100%;
-  text-align: center;
-}
-
-label.select-label {
-padding-top: 25px;
-font-size: 16px;
-line-height: 12px;
-letter-spacing: -.5px;
-padding-bottom: 5px;
-}
 
 #map-tool-container, #feature-top-row {
   border-top: 8px solid #000;
@@ -578,20 +520,6 @@ padding-bottom: 5px;
 #pyramids {
   margin-top: 20px;
 }
-
-#boundary-info {
-  font-style: italic;
-  padding-left: 10px;
-  padding-top: 44px;
-}
-
-#boundary-info {
-  padding-top: 25px;
-}
-label#boundary_label {
-  padding-top: 5px;
-}
-
 
 .navbar {
   background-color: #000;
@@ -623,15 +551,6 @@ label#boundary_label {
   padding-top:20px;
 }
 
-.border-group {
-  border-left: 1px solid #eee;
-  padding-bottom: 20px;
-}
-
-.border-group#year-change-group {
-  padding-bottom: 0px;
-}
-
 #copyright {
   width: 100%;
   text-align: center;
@@ -639,18 +558,7 @@ label#boundary_label {
   font-size: 12px;
 }
 
-@media (max-width: 767px) {
-  .border-group {
-    border-left: none;
-    border-right: none;
-    margin: 20px 0px;
-  }
-}
 
-div.extra-padding {
-    padding-left: 40px;
-    padding-right: 40px;
-}
 
 
 /*---------------------------------------

@@ -98,8 +98,22 @@
 }
 
 
+.pyramid.chart-svg-container {
+  padding-bottom: 33%;
+}
 
 
+@media(max-width: 767px) {
+  .pyramid.chart-svg-container {
+    padding-bottom: 83.3%;
+  }
+
+  .pyramid:nth-child(odd) .axis text {
+    stroke : none;
+    fill : #000;
+  }
+
+}
 
 /*---------------------------------------
   ---------------------------------------

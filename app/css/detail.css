@@ -63,6 +63,16 @@ h2.detail-header {
   font-weight: bold;
 }
 
+@media(max-width: 767px) {
+  .detail-label {
+    display: block;
+    font-size: 26px;
+  }
+  .change-block {
+    display: block;
+  }
+}
+
 #start-change, #end-change, #growth-cell{
     color:#0096D2;
 }
@@ -83,4 +93,8 @@ h2.detail-header {
 
 #region-header{
     margin-top: 0px;
+    width: 100%;
+    display: block;
 }
+
+

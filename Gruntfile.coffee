@@ -51,6 +51,7 @@ module.exports = (grunt) ->
     "carousel"
     "detail"
     "main"
+    "controls"
     "full-width-pics"
     "select2-bootstrap"
   ].map (f) -> "#{f}.css"

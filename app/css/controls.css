@@ -1,0 +1,128 @@
+
+
+
+/*
+  Styles for controls at top of map
+  Ben Southgate
+  01/09/15
+*/
+
+
+button.btn,
+div.btn-group,
+select.form-control {
+  border-radius: 0px !important;
+}
+
+button.btn.settings-button {
+  background-color: #0096D2;
+  color: white;
+  font-weight: 400;
+  letter-spacing: .5px;
+}
+
+button.btn.settings-button:not(.active):hover {
+  background-color: #777;
+}
+
+button.btn.settings-button.active {
+  background-color: #000;
+}
+
+.extra-padding {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.no-right-pad {
+  padding-right: 0px;
+}
+
+.no-left-pad {
+  padding-left: 0px;
+}
+
+.border-group {
+  border-left: 1px solid #eee;
+  padding-bottom: 20px;
+}
+
+.border-group#year-change-group {
+  padding-bottom: 0px;
+}
+
+#boundary-info {
+  font-style: italic;
+  padding-left: 10px;
+  padding-top: 44px;
+}
+
+#boundary-info {
+  padding-top: 45px;
+}
+
+label.centered {
+  width: 100%;
+  text-align: center;
+}
+
+label.select-label {
+  padding-top: 25px;
+  font-size: 16px;
+  line-height: 12px;
+  letter-spacing: -.5px;
+  padding-bottom: 5px;
+}
+
+
+/* select background image for webkit only */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+
+  select.form-control {
+    border-radius: 0px;
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: url(
+      'http://datatools.urban.org/features/test/dropdown-test.png'
+    );
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right center;
+  }
+
+}
+
+@media (max-width: 767px) {
+  .border-group {
+    border-left: none;
+    border-right: none;
+    margin: 20px 0px;
+  }
+
+  .sm-no-pad {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  #pyramid-select {
+    padding: inherit;
+    padding-top : 20px;
+  }
+
+}
+
+@media(max-width : 992px) {
+  button.btn.settings-button, select.year-select {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 1200px) {
+  label#boundary_label {
+    padding-top: 0px;
+  }
+
+  #boundary-info {
+    padding-top: 15px;
+  }
+}

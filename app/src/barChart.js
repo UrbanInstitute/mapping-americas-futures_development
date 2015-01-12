@@ -127,10 +127,7 @@ function barChart(options) {
 
     // container svg, dynamically sized
     container.classed('chart-svg-container', true)
-      .style('width', (1/5)*100 + "%")
-      .style('padding-bottom' , Math.round(
-          (full_height/full_width)*(1/5)*100
-        ) + "%");
+
     var svg = self.svg = container.append('svg')
       .attr({
         "preserveAspectRatio" : "xMinYMin meet",
