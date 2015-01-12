@@ -1,9 +1,15 @@
 module.exports = (grunt) ->
 
-  deploy_paths = [
+  windows_deploy_paths = [
     'B:/bsouthga/projections/'
     'B:/mapping-americas-futures/'
   ]
+
+  osx_deploy_paths = [
+    # insert paths here
+  ]
+
+
   #
   # Full build system steps
   #
@@ -76,7 +82,13 @@ module.exports = (grunt) ->
             cwd : "dist/"
             src: ['**']
             dest: path
-          } for path in deploy_paths
+          } for path in (
+              do ->
+                if grunt.option('osx')
+                  osx_deploy_paths
+                else
+                  windows_deploy_paths
+            )
         )
     concat :
       options :
