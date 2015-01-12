@@ -148,15 +148,16 @@ function barChart(options) {
       }).text(capitalize(renderOpts.race));
 
     // y grid lines
-    svg.append('g')
+    var gridAxis = d3.svg.axis().scale(x)
+              .orient("bottom")
+              .tickSize(-height, 0, 0)
+              .ticks(4)
+              .tickFormat("");
+
+    var grid_lines = svg.append('g')
       .attr('class', 'y grid')
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.svg.axis().scale(x)
-            .orient("bottom")
-            .tickSize(-height, 0, 0)
-            .ticks(4)
-            .tickFormat("")
-        );
+      .call(gridAxis);
 
     // bar chart rectangles
     var bar_container = svg.append('g')
@@ -221,6 +222,8 @@ function barChart(options) {
     // data update
     self.update = function(new_data, maximum) {
 
+      var dur = 300;
+
       // bounce back if already loading something
       if (projections.loading_indicator) return self;
 
@@ -247,16 +250,22 @@ function barChart(options) {
 
       x.domain([0, maximum]);
 
-      // update bars and labels
       bars
         .transition()
-        .duration(300)
-        .attr("width" , function(d) { return x(pop_percent(d)); });
+        .duration(dur)
+        .attr("width" , function(d) {
+          return x(pop_percent(d));
+        });
 
       x_axis_g
         .transition()
-        .duration(300)
+        .duration(dur)
         .call(xAxis);
+
+      grid_lines
+        .transition()
+        .duration(dur)
+        .call(gridAxis);
 
       datalabels
         .text(function(d) {return p(pop_percent(d));})

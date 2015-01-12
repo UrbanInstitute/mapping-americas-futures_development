@@ -192,6 +192,7 @@ function carousel() {
           offset: control_bottom(),
           bottom: function() { return false; }
         });
+      return this;
     },
     disable : function() {
       this.active = false;
@@ -201,6 +202,10 @@ function carousel() {
         .removeData('bs.affix')
         .removeClass('affix affix-top affix-bottom');
       $control_toggle.off();
+      return this;
+    },
+    reset : function() {
+      this.disable().init();
     }
   };
 
@@ -255,10 +260,7 @@ function carousel() {
       if (projections.mobile()) {
         affix.disable();
       } else {
-        // scroll to top and rebind if necessary
-        if (!affix.active) {
-          affix.init();
-        }
+        affix.reset();
       }
       $control_collapse.css('width', '');
       if (affix.active) {
