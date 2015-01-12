@@ -162,6 +162,7 @@ function carousel() {
             );
          });
         }).hide(); // hide on load
+
       // bind affix listeners
       // need to bind events before affix init
       // (https://github.com/twbs/bootstrap/pull/14331)
@@ -205,7 +206,7 @@ function carousel() {
       return this;
     },
     reset : function() {
-      this.disable().init();
+      return this.disable().init();
     }
   };
 
