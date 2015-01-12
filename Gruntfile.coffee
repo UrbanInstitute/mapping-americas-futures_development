@@ -84,10 +84,10 @@ module.exports = (grunt) ->
             dest: path
           } for path in (
               do ->
-                if grunt.option('osx')
-                  osx_deploy_paths
-                else
+                if /^win/.test(process.platform)
                   windows_deploy_paths
+                else
+                  osx_deploy_paths
             )
         )
     concat :
