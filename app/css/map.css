@@ -355,7 +355,8 @@ text.us-map-legend-label {
   #ethicity-select,
   .map-control,
   #space-filler,
-  #control-collapse-toggle
+  #control-collapse-toggle,
+  #return-to-map
   {
     display: none !important;
   }
