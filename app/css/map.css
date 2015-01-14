@@ -55,13 +55,13 @@ path.us-map-czones-hover:hover,
 path.us-map-states-hover:hover,
 path.us-map-czones-hover.highlight {
   stroke : rgba(0,0,0,1);
-  stroke-width: 2px;
+  stroke-width: 1px;
 }
 
 path.us-map-states {
   fill : none;
   stroke : #fff;
-  stroke-width : 3px;
+  stroke-width : 2px;
 }
 
 circle.cities {

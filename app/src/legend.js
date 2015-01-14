@@ -17,11 +17,6 @@
 
 projections.legend = function(opts) {
 
-  /* ---------------------------
-    Legend
-  -----------------------------*/
-  // if a legend container id is passed to the map constructor
-  // render a legend for this map to that container
   var legendRenderTo = opts.legendRenderTo, legend;
 
   // Clear previous legend
@@ -205,4 +200,4 @@ projections.legend = function(opts) {
 
 };
 
-})(projections)
+})(projections);

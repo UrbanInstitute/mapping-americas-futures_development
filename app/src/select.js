@@ -13,6 +13,61 @@
 
 ;(function(projections){
 
+
+
+var age_range = ["all", "0-19", "20-49", "50-64", "65+"],
+    ethnicities = ["all", "white", "black", "hispanic", "other"],
+    assumptions = ["low", "avg", "high"];
+
+
+
+// gray out assumptions when "2000 to 2010"
+// is selected, as the data is not from
+// the model
+var assumption_buttons = {
+  disable : function() {
+
+    this.plexiglass = this.plexiglass || d3.select('#assumption-buttons')
+      .append('div')
+      .style({
+        "top" : 0,
+        "display" : "block",
+        "position" : "absolute",
+        "width" : "100%",
+        "height" : "100%",
+        "z-index" : 20,
+        "opacity" : 0
+      });
+
+    this.buttons.forEach(function(b) {
+      b.style('background-color', '#ccc');
+    });
+
+  },
+  enable : function() {
+
+    if (this.plexiglass) {
+      this.plexiglass.remove();
+      this.plexiglass = null;
+    }
+
+    this.buttons.forEach(function(b) {
+      b.style('background-color', '');
+    });
+  },
+  buttons : [
+    addButtons("migration", assumptions),
+    addButtons("mortality", assumptions),
+    addButtons("fertility", assumptions)
+  ]
+};
+
+
+addButtons("age", age_range);
+addButtons("race", ethnicities);
+
+
+
 /*
   Update text at top of detail section
 */
@@ -98,59 +153,6 @@ function addButtons(id, values) {
         return d.toUpperCase();
       });
 }
-
-var age_range = ["all", "0-19", "20-49", "50-64", "65+"],
-    ethnicities = ["all", "white", "black", "hispanic", "other"],
-    assumptions = ["low", "avg", "high"];
-
-
-
-// gray out assumptions when "2000 to 2010"
-// is selected, as the data is not from
-// the model
-var assumption_buttons = {
-  disable : function() {
-
-    this.plexiglass = this.plexiglass || d3.select('#assumption-buttons')
-      .append('div')
-      .style({
-        "top" : 0,
-        "display" : "block",
-        "position" : "absolute",
-        "width" : "100%",
-        "height" : "100%",
-        "z-index" : 20,
-        "opacity" : 0
-      });
-
-    this.buttons.forEach(function(b) {
-      b.style('background-color', '#ccc');
-    });
-
-  },
-  enable : function() {
-
-    if (this.plexiglass) {
-      this.plexiglass.remove();
-      this.plexiglass = null;
-    }
-
-    this.buttons.forEach(function(b) {
-      b.style('background-color', '');
-    });
-  },
-  buttons : [
-    addButtons("migration", assumptions),
-    addButtons("mortality", assumptions),
-    addButtons("fertility", assumptions)
-  ]
-};
-
-
-addButtons("age", age_range);
-addButtons("race", ethnicities);
-
-
 
 
 

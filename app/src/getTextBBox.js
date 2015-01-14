@@ -14,10 +14,10 @@
 ;(function(projections){
 
 
-var helper_svg = d3.select('body')
+var cache = {},
+    helper_svg = d3.select('body')
       .append('svg')
-      .attr('class', 'helper-svg'),
-    cache = {};
+      .attr('class', 'helper-svg');
 
 // calculate text bounds (memoized)
 projections.getTextBBox = function(text, classname, modifier) {

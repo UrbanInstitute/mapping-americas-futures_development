@@ -27,8 +27,8 @@ projections.mapper = function(options) {
     // which tightly bounds the map. The actual visible
     // dimensions are set by the svg viewbox.
     //
-    width = 1011*2,
-    height = 588*2,
+    width = 1011,
+    height = 588,
     // the assumption / age / race settings object
     settings = options.settings,
     // projection function
@@ -250,8 +250,8 @@ projections.mapper = function(options) {
 
         var cities = renderOpts.cities,
             point_coords = self.cities.coords = {},
-            city_r = self.cities.start_r = 6,
-            start_font = self.cities.start_font = 22,
+            city_r = self.cities.start_r = 4,
+            start_font = self.cities.start_font = 12,
             start_swidth = self.cities.start_swidth = 5,
             start_text_offset = self.cities.start_text_offset = 2,
             // calculate bounding box for city label
@@ -341,30 +341,30 @@ projections.mapper = function(options) {
 
     function zoomed() {
 
+      var s = d3.event.scale;
+      var t = d3.event.translate;
+
       var trans = (
-        "translate(" +
-          d3.event.translate +
-        ")scale(" + d3.event.scale + ")"
+        "translate(" + t + ")scale(" + s + ")"
       );
 
-      var swidth = 1 / d3.event.scale + "px";
+      var swidth = 1 / s + "px";
 
       features
         .style("stroke-width", swidth)
         .attr("transform",trans);
 
       // semantic zooming for city labels
-      if (self.cities && lag_scale != d3.event.scale) {
-        lag_scale = d3.event.scale;
+      if (self.cities && lag_scale != s) {
+        lag_scale = s;
 
         var c = self.cities,
-            s = d3.event.scale,
             new_r = c.start_r/s,
             new_font = c.start_font/s,
             new_swidth = c.start_swidth/s,
             new_offset = c.start_text_offset/s,
             spad = c.start_pad,
-            coords = self.cities.coords,
+            coords = c.coords,
             bb = self.getCityLabelBBox;
 
         c.points.attr({
@@ -410,6 +410,7 @@ projections.mapper = function(options) {
           .style("stroke-width", swidth)
           .attr("transform",trans);
       }
+
     };
 
     var zoom = d3.behavior.zoom()
@@ -540,8 +541,8 @@ projections.mapper = function(options) {
         renderOpts,
         options,
         {
-        "bins" : fixed_bins,
-        "colors" : fixed_colors
+          "bins" : fixed_bins,
+          "colors" : fixed_colors
         }
       );
 
