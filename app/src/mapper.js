@@ -411,7 +411,7 @@ projections.mapper = function(options) {
           .attr("transform",trans);
       }
 
-    };
+    }
 
     var zoom = d3.behavior.zoom()
         .center([width/2, height/2])
@@ -518,7 +518,7 @@ projections.mapper = function(options) {
           c[0] + (t[0] - c[0]) / scale * newScale,
           c[1] + (t[1] - c[1]) / scale * newScale
         ])
-        .event(svg.transition().duration(dur || 500));
+        .event(svg.transition().duration(dur || 200));
     }
 
     // zoom in + out
@@ -528,7 +528,7 @@ projections.mapper = function(options) {
           d3.select(this).classed('fa-search-plus') ?
             1.5 :
             (1/1.5),
-          750
+          500
         );
       });
     /* ---------------------------

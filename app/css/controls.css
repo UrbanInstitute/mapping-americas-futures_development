@@ -67,6 +67,15 @@ button.btn.settings-button.active {
 }
 
 
+/* hacky alignment for intermediate width */
+@media (max-width: 992px) {
+  #boundary-group {
+    margin-top: -16px;
+  }
+}
+
+
+
 #boundary-info {
   font-style: italic;
   padding-left: 10px;
