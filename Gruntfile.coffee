@@ -9,6 +9,11 @@ module.exports = (grunt) ->
     # insert paths here
   ]
 
+  deploy_paths = if /^win/.test(process.platform)
+                  windows_deploy_paths
+                else
+                  osx_deploy_paths
+
 
   #
   # Full build system steps
@@ -39,10 +44,13 @@ module.exports = (grunt) ->
 
   js_src = [
     "projections"
+    "getTextBBox"
+    "dataParser"
     "path"
     "progress"
     "select"
     "dropdown"
+    "legend"
     "mapper"
     "lineChart"
     "barChart"
@@ -79,16 +87,17 @@ module.exports = (grunt) ->
         files : (
           {
             expand: true
+            cwd : "app/#{dir}/"
+            src: ['**']
+            dest: "dist/#{dir}/"
+          } for dir in ["json", "images"]
+        ).concat(
+          {
+            expand: true
             cwd : "dist/"
             src: ['**']
             dest: path
-          } for path in (
-              do ->
-                if /^win/.test(process.platform)
-                  windows_deploy_paths
-                else
-                  osx_deploy_paths
-            )
+          } for path in deploy_paths
         )
     concat :
       options :

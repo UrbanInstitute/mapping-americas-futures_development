@@ -68,6 +68,7 @@ h1#title-header {
   text-align: center;
   font-size: 45px;
   font-weight: 300;
+  margin-bottom: 40px;
   text-rendering: geometricPrecision;
 }
 
@@ -163,6 +164,11 @@ div.shadow {
   border-bottom: 8px solid black;
   width: 100%;
   box-sizing:content-box;
+}
+
+.affix #control-collapse {
+  display: block;
+  margin: 0 auto;
 }
 
 

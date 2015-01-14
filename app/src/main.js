@@ -388,11 +388,12 @@ q.awaitAll(function(error, data) {
   $('.jump-to-map').click(function() {
     // set the user scroll position on the map
     // page to the top of the map itself
-    carousel.top('map', 300);
     // transition to the map
     projections.goTo("map", function() {
-      // scroll to map if not already there
-      $('#return-to-map').trigger('click');
+      setTimeout(function(){
+        $('#return-to-map').trigger('click');
+      }, 1000);
+
     });
     // updates the settings with the
     // data from the link, and then
@@ -400,7 +401,10 @@ q.awaitAll(function(error, data) {
     var data = $(this).data();
     select_settings.set(data);
     // zoom map to given czone
-    main_map.target(data.czone);
+    var czone = data.czone || 0;
+    main_map.target(czone);
+    czone_dropdown.set(czone);
+    update_detail(czone);
   });
 
 });

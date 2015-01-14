@@ -18,76 +18,63 @@
 // given map settings, returns function
 // to produce maps
 //
-function mapper(options) {
+projections.mapper = function(options) {
 
-  //
-  // These "magic numbers" are not the pixel width and height,
-  // but simply a starting point for the w/h ratio
-  // which tightly bounds the map. The actual visible
-  // dimensions are set by the svg viewbox.
-  //
-  var width = 1011*2;
-  var height = 588*2;
-  // the assumption / age / race settings object
-  var settings = options.settings;
-  // projection function
-  var d3Albers = d3.geo.albersUsa()
-      .scale(width*1.2)
-      .translate([width/2, height/2]);
-  // standard projection function for the maps
-  var geoPath = d3.geo.path().projection(d3Albers);
+  var
+    //
+    // These "magic numbers" are not the pixel width and height,
+    // but simply a starting point for the w/h ratio
+    // which tightly bounds the map. The actual visible
+    // dimensions are set by the svg viewbox.
+    //
+    width = 1011*2,
+    height = 588*2,
+    // the assumption / age / race settings object
+    settings = options.settings,
+    // projection function
+    d3Albers = d3.geo.albersUsa()
+        .scale(width*1.2)
+        .translate([width/2, height/2]),
+    // standard projection function for the maps
+    geoPath = d3.geo.path().projection(d3Albers),
 
-  // cache for path strings (check for existence already)
-  var pathcache = projections.cache.path = projections.cache.path || {};
-  // cache for map data
-  var datacache = projections.cache.data = projections.cache.data || {};
-  // cache for map state data
-  var statecache = (
-    projections.cache.statedata = projections.cache.statedata || {}
-  );
+    // cache for path strings (check for existence already)
+    pathcache = projections.cache.path = projections.cache.path || {},
+    // cache for map data
+    datacache = projections.cache.data = projections.cache.data || {},
+    // cache for map state data
+    statecache = (
+      projections.cache.statedata = projections.cache.statedata || {}
+    ),
+    // zero padding function
+    zeros = d3.format("05d"),
+    i_d,
+    variable_order = ["agegrp", "yr", "r"],
+    parsers = {
+      "cz" : projections.dataParser(
+        ["cz"].concat(variable_order)
+      ),
+      "stfips" : projections.dataParser(
+        ["stfips"].concat(variable_order)
+      )
+    };
 
-  // zero padding function
-  var zeros = d3.format("05d"), i_d;
+
+  // structure data for usage in map
+  function prepMapData(raw) {
+    var id = (raw[0].cz !== undefined) ? "cz" : "stfips";
+    return parsers[id](raw);
+  }
 
   // memoized path generation function
-  var path = function(d) {
+  function path(d) {
     var uid = d.id;
     if (uid in pathcache) {
       return pathcache[uid];
     } else {
       return (pathcache[uid] = geoPath(d));
     }
-  };
-
-  // create a path in an object to a value
-  var recurseAssign = function(obj, path, value, last_index) {
-    path.forEach(function(key, i) {
-      if (i == last_index) return obj[key] = value;
-      if (!(key in obj)) obj[key] = {};
-      obj = obj[key] || {};
-    });
-  };
-
-  // structure data for usage in map
-  var prepMapData = function(raw) {
-    var
-      d = {},
-      id = (raw[0].cz !== undefined) ? "cz" : "stfips",
-      variable_order = [id, "agegrp", "yr", "r"],
-      last_index = variable_order.length - 1,
-      row,
-      path;
-
-    for (var r = 0, l=raw.length; r < l; r++) {
-      row = raw[r];
-      path = variable_order.map(function(n) {
-        return n === "yr" ? parseInt(row[n]) : row[n];
-      });
-      recurseAssign(d, path, Number(row.pop), last_index);
-    }
-
-    return d;
-  };
+  }
 
   //
   //
@@ -97,34 +84,39 @@ function mapper(options) {
   function map(renderOpts) {
 
     // map object to return ("self")
-    var self = {async : renderOpts.async};
-    var container = d3.select(renderOpts.renderTo);
-    var tooltipDiv;
-
-    var container_id = renderOpts.renderTo.replace("#","");
-
-    // local references to options
-    var colors = options.colors;
-    var bins = options.bins;
-    var display = options.display;
-    var missingColor = options.missingColor;
-    var czone_topology = options.czone_topology;
-    var state_topology = options.state_topology;
-    var fixed = options.fixed;
-
-    // Correct ratio of bins to colors
-    // (there should be one more color than bins)
-    var d = (colors.length - bins.length);
-    var fixed_bins = (d <= 0) ? bins.slice(0, d-1) : bins;
-    var fixed_colors = (d > 1) ? colors.slice(0, -d+1) : colors;
-
-    // create scale for breaks
-    var colorf = d3.scale.threshold()
+    var
+      self = {async : renderOpts.async},
+      container = d3.select(renderOpts.renderTo),
+      tooltipDiv,
+      container_id = renderOpts.renderTo.replace("#",""),
+      // local references to options
+      colors = options.colors,
+      bins = options.bins,
+      display = options.display,
+      missingColor = options.missingColor,
+      czone_topology = options.czone_topology,
+      state_topology = options.state_topology,
+      fixed = options.fixed,
+      // Correct ratio of bins to colors
+      // (there should be one more color than bins)
+      d = (colors.length - bins.length),
+      fixed_bins = (d <= 0) ? bins.slice(0, d-1) : bins,
+      fixed_colors = (d > 1) ? colors.slice(0, -d+1) : colors,
+      // create scale for breaks
+      colorf = d3.scale.threshold()
                   .domain(fixed_bins)
-                  .range(fixed_colors);
+                  .range(fixed_colors),
+      start_data = null,
+      // add hidden svg canvas for calculating bounding boxes
+      // even if the main svg is not yet being displayed
+      helper_svg = d3.select('body').append('svg')
+        .attr('class', 'helper-svg')
+        .style('visibility', "hidden");
 
-    var start_data = null;
-    var createPopulationFunction = function(curr_settings, data) {
+
+
+
+    function createPopulationFunction(curr_settings, data) {
 
       if (fixed && !start_data) {
         start_data = curr_settings;
@@ -156,10 +148,13 @@ function mapper(options) {
           return false;
         }
       };
-    };
+
+    }
+
+
 
     // color fill for czones, defaulting to missing color
-    var createFill = function(settings, data) {
+    function createFill(settings, data) {
       // return function which calculates the population
       // growth rate over the period requested and returns a color
       var popf = createPopulationFunction(settings, data);
@@ -171,36 +166,12 @@ function mapper(options) {
           return missingColor;
         }
       };
-    };
+    }
 
     // stop click events
-    var stopped = function() {
+    function stopped() {
       if (d3.event.defaultPrevented) d3.event.stopPropagation();
-    };
-
-    // add hidden svg canvas for calculating bounding boxes
-    // even if the main svg is not yet being displayed
-    var helper_svg = d3.select('body').append('svg')
-      .attr('class', 'helper-svg')
-      .style('visibility', "hidden");
-
-    // calculate text bounds
-    var getTextBBox = function(text, classname, modifier) {
-      // cache bound to function
-      this.cache = this.cache || {};
-      var id = text + "_" + classname;
-
-      if (this.cache[id] && !modifier) return this.cache[id];
-
-      var t = helper_svg.append('text')
-                .text(text)
-                .attr('class', classname);
-      if (modifier) t = modifier(t);
-      var bb = t.node().getBBox();
-      t.remove();
-
-      return this.cache[id] = bb;
-    };
+    }
 
 
     // map control icons (fontawesome)
@@ -249,37 +220,28 @@ function mapper(options) {
     };
 
     // States visible in background while transitioning
-    var background_states = addLayer(
-      state_topology, 'us-map-states-background'
-    );
-
-    // state paths to fill
-    var fill_states = addLayer(
-      state_topology, 'us-map-states-filled hidden'
-    );
-
-    // zone paths to fill
-    var fill_czones = addLayer(
-      czone_topology, 'us-map-czones'
-    );
-
-    // state paths for white state boundary
-    var outline_states = addLayer(
-      state_topology, 'us-map-states'
-    );
-
-    // state paths to hover over
-    var hover_states = addLayer(
-      state_topology, 'us-map-states-hover hidden us-map-boundary'
-    );
-
-    // zone paths for hovering
-    var hover_czones = addLayer(
-      czone_topology, 'us-map-czones-hover us-map-boundary'
-    );
+    var
+      background_states = addLayer(
+        state_topology, 'us-map-states-background'
+      ),
+      fill_states = addLayer(
+        state_topology, 'us-map-states-filled hidden'
+      ),
+      fill_czones = addLayer(
+        czone_topology, 'us-map-czones'
+      ),
+      outline_states = addLayer(
+        state_topology, 'us-map-states'
+      ),
+      hover_states = addLayer(
+        state_topology, 'us-map-states-hover hidden us-map-boundary'
+      ),
+      hover_czones = addLayer(
+        czone_topology, 'us-map-czones-hover us-map-boundary'
+      );
 
 
-    // add city paths
+    // extend self with city layers if desired
     if (renderOpts.cities) {
 
       (function(self) {
@@ -296,22 +258,10 @@ function mapper(options) {
             // of given font size
             bb = self.getCityLabelBBox = function(d, font_size) {
               // cache bound to function
-              this.cache = this.cache || {};
-
               var text = d.properties.NAME;
-              var id = text + Math.round(font_size*1000);
-
-              if (this.cache[id]) return this.cache[id];
-
-              var t = helper_svg.append('text')
-                        .text(text)
-                        .style('font-size', font_size + "px")
-                        .attr('class', 'city-label');
-
-              var bb = t.node().getBBox();
-              t.remove();
-              return this.cache[id] = bb;
-
+              return projections.getTextBBox(text, 'city-label', function(node) {
+                return node.style('font-size', font_size + "px");
+              });
             };
 
         // calculate center of city point
@@ -389,7 +339,7 @@ function mapper(options) {
     var zoom_extent = [1, 8];
     var lag_scale = null;
 
-    var zoomed = function() {
+    function zoomed() {
 
       var trans = (
         "translate(" +
@@ -491,8 +441,8 @@ function mapper(options) {
     }
 
     // Move tooltip to position above mouse
-    var x, y, tt_bbox;
-    var moveToolTip = function(){
+    function moveToolTip(){
+      var x, y, tt_bbox;
       x = d3.event.pageX;
       y = d3.event.pageY;
       tt_bbox = tooltipDiv.node().getBoundingClientRect();
@@ -500,7 +450,7 @@ function mapper(options) {
         top :  "" + (y - tt_bbox.height - 20) + "px",
         left : "" + (x - tt_bbox.width / 2) + "px"
       });
-    };
+    }
 
     // move the tooltip as the user moves their
     // mouse over the map container div
@@ -509,7 +459,7 @@ function mapper(options) {
     var boundary_click_callback = function(){};
     fill_boundary.attr('fill', missingColor);
 
-    var bind_click_callback = function(boundary) {
+    function bind_click_callback(boundary) {
       boundary.on( 'mouseover', function(d){
 
           // rebind click event
@@ -537,7 +487,7 @@ function mapper(options) {
           tooltipDiv.classed('hidden', true);
         });
 
-    };
+    }
 
     bind_click_callback(hover_boundary);
 
@@ -557,7 +507,7 @@ function mapper(options) {
     // taken from http://stackoverflow.com/a/21653008/1718488
     function zoomByFactor(factor, dur) {
       var scale = zoom.scale();
-      var ext = zoom.scaleExtent();
+      var ext = zoom_extent;
       var newScale = Math.max(ext[0], Math.min(ext[1], scale*factor));
       var t = zoom.translate();
       var c = [width / 2, height / 2];
@@ -583,200 +533,34 @@ function mapper(options) {
     /* ---------------------------
     -----------------------------*/
 
-    /* ---------------------------
-      Legend
-    -----------------------------*/
-    // if a legend container id is passed to the map constructor
-    // render a legend for this map to that container
-    var legendRenderTo = renderOpts.legendRenderTo, legend;
-    if (legendRenderTo) {
+    if (renderOpts.legendRenderTo) {
 
-      // Clear previous legend
-      var legend_container = d3.select(legendRenderTo)
-                                .classed('map-legend-svg-container', true);
-      legend_container.selectAll("*").remove();
-
-      // if the legend is rendered somewhere else, copy the svg
-      var existing = $('.us-map-legend.map-legend-svg').first();
-      if (existing.length && !renderOpts.legendMouseover) {
-        $(legendRenderTo).append(existing.clone());
-      } else {
-        // similar to the map, these simply guide the ratio of w/h
-        // for the legend, the actual size is determined dynamically
-        // by the svg view box
-        var legend_width = 400;
-        var legend_height = 30;
-        // Append svg element to draw legend
-        legend = legend_container
-              .append('svg')
-                .attr({
-                  preserveAspectRatio : "xMinYMin meet",
-                  viewBox :  "0 0 " + legend_width + " " + legend_height,
-                  class : 'us-map-legend map-legend-svg'
-                })
-                .append('g');
-
-        // Spacing between legend bins
-        var offset = 0;
-        // number of bins to render in legend
-        var n_bins = fixed_bins.length;
-        var n_colors = fixed_colors.length;
-        // Width of colored bins
-        var binWidth = (legend_width*0.6 / (n_bins+1)) - offset;
-        // height of colored bins
-        var binHeight = 10;
-        var binStrokeWidth = 1;
-
-        var midpad = function(i) {
-          return i >= Math.round(n_colors / 2) ?
-                 binStrokeWidth*2 : 0;
-        };
-
-        var decline_text = legend.append('text')
-          .text('decline')
-          .attr('class', 'growth-text');
-
-        var dtext_dims = getTextBBox(
-          decline_text.text(),
-          'growth-text'
-        );
-
-        decline_text.attr({
-          "x" : 0,
-          "y" : dtext_dims.height
-        });
-
-        var dtext_pad = dtext_dims.width + 5;
-
-        // add legend rectangles
-        var legend_rects = legend.selectAll('rect')
-            .data(fixed_colors)
-            .enter()
-            .append('rect')
-              .attr({
-                "class" : "us-map-legend-rect",
-                id : function(d){ return d; },
-                width : binWidth,
-                height : binHeight,
-                // position
-                x : function(d, i) {
-                  return (
-                    offset/2 +
-                    i*binWidth +
-                    i*offset +
-                    midpad(i) +
-                    dtext_pad
-                  );
-                },
-                y : 0
-              })
-              .style('fill', function(d){ return d; })
-              .style('stroke', "#fff")
-              .style('stroke-width', binStrokeWidth);
-
-        if (renderOpts.legendMouseover) {
-          // show zones with this legend color
-          legend_rects.on('mouseover', function(){
-            var fill = createFill(settings, self.data);
-            var rect = this;
-            fill_boundary.attr('fill', function(d){
-                var czone_fill = d3.select(this).attr('fill');
-                return czone_fill == rect.id ? czone_fill : missingColor;
-            });
-          }).on('mouseout', function(){
-            var fill = createFill(settings, self.data);
-            fill_boundary.attr('fill', fill);
-          });
+      legend_opts = $.extend(
+        {},
+        renderOpts,
+        options,
+        {
+        "bins" : fixed_bins,
+        "colors" : fixed_colors
         }
+      );
 
-        var formatter = options.legendFormat;
-        // Add text to legend, and reposition it correctly
-        legend.append('g').selectAll('text')
-              .data(fixed_bins)
-            .enter()
-            .append('text')
-              .attr('class', 'us-map-legend-label')
-              .text(formatter)
-              .attr({
-                y : (binHeight + 10),
-                x : function(d, i) {
-                  var dims = getTextBBox(
-                    formatter(d),
-                    'us-map-legend-label'
-                  );
-                  return (
-                    (i+1)*(binWidth + offset) -
-                    (dims.width/2) +
-                    midpad(i+1) +
-                    dtext_pad
-                  );
-                }
-              });
-
-
-        //half way accross the legend
-        var half_way = (
-          ((n_bins+1) / 2)*(binWidth + offset) +
-          binStrokeWidth +
-          dtext_pad
-        );
-        // midway line
-        legend.append('line')
-          .attr({
-            "x1" : half_way,
-            "x2" : half_way,
-            "y1" : binStrokeWidth/2,
-            "y2" : binHeight - binStrokeWidth/2
-          }).style({
-            "stroke" : "#000",
-            "stroke-width" : 0.5
+      if (renderOpts.legendMouseover) {
+        legend_opts.legendMouseover = function(){
+          var fill = createFill(settings, self.data);
+          var rect = this;
+          fill_boundary.attr('fill', function(d){
+              var czone_fill = d3.select(this).attr('fill');
+              return czone_fill == rect.id ? czone_fill : missingColor;
           });
-
-        //half way accross the legend
-        var past_legend = (n_bins+1)*(binWidth + offset) + dtext_pad;
-
-        var growth_text = legend.append('text')
-          .text('growth')
-          .attr('class', 'growth-text');
-
-        var gtext_dims = getTextBBox(
-          growth_text.text(),
-          'growth-text'
-        );
-
-        growth_text.attr({
-          "x" : past_legend + 5,
-          "y" : gtext_dims.height
-        });
-
-        var no_pop_position = past_legend + gtext_dims.width + 20;
-
-        legend.append('rect')
-              .attr({
-                "class" : "us-map-legend-rect",
-                "width" : binWidth,
-                "height": binHeight,
-                "x" : no_pop_position
-              })
-              .style('stroke', "#fff")
-              .style('stroke-width', binStrokeWidth)
-              .style('fill', missingColor);
-
-        var pop_text = legend.append('text')
-          .text('no population')
-          .attr('class', 'growth-text');
-
-        var poptext_dims = getTextBBox(
-          pop_text.text(),
-          'growth-text'
-        );
-
-        pop_text.attr({
-          "x" : no_pop_position + binWidth + 5,
-          "y" : poptext_dims.height
-        });
-
+        };
+        legend_opts.legendMouseout = function(){
+          var fill = createFill(settings, self.data);
+          fill_boundary.attr('fill', fill);
+        };
       }
+
+      projections.legend(legend_opts);
 
     }
 
@@ -879,7 +663,6 @@ function mapper(options) {
       return self;
 
     };
-
 
 
     /* ---------------------------
@@ -1031,12 +814,7 @@ function mapper(options) {
   };
 
   return map;
-}
-
-
-
-// write to projections module
-projections.mapper = mapper;
+};
 
 
 })(projections);

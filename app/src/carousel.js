@@ -6,7 +6,7 @@
 # 10/31/14
 #
 #
-# Carousel  + scrolling Events
+# Carousel + scrolling Events + affix
 #
 #
 */
@@ -102,44 +102,66 @@ function carousel() {
     view_top = {map : 0, feature : 0},
     // function to go to index of page in carousel
     pages = ["feature", "map"],
-    goTo = projections.goTo = function(p) {
-      return $car.carousel(pages.indexOf(p));
-    },
-    // controls bounding rect
-    controlBBox = function() {
-      return $controls.get(0).getBoundingClientRect();
-    },
-    // reset affix offset for different div sizes
-    control_bottom = function() {
-      return $win.scrollTop() + controlBBox().bottom - 150;
-    },
-    setAffixOffset = function() {
-      if (!$('.affix').length) {
-        $controls.data('bs.affix').options.offset = control_bottom();
-      }
+    goTo = projections.goTo = function(p, callback) {
+      return $car.on('slide.bs.carousel', callback || function(){})
+                  .carousel(pages.indexOf(p));
     };
 
-  var unAffix = function() {
+
+  // controls bounding rect
+  function controlBBox() {
+    return $controls.get(0).getBoundingClientRect();
+  }
+
+  // reset affix offset for different div sizes
+  function control_bottom() {
+    return $win.scrollTop() + controlBBox().bottom - 150;
+  }
+
+
+  function setAffixOffset() {
+    if (affix.affixed) {
+      $controls.data('bs.affix').options.offset = control_bottom();
+    }
+  }
+
+  function startAffix() {
+    // The affix needs to stretch
+    // all the way across the screen
+    $filler.css('height', controlBBox().height);
+    $controls
+      .css('left', 0)
+      .css('width', $win.width());
+    // Padd the controls to keep them
+    // in line with the map
+    $control_collapse
+      .css('padding-top', 30)
+      .css('width', $map_container.width());
+    $control_collapse.hide();
+    $control_toggle.show();
+  }
+
+  function endAffix() {
     $controls
       .css('width', '')
       .css('padding-top', '')
       .css('left', '');
     $control_collapse
-      .css('margin-left', '')
+      .css('width', '')
       .show();
     $control_toggle.hide();
     $filler.css('height', 0);
-  };
+  }
+
 
   // Bind affix events once affixed div has
   // rendered bounding rect
   var affix = {
     active : false,
-
+    affixed : false,
     init : function() {
       this.active = true;
       // scroll to top to get correct affix scrollpoint
-      scrollTo(getTop(), 0, 0);
       // no mobile affix
       if (projections.mobile() || projections.ie9) {
         $control_toggle.remove();
@@ -166,29 +188,16 @@ function carousel() {
       // bind affix listeners
       // need to bind events before affix init
       // (https://github.com/twbs/bootstrap/pull/14331)
+      var self = this;
       $controls
-        .on('affix.bs.affix', function() {
-          // fill hole left by affix with empty
-          // element of same height
-          $filler.css('height', controlBBox().height);
-        })
         .on('affixed.bs.affix', function() {
-          // The affix needs to stretch
-          // all the way across the screen
-          var rect = controlBBox();
-          $controls
-            .css('left', 0)
-            .css('width', $win.width());
-          // Padd the controls to keep them
-          // in line with the map
-          $control_collapse
-            .css('padding-top', 30)
-            .css('width', $map_container.width())
-            .css('margin-left', rect.left);
-          $control_collapse.hide();
-          $control_toggle.show();
+          self.affixed = true;
+          startAffix();
         })
-        .on('affixed-top.bs.affix', unAffix)
+        .on('affixed-top.bs.affix', function() {
+          self.affixed = false;
+          endAffix();
+        })
         .affix({
           offset: control_bottom(),
           bottom: function() { return false; }
@@ -196,10 +205,12 @@ function carousel() {
       return this;
     },
     disable : function() {
-      this.active = false;
-      unAffix();
+      this.active = this.affixed = false;
+      endAffix();
       $win.off('.affix');
+      // unbind events and remove affix classes
       $controls
+        .unbind()
         .removeData('bs.affix')
         .removeClass('affix affix-top affix-bottom');
       $control_toggle.off();
@@ -263,11 +274,9 @@ function carousel() {
       } else {
         affix.reset();
       }
-      $control_collapse.css('width', '');
-      if (affix.active) {
-        $controls.css('width', $map_container.width());
-      } else {
-        $controls.css('width', '');
+
+      if (affix.affixed) {
+        startAffix();
       }
 
     })
@@ -277,7 +286,7 @@ function carousel() {
     });
 
   $('#return-to-map').click(function(){
-    var map_top = $(".hr-legend").offset().top - 50;
+    var map_top = $("#legend-header").offset().top - 150;
     scrollTo(getTop(), map_top, 750);
   });
 

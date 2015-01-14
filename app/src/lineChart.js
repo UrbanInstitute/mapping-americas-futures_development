@@ -15,45 +15,17 @@
 
 function lineChart(options) {
 
-  var years = [2000, 2010, 2020, 2030];
-  var yvalue_extent = [0, 2*10e7];
-  var start_settings = options.settings;
+  var
+    years = [2000, 2010, 2020, 2030],
+    yvalue_extent = [0, 2*10e7],
+    start_settings = options.settings,
+    prepData = projections.dataParser(["age", "yr", "r"]),
+    start_data = prepData(options.data);
 
   // Capitalize word
-  var capitalize = function(s) {
+  function capitalize(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
-  // assign nested object
-  var recurseAssign = function(obj, path, value, last_index) {
-    path.map(function(key, i) {
-      if (i == last_index) {
-        obj[key] = parseFloat(value);
-        // return to exit
-        return null;
-      }
-      if (!(key in obj)) obj[key] = {};
-      obj = obj[key] || {};
-    });
-  };
-
-  // csv to nested object
-  var prepData = function(raw) {
-    var d = {};
-    var variable_order = ["age", "yr", "r"];
-    var last_index = variable_order.length - 1;
-    var row, path;
-    for (var r = 0, l=raw.length; r < l; r++) {
-      row = raw[r];
-      path = variable_order.map(function(n){
-        return row[n];
-      });
-      recurseAssign(d, path, row.pop, last_index);
-    }
-    return d;
-  };
-
-  var start_data = prepData(options.data);
+  }
 
   // create data for race plots
   function getDataPrepper(category) {
@@ -121,16 +93,17 @@ function lineChart(options) {
         };
 
         for (var age in prepped) {
-          var n_age = parseFloat(age);
-          var bkt = get_bucket(n_age);
+
+          var n_age = parseFloat(age),
+              bkt = get_bucket(n_age);
+
           if (n_age != 99) {
             for (var year in prepped[age]) {
               // string year to number
               var n_year = 2000 + parseFloat(year);
               if (!(n_year in age_data[bkt])) age_data[bkt][n_year] = 0;
-              for (var race in prepped[age][year]) {
-                age_data[bkt][n_year] += prepped[age][year][race];
-              }
+              // add up race totals for this year
+              age_data[bkt][n_year] += prepped[age][year]["T"];
             }
           }
         }

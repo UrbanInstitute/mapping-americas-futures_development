@@ -32,7 +32,7 @@ function createDetailString(settings) {
   $('#detail-settings').text(
     cap(full[b]) + " birth, " +
     full[d] + " death, " +
-    full[m] + " migration." 
+    full[m] + " migration."
   );
 
 }
@@ -75,7 +75,7 @@ function raceAbbr(race_string) {
 }
 
 function yearAbbr(year) {
-  return ("" + year).slice(-2);
+  return parseInt(("" + year).slice(-2));
 }
 
 // create buttons

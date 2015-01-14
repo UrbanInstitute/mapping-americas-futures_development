@@ -16,42 +16,21 @@
 
 function barChart(options) {
 
-  var ages, start_data;
-  var settings = options.settings;
+  var ages, start_data,
+      settings = options.settings,
+      // data parsing function
+      prepData = projections.dataParser(["age", "yr", "r"]);
+
 
   // create the formatted strings for the bar lables
-  var bucket = function(a) {
+  function bucket(a) {
     return (a != ages[0]) ? ("" + a + "-" + (a+4)) : (a + "+");
-  };
+  }
 
   // Capitalize word
-  var capitalize = function(s) {
+  function capitalize(s) {
     return s.charAt(0).toUpperCase() + s.slice(1);
-  };
-
-  // assign nested object
-  var recurseAssign = function(obj, path, value, last_index) {
-    path.map(function(key, i) {
-      // return to exit
-      if (i == last_index) return obj[key] = parseFloat(value);
-      if (!(key in obj)) obj[key] = {};
-      obj = obj[key] || {};
-    });
-  };
-
-  // csv to nested object
-  var prepData = function(raw) {
-    var d = {};
-    var variable_order = ["age", "yr", "r"];
-    var last_index = variable_order.length - 1;
-    var row, path;
-    for (var r = 0, l=raw.length; r < l; r++) {
-      row = raw[r];
-      path = variable_order.map( function(n) { return row[n]; } );
-      recurseAssign(d, path, row.pop, last_index);
-    }
-    return d;
-  };
+  }
 
   start_data = prepData(options.data);
 
@@ -66,33 +45,30 @@ function barChart(options) {
   function bar(renderOpts) {
     // create object to hold chart updating function
     // as well as current data
-    var self = {};
-    self.data = start_data;
-
-    var container = d3.select(renderOpts.renderTo);
-    var race = projections.raceAbbr(renderOpts.race);
-    var margin = self.margin = { top: 50, right: 40, bottom: 40, left: 65 };
-
-    // chart h/w vs full svg h/w
-    var width = 300 - margin.left - margin.right;
-    var height = 500 - margin.top - margin.bottom;
-    var full_width = self.width = width + margin.left + margin.right;
-    var full_height = self.height = height + margin.top + margin.bottom;
+    var
+      self = {data : start_data},
+      container = d3.select(renderOpts.renderTo),
+      race = projections.raceAbbr(renderOpts.race),
+      margin = self.margin = { top: 50, right: 40, bottom: 40, left: 65 },
+      // chart h/w vs full svg h/w
+      width = 300 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom,
+      full_width = self.width = width + margin.left + margin.right,
+      full_height = self.height = height + margin.top + margin.bottom,
+      total = 0;
 
     // get population number for age, year, race
-    var value = function(a){
-      return self.data[a]["00"][race];
-    };
-
-    // calculate total for this group
-    var total = 0;
-    ages.map(function(a) { total += value(a); });
-    total = total || 1; // to avoid division by 0
+    function value(a){
+      return self.data[a][0][race];
+    }
 
     // generate percentage stat for bar width
-    var pop_percent = function(a) {
+    function pop_percent(a) {
       return value(a) / total;
-    };
+    }
+
+    ages.map(function(a) { total += value(a); });
+    total = total || 1; // to avoid division by 0
 
     var max = 0.15;
 
@@ -194,9 +170,9 @@ function barChart(options) {
     var datalabels = bar_container.append('text')
       .text(function(d) {return p(pop_percent(d));})
       .attr({
-        "class" : function(d) { return 'datalabel ' + bucket(d); },
-        "x" : function(d) { return 5 + x(pop_percent(d)); },
-        "y" : buffer + barHeight / 2
+        class : function(d) { return 'datalabel ' + bucket(d); },
+        x : function(d) { return 5 + x(pop_percent(d)); },
+        y : buffer + barHeight / 2
       }).style('opacity', 0);
 
     // highlight all same y-value
@@ -268,10 +244,8 @@ function barChart(options) {
         .call(gridAxis);
 
       datalabels
-        .text(function(d) {return p(pop_percent(d));})
-        .attr({
-          "x" : function(d) { return 5 + x(pop_percent(d)); },
-        });
+        .text(function(d){ return p(pop_percent(d)); })
+        .attr("x",  function(d){ return 5 + x(pop_percent(d)); } );
 
       return self;
     };

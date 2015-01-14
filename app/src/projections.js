@@ -17,7 +17,6 @@ var projections = {
   // boolean indicating if a file is currently
   // being downloaded
   loading_indicator : false,
-  // land on mobile sized (768px)
   mobile : function() {
     return $("#mobile-test").css("display") === "block";
   },
