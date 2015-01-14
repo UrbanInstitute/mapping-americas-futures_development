@@ -654,11 +654,11 @@ projections.mapper = function(options) {
     /* ----------------------------------
         highlight a czone with an outline
        ---------------------------------- */
-    self.highlight = function(czone) {
+    self.highlight = function(fipscode) {
 
       svg.selectAll('path.us-map-boundary')
           .classed('highlight', function() {
-            return this.id === "z" + czone;
+            return this.id === "z" + fipscode;
           });
 
       return self;

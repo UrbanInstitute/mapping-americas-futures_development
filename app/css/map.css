@@ -53,7 +53,8 @@ path.us-map-states-hover {
 
 path.us-map-czones-hover:hover,
 path.us-map-states-hover:hover,
-path.us-map-czones-hover.highlight {
+path.us-map-czones-hover.highlight,
+path.us-map-states-hover.highlight {
   stroke : rgba(0,0,0,1);
   stroke-width: 1px;
 }
