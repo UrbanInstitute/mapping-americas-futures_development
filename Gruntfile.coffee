@@ -19,12 +19,13 @@ module.exports = (grunt) ->
   # Full build system steps
   #
   full_build = [
-    'uglify:js'     # uglify urban js files
-    'cssmin'        # uglify urban css files
-    'concat'   # build index html
-    'processhtml'   # replace development <script> tags with dist
-    'htmlmin'       # minify html
-    'copy:deploy'   # copy build to deployment folder
+    'uglify:js'        # uglify urban js files
+    'cssmin'           # uglify urban css files
+    'concat'           # build index html
+    'processhtml'      # replace development <script> tags with dist
+    'htmlmin'          # minify html
+    'copy:resources'   # copy build to deployment folder
+    'copy:deploy'      # copy build to deployment folder
   ]
 
   js_dependencies = [
@@ -64,8 +65,9 @@ module.exports = (grunt) ->
     "charts"
     "carousel"
     "detail"
-    "main"
+    "nav"
     "controls"
+    "main"
     "full-width-pics"
     "select2-bootstrap"
   ].map (f) -> "#{f}.css"
@@ -83,7 +85,7 @@ module.exports = (grunt) ->
   # Register configuration
   grunt.initConfig
     copy :
-      deploy :
+      resources :
         files : (
           {
             expand: true
@@ -91,7 +93,9 @@ module.exports = (grunt) ->
             src: ['**']
             dest: "dist/#{dir}/"
           } for dir in ["json", "images"]
-        ).concat(
+        )
+      deploy :
+        files : (
           {
             expand: true
             cwd : "dist/"

@@ -113,12 +113,12 @@ function downloadLinks(settings) {
   }
 
   // map data with current settings
-  $('#download-map').attr(
-    'href', dpath + '0_' + filename
+  $('.download-link a#download-map').attr(
+    'href', dpath + 'ALLCZ_' + filename
   );
 
   // detail commuting zone data
-  $('#download-czone').attr(
+  $('.download-link a#download-czone').attr(
     'href', dpath + czone + "_AllFert_AllMort_AllMig.csv"
   );
 

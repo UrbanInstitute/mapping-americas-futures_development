@@ -17,7 +17,8 @@
     Body Styles
   ---------------------------------------
   --------------------------------------- */
-html,body{
+
+html,body {
   height:100%;
   width: 100%;
   font-family: 'Lato';
@@ -144,10 +145,6 @@ div.shadow {
 }
 
 
-
-/*---------------------------------------
-  --------------------------------------*/
-
 /*---------------------------------------
   ---------------------------------------
     Bootstrap Affix Styles
@@ -207,197 +204,6 @@ div.shadow {
   display: inline-block;
 }
 
-
-/*---------------------------------------
-  ---------------------------------------
-    Nav override
-  ---------------------------------------
-  --------------------------------------- */
-.navbar-header {
-    float: none;
-}
-.navbar-left,.navbar-right {
-    float: none !important;
-}
-
-.navbar-toggle {
-  display: block;
-  border-radius: 20px;
-  margin-top: 10px;
-  padding: 3px 7px;
-  background-color: #fdbf11;
-  color: #fff;
-  cursor: pointer;
-}
-.navbar-toggle:active {
-  background-color: #fdbf11;
-}
-
-#hidden-share {
-  visibility: hidden;
-  opacity: 0;
-  display: inline-block;
-  padding-bottom: 10px;
-  margin-right: 5px;
-  padding-right: 5px
-  -webkit-transition: opacity .3s ease;
-  -moz-transition: opacity .3s ease;
-  -o-transition: opacity .3s ease;
-  transition: opacity .3s ease;
-}
-
-#hidden-share {
-  color: inherit;
-  text-decoration: none;
-}
-
-#share-container {
-  display: inline-block;
-  background-color: rgba(0,0,0,0);
-}
-
-#share-container:hover #hidden-share {
-  visibility: visible;
-  opacity: 1;
-}
-
-#social, #hidden-share span {
-  display: inline-block;
-  padding : 3px 6px;
-  border-radius: 15px;
-  margin-top: 11px;
-  margin-right: 5px;
-  position: relative;
-  background-color: #0096D2;
-  color : #fff;
-}
-
-#social {
-  margin-right: 10px;
-}
-
-span#twitter {
-  padding: 3px 7px;
-  background-color: #55ACEE;
-}
-
-span#facebook {
-  padding: 3px 9px;
-  background-color: #3B5998;
-}
-
-span#mail {
-  background-color: #999;
-}
-
-#hamburger-bun {
-  position: absolute;
-  display: inline-block;
-  right: 0px;
-  padding-right: 15px;
-}
-
-#hamburger-bun .navbar-toggle:hover,
-#share-container span.nav-icon:hover {
-  background-color: #777;
-  cursor: pointer;
-}
-
-nav.navbar {
-  height: 120px;
-}
-
-.navbar-collapse {
-  border-top: 1px solid transparent;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
-  display: block;
-  overflow: scroll;
-}
-.navbar-fixed-top {
-  top: 0;
-  border-width: 0 0 1px;
-}
-.navbar-collapse.collapse {
-  display: none!important;
-}
-
-.navbar-nav {
-  float: none!important;
-  margin-top: 7.5px;
-}
-.navbar-nav>li {
-    float: none;
-}
-.navbar-nav>li>a {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-.collapse.in{
-  display:block !important;
-}
-
-.navbar-header {
-  text-align: center;
-}
-
-#title-span {
-  line-height: 120px;
-  font-size: 25px;
-  color : white;
-  font-weight: bold;
-}
-
-#briefs {
-  color : white;
-  background-color: #333;
-  position: absolute;
-  width: 100%;
-}
-
-#hamburger-meat {
-  padding-top : 20px;
-  padding-bottom: 20px;
-}
-
-#hamburger-meat h1 {
-  font-size: 20px;
-}
-
-.height-adjust {
-  margin-top: 30px;
-}
-
-.logo-image {
-  float: left;
-  display: block;
-  position: absolute;
-  height: 100px;
-  margin-top: 10px;
-  margin-left: 20px;
-}
-
-#hamburger-meat a {
-  display: block;
-  padding: 5px 0px;
-  cursor: pointer;
-  color: white;
-}
-
-.mini-footer {
-  position: absolute;
-  display: block;
-  top: 190px;
-}
-
-.settings-header {
-  font-weight: regular;
-  font-size: 20px;
-}
-
-
-
-/*---------------------------------------
-  --------------------------------------*/
 
 /*---------------------------------------
   ---------------------------------------
@@ -566,13 +372,6 @@ div.pyramid.col-sm-15 {
   margin-top: 20px;
   font-size: 12px;
 }
-
-
-
-
-/*---------------------------------------
-  --------------------------------------*/
-
 
 
 /*---------------------------------------
