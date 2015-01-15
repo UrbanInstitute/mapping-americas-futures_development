@@ -103,6 +103,7 @@ function carousel() {
     // function to go to index of page in carousel
     pages = ["feature", "map"],
     goTo = projections.goTo = function(p, callback) {
+      p = p != "map" ? "feature" : "map";
       return $car.on('slide.bs.carousel', callback || function(){})
                   .carousel(pages.indexOf(p));
     };
@@ -283,6 +284,9 @@ function carousel() {
     .scroll(function(){
       view_top[hash] = Math.round(getTop());
       resizeHeader();
+    })
+    .on('hashchange', function() {
+      goTo(window.location.hash.slice(1));
     });
 
   $('#return-to-map').click(function(){
