@@ -14,6 +14,36 @@
 
 ;(function(projections) {
 
+
+/*
+** resize header based on scroll
+*/
+
+var $nav = $('nav.navbar'),
+    $title = $('#title-span'),
+    $margined = $('.height-adjust'),
+    $logoimage = $('.logo-image'),
+    $briefs = $('#briefs'),
+    $map_affix = $('.affix#map-top'),
+    start_size = parseFloat($nav.css('height')),
+    end_size = 66,
+    start_margin_top = parseFloat($('.height-adjust').css('margin-top')),
+    end_margin_top = 10,
+
+    // linear scales for scroll position
+    height = d3.scale.linear()
+              .domain([0, 1])
+              .range([start_size, end_size]),
+
+    margin = d3.scale.linear()
+              .domain([0, 1])
+              .range([start_margin_top, end_margin_top]),
+
+    font_size = d3.scale.linear()
+              .domain([0, 1])
+              .range([25, 16]);
+
+
 // get top offset
 function getTop() {
   var doc = document.documentElement;
@@ -31,36 +61,6 @@ function scrollTo(start, end, duration, callback){
     complete : callback
   });
 }
-
-/*
-** resize header based on scroll
-*/
-
-var $nav = $('nav.navbar'),
-    $title = $('#title-span'),
-    $margined = $('.height-adjust'),
-    $logoimage = $('.logo-image'),
-    $briefs = $('#briefs'),
-    $map_affix = $('.affix#map-top'),
-    start_size = parseFloat($nav.css('height')),
-    end_size = 66,
-    start_margin_top = parseFloat($('.height-adjust').css('margin-top')),
-    end_margin_top = 10;
-
-
-// linear scales for scroll position
-var height = d3.scale.linear()
-              .domain([0, 1])
-              .range([start_size, end_size]);
-
-var margin = d3.scale.linear()
-              .domain([0, 1])
-              .range([start_margin_top, end_margin_top]);
-
-var font_size = d3.scale.linear()
-              .domain([0, 1])
-              .range([25, 16]);
-
 
 function resizeHeader() {
   var scr = Math.min(1, getTop()/(350 - end_size)),
@@ -275,11 +275,9 @@ function carousel() {
       } else {
         affix.reset();
       }
-
       if (affix.affixed) {
         startAffix();
       }
-
     })
     .scroll(function(){
       view_top[hash] = Math.round(getTop());

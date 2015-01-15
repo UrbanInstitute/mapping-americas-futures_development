@@ -418,8 +418,7 @@ projections.mapper = function(options) {
         .scaleExtent(zoom_extent)
         .on("zoom", zoomed);
 
-    svg.call(zoom)
-        .call(zoom.event)
+    svg.call(zoom).call(zoom.event)
         // disable unwanted zoom events
         .on("dblclick.zoom", null)
         .on("wheel.zoom", null)

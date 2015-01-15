@@ -332,19 +332,6 @@ function lineChart(options) {
       });
 
 
-    // legend hover behavior
-    legend_containers
-      .on('mouseover', function(d) {
-        line_paths.attr('stroke', "#ccc");
-        svg.selectAll('path.line#' + this.id)
-          .attr('stroke', function(d) { return d.color; })
-          .attr("stroke-dasharray" , "none");
-      })
-      .on('mouseout', function(d) {
-        line_paths.attr('stroke', function(d) { return d.color; })
-            .attr("stroke-dasharray" , "none");
-      });
-
 
     // store y scale in data for reference
     var add_scale = prepped.map(function(o) {
@@ -355,22 +342,23 @@ function lineChart(options) {
 
 
 
-
-    // mouseover circles
     var static_circles = svg.append('g')
       .selectAll('g')
       .data(add_scale)
-    .enter().append('g')
-      
+    .enter().append('g');
+
     static_circles.selectAll('circle')
       .data(function(d) {
-        d.values.forEach(function(v){ 
+        d.values.forEach(function(v){
           v.color = d.color;
+          v.id = d.id;
         });
         return d.values;
       })
     .enter().append('circle')
-      .attr('class', 'linechart static-circle')
+      .attr('class', function(d) {
+        return 'linechart static-circle ' + idf(d.id);
+      })
       .attr('r', 7)
       .attr('cx', function(d) {
         return x(d.year);
@@ -527,6 +515,22 @@ function lineChart(options) {
 
     // remove svg used for bbox calculation
     helper_svg.remove();
+
+    // legend hover behavior
+    legend_containers
+      .on('mouseover', function(d) {
+        var id = this.id;
+        line_paths.attr('stroke', function(d) {
+          return this.id == id ? d.color : "#ccc";
+        });
+        static_circles.style('fill', function(d) {
+          return d3.select(this).classed(id) ? d.color : "#ccc";
+        });
+      })
+      .on('mouseout', function(d) {
+        line_paths.attr('stroke', function(d) { return d.color; });
+        static_circles.style('fill', function(d) { return d.color; });
+      });
 
     //
     // update line chart with new data
