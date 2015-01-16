@@ -299,7 +299,7 @@ q.awaitAll(function(error, data) {
 
     // update czone
     var cz = parseFloat(czone);
-    var cz_bound = (cz < 56 ? "states" : "czones");
+    var cz_bound = (cz < 100 ? "states" : "czones");
     var old_bound = select_settings.boundary;
 
     select_settings.set({

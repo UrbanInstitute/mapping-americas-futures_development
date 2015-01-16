@@ -13,7 +13,7 @@
 
 ;(function(projections){
 
-function dropdown(names) {
+projections.dropdown = function(names) {
 
   var self = {};
 
@@ -65,8 +65,7 @@ function dropdown(names) {
   };
 
   return self;
-}
 
-projections.dropdown = dropdown;
+};
 
 })(projections);

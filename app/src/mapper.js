@@ -207,7 +207,7 @@ projections.mapper = function(options) {
                       .attr('class', 'features ' + zoom_class);
 
     // add geographic layer to features
-    var addLayer = function(topology, classes) {
+    var addLayer = function(topology, classes, swidth) {
       return features.append('g')
                 .selectAll('path')
                   .data(topology)
@@ -215,7 +215,8 @@ projections.mapper = function(options) {
                   .attr({
                     "class": classes,
                     "id" : function(d) { return "z" + d.id; },
-                    "d" : path
+                    "d" : path,
+                    "stroke-width" : swidth || 1
                   });
     };
 
@@ -225,21 +226,20 @@ projections.mapper = function(options) {
         state_topology, 'us-map-states-background'
       ),
       fill_states = addLayer(
-        state_topology, 'us-map-states-filled hidden'
+        state_topology, 'us-map-states-filled hidden', 2
       ),
       fill_czones = addLayer(
         czone_topology, 'us-map-czones'
       ),
       outline_states = addLayer(
-        state_topology, 'us-map-states'
+        state_topology, 'us-map-states', 2
       ),
       hover_states = addLayer(
-        state_topology, 'us-map-states-hover hidden us-map-boundary'
+        state_topology, 'us-map-states-hover hidden us-map-boundary', 2
       ),
       hover_czones = addLayer(
         czone_topology, 'us-map-czones-hover us-map-boundary'
       );
-
 
     // extend self with city layers if desired
     if (renderOpts.cities) {
@@ -351,8 +351,12 @@ projections.mapper = function(options) {
       var swidth = 1 / s + "px";
 
       features
-        .style("stroke-width", swidth)
+        .attr('stroke-width', swidth)
         .attr("transform",trans);
+
+      outline_states.attr("stroke-width", 2 / s + "px");
+      hover_boundary.attr("stroke-width", 2 / s + "px");
+      fill_boundary.attr("stroke-width", 1 / s + "px");
 
       // semantic zooming for city labels
       if (self.cities && lag_scale != s) {
@@ -525,8 +529,8 @@ projections.mapper = function(options) {
       .on('click', function(){
         zoomByFactor(
           d3.select(this).classed('fa-search-plus') ?
-            1.5 :
-            (1/1.5),
+            2 :
+            (1/2),
           500
         );
       });
@@ -771,6 +775,7 @@ projections.mapper = function(options) {
         // progress bar, only show if loading is slow
         var progress_bar;
         // load csv
+        background_states.classed('hidden', false);
         d3.csv(path, function(error, downloaded_data){
           if (error) throw error;
           self.data = datacache[path] = prepMapData(downloaded_data);
@@ -778,6 +783,7 @@ projections.mapper = function(options) {
             progress_bar.remove(end_callback);
           } else {
             end_callback();
+            background_states.classed('hidden', true);
           }
         }).on("progress", function(event){
           var time = Date.now();
