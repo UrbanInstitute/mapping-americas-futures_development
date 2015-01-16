@@ -102,12 +102,7 @@ projections.legend = function(opts) {
           .style('stroke', "#fff")
           .style('stroke-width', binStrokeWidth);
 
-    if (opts.legendMouseover) {
-      // show zones with this legend color
-      legend_rects
-        .on('mouseover', opts.legendMouseover)
-        .on('mouseout', opts.legendMouseout);
-    }
+
 
     var formatter = opts.legendFormat;
     // Add text to legend, and reposition it correctly
@@ -171,16 +166,17 @@ projections.legend = function(opts) {
 
     var no_pop_position = past_legend + gtext_dims.width + 20;
 
-    legend.append('rect')
+    no_pop = legend.append('rect')
           .attr({
             "class" : "us-map-legend-rect",
+            id : opts.missingColor,
             "width" : binWidth,
             "height": binHeight,
             "x" : no_pop_position
           })
           .style('stroke', "#fff")
           .style('stroke-width', binStrokeWidth)
-          .style('fill', opts.missingColor);
+          .attr('fill', opts.missingColor);
 
     var pop_text = legend.append('text')
       .text('no population')
@@ -195,6 +191,17 @@ projections.legend = function(opts) {
       "x" : no_pop_position + binWidth + 5,
       "y" : poptext_dims.height
     });
+
+
+    if (opts.legendMouseover) {
+      // show zones with this legend color
+      [legend_rects, no_pop].map(function(s) {
+        s.on('mouseover', opts.legendMouseover)
+         .on('mouseout', opts.legendMouseout);
+      });
+    }
+
+
 
   }
 

@@ -91,6 +91,7 @@ function carousel() {
     // affix map controls
     $controls = $('#map-top'),
     $control_collapse = $('#control-collapse'),
+    $control_row = $('#control-row');
     $control_toggle = $('#control-collapse-toggle'),
     $legend_header = $('#legend-header'),
     $map_container = $('#map_container'),
@@ -111,7 +112,7 @@ function carousel() {
 
   // controls bounding rect
   function controlBBox() {
-    return $controls.get(0).getBoundingClientRect();
+    return $control_row.get(0).getBoundingClientRect();
   }
 
   // reset affix offset for different div sizes
@@ -161,7 +162,9 @@ function carousel() {
     active : false,
     affixed : false,
     init : function() {
+
       this.active = true;
+
       // scroll to top to get correct affix scrollpoint
       // no mobile affix
       if (projections.mobile() || projections.ie9) {
@@ -191,7 +194,7 @@ function carousel() {
       // (https://github.com/twbs/bootstrap/pull/14331)
       var self = this;
       $controls
-        .on('affixed.bs.affix', function() {
+        .on('affix.bs.affix', function() {
           self.affixed = true;
           startAffix();
         })
@@ -204,8 +207,10 @@ function carousel() {
           bottom: function() { return false; }
         });
       return this;
+
     },
     disable : function() {
+      if (!this.active) return this;
       this.active = this.affixed = false;
       endAffix();
       $win.off('.affix');

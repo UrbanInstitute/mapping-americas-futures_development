@@ -253,7 +253,7 @@ projections.mapper = function(options) {
             city_r = self.cities.start_r = 4,
             start_font = self.cities.start_font = 12,
             start_swidth = self.cities.start_swidth = 5,
-            start_text_offset = self.cities.start_text_offset = 2,
+            start_text_offset = self.cities.start_text_offset = 1,
             // calculate bounding box for city label
             // of given font size
             bb = self.getCityLabelBBox = function(d, font_size) {
@@ -336,7 +336,7 @@ projections.mapper = function(options) {
       Zooming behavior
     -----------------------------*/
 
-    var zoom_extent = [1, 8];
+    var zoom_extent = [1, 6.5];
     var lag_scale = null;
 
     function zoomed() {
@@ -551,7 +551,7 @@ projections.mapper = function(options) {
           var rect = this;
           fill_boundary.attr('fill', function(d){
               var czone_fill = d3.select(this).attr('fill');
-              return czone_fill == rect.id ? czone_fill : missingColor;
+              return czone_fill == rect.id ? czone_fill : "#eeeeee";
           });
         };
         legend_opts.legendMouseout = function(){

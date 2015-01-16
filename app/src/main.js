@@ -29,15 +29,6 @@ $('img.async').each(function() {
   $this.attr('src', $this.data().src);
 });
 
-// read more button
-$('a.read-more').click(function () {
-    var $this = $(this),
-        moreText = "Read more",
-        lessText = "Read less";
-    $this.text($this.text() == moreText ? lessText : moreText);
-    $("p#map-more-text").slideToggle("fast");
-});
-
 // initialize carousel (carousel.js)
 var carousel = projections.carousel();
 
@@ -180,7 +171,7 @@ q.awaitAll(function(error, data) {
       "#0076bc", //  30 < x < 40
       "#1D4281"  //  40 < x
     ],
-    missingColor : "#aaa",
+    missingColor : "#aaaaaa",
     // formatting function for legend labels
     legendFormat : d3.format("%"),
     // id and display variables
@@ -326,6 +317,15 @@ q.awaitAll(function(error, data) {
 
   };
 
+  var scroll_to_detail = function() {
+
+      var pad = projections.mobile() ? 90 : 180,
+          detail_top = $("#detail-well").offset().top - pad,
+          curr_top = projections.getTop();
+      // scroll to detail area of map page
+      projections.scrollTo(curr_top, detail_top, 750);
+  };
+
   // whenever a new czone is selected,
   // update the charts
   czone_dropdown.change(update_detail);
@@ -338,13 +338,11 @@ q.awaitAll(function(error, data) {
     main_map
     // update the detail map on click of a county
     .click(function(czone) {
-      var detail_top = $("#detail-well").offset().top - 180,
-          curr_top = projections.getTop();
       // update detail page to czone
       czone_dropdown.set(czone);
       update_detail(czone);
-      // scroll to detail area of map page
-      projections.scrollTo(curr_top, detail_top, 750);
+      scroll_to_detail();
+
     })
     .update(select_settings, function(){
       // update all the smaller maps once the main
@@ -391,7 +389,12 @@ q.awaitAll(function(error, data) {
     // transition to the map
     projections.goTo("map", function() {
       setTimeout(function(){
-        $('#return-to-map').trigger('click');
+        // if mobile screen, scroll to detail instead of map
+        if (projections.mobile()) {
+          scroll_to_detail();
+        } else {
+          $('#return-to-map').trigger('click');
+        }
       }, 1000);
 
     });
