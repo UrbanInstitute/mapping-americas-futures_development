@@ -37,7 +37,6 @@ projections.mapper = function(options) {
         .translate([width/2, height/2]),
     // standard projection function for the maps
     geoPath = d3.geo.path().projection(d3Albers),
-
     // cache for path strings (check for existence already)
     pathcache = projections.cache.path = projections.cache.path || {},
     // cache for map data
