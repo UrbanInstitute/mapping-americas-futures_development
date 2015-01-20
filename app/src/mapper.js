@@ -271,6 +271,8 @@ projections.mapper = function(options) {
           );
         });
 
+        var czone_id,state_id,czone_node,state_node;
+
         self.cities.points = features.append('g').selectAll('.cities')
           .data(cities.features)
           .enter()
@@ -286,7 +288,27 @@ projections.mapper = function(options) {
               return point_coords[d.properties.NAME][1];
             },
             class : 'cities'
-          });
+          })
+                  .on("mouseover",function(d){
+          czone_id = d.properties.CZONE_ID;
+          state_id = d.properties.STATE_KEY
+          czone_node = hover_boundary[0].filter(function(x) { return x.id == "z" + czone_id; });
+          state_node = hover_boundary[0].filter(function(x) { return x.id == "z" + state_id; });
+          d3.select(czone_node[0]).classed("highlight",true);
+          d3.select(state_node[0]).classed("highlight",true);
+        })
+        .on("mouseout",function(d){
+          d3.select(czone_node[0]).classed("highlight",false);
+          d3.select(state_node[0]).classed("highlight",false);
+        })
+        .on('click', function(d){
+          if(settings.boundary == "states"){
+            boundary_click_callback(state_id);
+          }
+          else{
+            boundary_click_callback(czone_id);
+          }
+        });
 
 
         // weave labels to stack nicely
@@ -319,7 +341,30 @@ projections.mapper = function(options) {
 
         });
 
-        self.cities.labels = city_labels.selectAll('text');
+        
+
+        self.cities.labels = city_labels.selectAll('text')
+        .on("mouseover",function(d){
+          czone_id = d.properties.CZONE_ID;
+          state_id = d.properties.STATE_KEY
+          czone_node = hover_boundary[0].filter(function(x) { return x.id == "z" + czone_id; });
+          state_node = hover_boundary[0].filter(function(x) { return x.id == "z" + state_id; });
+          d3.select(czone_node[0]).classed("highlight",true);
+          d3.select(state_node[0]).classed("highlight",true);
+          moveToolTip();
+        })
+        .on("mouseout",function(d){
+          d3.select(czone_node[0]).classed("highlight",false);
+          d3.select(state_node[0]).classed("highlight",false);
+        })
+        .on('click', function(d){
+          if(settings.boundary == "states"){
+            boundary_click_callback(state_id);
+          }
+          else{
+            boundary_click_callback(czone_id);
+          }
+        });
         self.cities.label_highlights = city_label_highlights.selectAll('text');
 
       })(self);
@@ -663,7 +708,6 @@ projections.mapper = function(options) {
           .classed('highlight', function() {
             return this.id === "z" + fipscode;
           });
-
       return self;
 
     };
