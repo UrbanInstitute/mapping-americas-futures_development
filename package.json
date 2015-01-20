@@ -7,16 +7,15 @@
     "url": "git@github.com/UI-Research/population-projections"
   },
   "dependencies": {
-    "grunt-cli" : "latest",
-    "grunt-contrib-concat": "latest",
-    "grunt-contrib-uglify": "latest",
-    "grunt-contrib-cssmin": "latest",
-    "grunt-contrib-htmlmin": "latest",
-    "grunt-contrib-watch": "latest",
-    "grunt-contrib-coffee": "latest",
-    "grunt-contrib-copy": "latest",
-    "grunt-browser-sync": "latest",
-    "grunt-processhtml": "latest",
-    "wherewolf": "1.0.x"
+    "wherewolf": "1.0.x",
+    "grunt-cli" : "0.1.x",
+    "grunt-contrib-concat": "0.5.x",
+    "grunt-contrib-uglify": "0.7.x",
+    "grunt-contrib-cssmin": "0.11.x",
+    "grunt-contrib-htmlmin": "0.3.x",
+    "grunt-contrib-watch": "0.6.x",
+    "grunt-contrib-copy": "0.7.x",
+    "grunt-browser-sync": "1.5.x",
+    "grunt-processhtml": "0.3.x"
   }
 }
