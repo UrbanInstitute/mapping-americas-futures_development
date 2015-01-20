@@ -270,6 +270,8 @@ projections.mapper = function(options) {
           );
         });
 
+        var czone_id,state_id,czone_node,state_node;
+
         self.cities.points = features.append('g').selectAll('.cities')
           .data(cities.features)
           .enter()
@@ -285,7 +287,46 @@ projections.mapper = function(options) {
               return point_coords[d.properties.NAME][1];
             },
             class : 'cities'
-          });
+          })
+        .on("mouseover",function(d){
+          czone_id = d.properties.CZONE_ID;
+          state_id = d.properties.STATE_KEY
+          czone_node = hover_boundary[0].filter(function(x) { return x.id == "z" + czone_id; });
+          state_node = hover_boundary[0].filter(function(x) { return x.id == "z" + state_id; });
+          var cz = d3.select(czone_node[0]).classed("highlight",true);
+          var st = d3.select(state_node[0]).classed("highlight",true);
+
+          var popf = createPopulationFunction(settings, self.data);
+          // console.log(settings.boundary)
+          if(settings.boundary == "states"){
+            pop = popf(st.data()[0]) || {};
+            pop.boundary_id = state_id;
+          }
+          else{
+           pop = popf(cz.data()[0]) || {};
+           pop.boundary_id = czone_id;
+          }
+
+          pop.percent = (pop.end - pop.start) / pop.start;
+          
+
+          var formatter = options.tooltip.formatter;
+          tooltipDiv.html(formatter.call(pop))
+              .classed('hidden', false);
+          moveToolTip();
+        })
+        .on("mouseout",function(d){
+          d3.select(czone_node[0]).classed("highlight",false);
+          d3.select(state_node[0]).classed("highlight",false);
+        })
+        .on('click', function(d){
+          if(settings.boundary == "states"){
+            boundary_click_callback(state_id);
+          }
+          else{
+            boundary_click_callback(czone_id);
+          }
+        });
 
 
         // weave labels to stack nicely
@@ -318,7 +359,49 @@ projections.mapper = function(options) {
 
         });
 
-        self.cities.labels = city_labels.selectAll('text');
+        // var pop;
+
+        self.cities.labels = city_labels.selectAll('text')
+        .on("mouseover",function(d){
+          czone_id = d.properties.CZONE_ID;
+          state_id = d.properties.STATE_KEY
+          czone_node = hover_boundary[0].filter(function(x) { return x.id == "z" + czone_id; });
+          state_node = hover_boundary[0].filter(function(x) { return x.id == "z" + state_id; });
+          var cz = d3.select(czone_node[0]).classed("highlight",true);
+          var st = d3.select(state_node[0]).classed("highlight",true);
+
+          var popf = createPopulationFunction(settings, self.data);
+          // console.log(settings.boundary)
+          if(settings.boundary == "states"){
+            pop = popf(st.data()[0]) || {};
+            pop.boundary_id = state_id;
+          }
+          else{
+           pop = popf(cz.data()[0]) || {};
+           pop.boundary_id = czone_id;
+          }
+
+          pop.percent = (pop.end - pop.start) / pop.start;
+          
+
+          var formatter = options.tooltip.formatter;
+          tooltipDiv.html(formatter.call(pop))
+              .classed('hidden', false);
+          moveToolTip();
+        })
+        .on("mouseout",function(d){
+          d3.select(czone_node[0]).classed("highlight",false);
+          d3.select(state_node[0]).classed("highlight",false);
+        })
+        .on('click', function(d){
+          if(settings.boundary == "states"){
+            boundary_click_callback(state_id);
+          }
+          else{
+            boundary_click_callback(czone_id);
+          }
+        })
+        .on('mousemove', moveToolTip);
         self.cities.label_highlights = city_label_highlights.selectAll('text');
 
       })(self);
@@ -478,10 +561,12 @@ projections.mapper = function(options) {
           // add percentage and czone id to object
           pop.percent = (pop.end - pop.start) / pop.start;
           pop.boundary_id = this.id.replace("z", "");
+
           // call tooltip html renderer on tooltip
           var formatter = options.tooltip.formatter;
           tooltipDiv.html(formatter.call(pop))
               .classed('hidden', false);
+
           // move the tooltip above the mouse (needed for IE)
           moveToolTip();
         })
@@ -662,7 +747,6 @@ projections.mapper = function(options) {
           .classed('highlight', function() {
             return this.id === "z" + fipscode;
           });
-
       return self;
 
     };
