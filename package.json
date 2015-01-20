@@ -16,6 +16,7 @@
     "grunt-contrib-coffee": "latest",
     "grunt-contrib-copy": "latest",
     "grunt-browser-sync": "latest",
-    "grunt-processhtml": "latest"
+    "grunt-processhtml": "latest",
+    "wherewolf": "1.0.x"
   }
 }
