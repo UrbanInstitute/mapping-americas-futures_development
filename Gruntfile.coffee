@@ -6,7 +6,8 @@ module.exports = (grunt) ->
   ]
 
   osx_deploy_paths = [
-    # insert paths here
+    '/Volumes/Features/bsouthga/projections/'
+    '/Volumes/Features/mapping-americas-futures/'
   ]
 
   deploy_paths = if /^win/.test(process.platform)
