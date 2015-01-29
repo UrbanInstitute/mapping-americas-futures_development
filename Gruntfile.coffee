@@ -10,10 +10,12 @@ module.exports = (grunt) ->
     '/Volumes/Features/mapping-americas-futures/'
   ]
 
-  deploy_paths = if /^win/.test(process.platform)
-                  windows_deploy_paths
-                else
-                  osx_deploy_paths
+  if /^win/.test(process.platform)
+    deploy_paths = windows_deploy_paths
+    stata_server = "W:/2014/forWebTool/"
+  else
+    deploy_paths = osx_deploy_paths
+
 
 
   #
@@ -86,6 +88,8 @@ module.exports = (grunt) ->
   # Register configuration
   grunt.initConfig
     copy :
+      data :
+        files : data_folders
       resources :
         files : (
           {
@@ -187,3 +191,4 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'deploy', full_build
 
+  grunt.registerTask 'data', ['copy:data']
