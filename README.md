@@ -28,3 +28,8 @@ To deploy, change the deployment path in `Gruntfile.coffee` and run...
 grunt deploy
 ```
 
+To update the data from the stata server, first check the folder paths in `Makefile`, and then run
+
+```
+make data
+```
