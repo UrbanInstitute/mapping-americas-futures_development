@@ -5,13 +5,13 @@ view current [production version here](http://datatools.urban.org/features/bsout
 ### Building the project
 
 Requirements :
-- [nodejs](http://nodejs.org/) (allows use of grunt)
-- [grunt](http://gruntjs.com/) (build system and development automation)
+- [nodejs](http://nodejs.org/)
 
 Once the requirements are installed, clone the repository and run...
 
 ```
 npm install
+npm install -g grunt-cli
 ```
 
 to install the grunt dependencies. Then, run...
