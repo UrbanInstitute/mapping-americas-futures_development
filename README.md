@@ -7,6 +7,8 @@ view current [production version here](http://datatools.urban.org/features/bsout
 Requirements :
 - [nodejs](http://nodejs.org/)
 
+NOTE : the data is not includeded within this repository, but can be obtained via the "All available data" link on the graphic.
+
 Once the requirements are installed, clone the repository and run...
 
 ```
