@@ -7,6 +7,11 @@ view current [production version here](http://datatools.urban.org/features/bsout
 Requirements :
 - [nodejs](http://nodejs.org/)
 
+Windows requirements :
+*The following requirements are standard to all OSX and Linux systems*
+-[make](http://gnuwin32.sourceforge.net/packages/make.htm) (link to windows installer)
+-[tar](http://gnuwin32.sourceforge.net/packages/gtar.htm) (link to windows installer)
+
 NOTE : the data is not includeded within this repository, but can be obtained via the "All available data" link on the graphic.
 
 Once the requirements are installed, clone the repository and run...
